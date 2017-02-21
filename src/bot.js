@@ -114,6 +114,36 @@ bot.on('message', (msg) => {
     }
 });
 
+function logMessageStatus(msg, type, color, description) {
+    if (!msg.cleanContent)
+        return;
+    var channel = msg.guild.channels.find('name', 'logs');
+    if (channel) {
+        channel.sendEmbed(
+            new Discord.RichEmbed()
+                .setTitle(type)
+                .setDescription(`\`\`\`\n${description || msg.cleanContent}\n\`\`\`\n **Channel:** ${msg.channel}`)
+                .setColor(color)
+                .setTimestamp(new Date())
+                .setFooter(msg.author.username, msg.author.avatarURL)
+        );
+    }
+}
+
+bot.on('messageDelete', msg => {
+    logMessageStatus(msg, 'Deleted', [255, 20, 50]);
+});
+
+bot.on('messageDeleteBulk', msgs => {
+    msgs.array().forEach(msg => {
+        logMessageStatus(msg, 'Bulk Deleted', [255, 60, 100]);
+    });
+});
+
+bot.on('messageUpdate', (oldMsg, newMsg) => {
+    logMessageStatus(oldMsg, 'Edited', [250, 215, 30], `${oldMsg.cleanContent}\n\`\`\` \`\`\`\n${newMsg.cleanContent}`);
+});
+
 bot.login(config.token);
 
 module.exports = bot;
