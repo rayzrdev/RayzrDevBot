@@ -50,10 +50,13 @@ class Levels {
     }
 
     async getLevel(id) {
-        var current = await this.getXP(id);
+        return this.levelFromXP(await this.getXP(id));
+    }
+
+    levelFromXP(xp) {
         var level = 0;
-        while (current >= this.neededXP(level)) {
-            current -= this.neededXP(level);
+        while (xp >= this.neededXP(level)) {
+            xp -= this.neededXP(level);
             level++;
         }
         return level;
@@ -70,6 +73,11 @@ class Levels {
     async addXP(id, value) {
         var current = await this.getXP(id);
         await this.setXP(id, current + value);
+    }
+
+    async getTop(num) {
+        var entries = await db.entries();
+        return entries.sort((a, b) => b.value - a.value).splice(0, num);
     }
 }
 
