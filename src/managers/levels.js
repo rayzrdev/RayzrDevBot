@@ -1,7 +1,7 @@
 const path = require('path');
 const XPDB = require('xpdb');
 
-const db = new XPDB(path.join(__dirname, '../levelsdb'));
+const db = new XPDB(path.join(__dirname, '../../levelsdb'));
 
 class Levels {
 

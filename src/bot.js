@@ -8,7 +8,7 @@ const read = require('fs-readdir-recursive');
 const bot = new Discord.Client();
 const commands = bot.commands = {};
 
-const levels = bot.levels = new (require('./levels'))();
+const levels = bot.levels = new (require('./managers/levels'))();
 
 let invite_template = 'https://discordapp.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot&permissions=268443648';
 
@@ -94,7 +94,7 @@ function updateTopics() {
 }
 
 bot.on('message', (msg) => {
-    if (msg.author.id === bot.user.id || msg.author.bot) return;
+    if (!msg.guild || msg.author.id === bot.user.id || msg.author.bot) return;
 
     levels.checkMessage(msg);
 
@@ -122,7 +122,7 @@ function logMessageStatus(msg, type, color, description) {
         channel.sendEmbed(
             new Discord.RichEmbed()
                 .setTitle(type)
-                .setDescription(`\`\`\`\n${description || msg.cleanContent}\n\`\`\`\n **Channel:** ${msg.channel}`)
+                .setDescription(`\`\`\`\n${(description || msg.cleanContent).substr(0, 1950)}\n\`\`\`\n **Channel:** ${msg.channel}`)
                 .setColor(color)
                 .setTimestamp(new Date())
                 .setFooter(msg.author.username, msg.author.avatarURL)
@@ -141,6 +141,7 @@ bot.on('messageDeleteBulk', msgs => {
 });
 
 bot.on('messageUpdate', (oldMsg, newMsg) => {
+    if (oldMsg.content === newMsg.content) return;
     logMessageStatus(oldMsg, 'Edited', [250, 215, 30], `${oldMsg.cleanContent}\n\`\`\` \`\`\`\n${newMsg.cleanContent}`);
 });
 
