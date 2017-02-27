@@ -14,8 +14,12 @@ exports.run = async (bot, msg, args) => {
     var m = await msg.channel.sendMessage(':arrows_counterclockwise:');
 
     try {
-        var res = JSON.parse(await get('http://random.cat/meow'));
-        await msg.channel.sendFile(res.file);
+        var res = await get('http://random.cat/meow');
+        if (!JSON.isJSON(res)) {
+            m.edit(':no_entry_sign: Failed to load cat picture!').then(m => m.delete(5000));
+            return;
+        }
+        await msg.channel.sendFile(JSON.parse(res).file);
         m.delete();
     } catch (err) {
         m.channel.sendMessage(`:no_entry_sign: ${err}`);

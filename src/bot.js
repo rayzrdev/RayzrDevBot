@@ -1,3 +1,16 @@
+/**
+ * @param {string} input The input to check
+ * @memberof JSON
+ */
+JSON.isJSON = function (input) {
+    try {
+        JSON.parse(input);
+        return true;
+    } catch (err) {
+        return false;
+    }
+};
+
 const Discord = require('discord.js');
 const path = require('path');
 const chalk = require('chalk');
@@ -115,7 +128,7 @@ bot.on('message', (msg) => {
 });
 
 function logMessageStatus(msg, type, color, description) {
-    if (!msg.cleanContent)
+    if (!msg.guild || !msg.guild.channel || !msg.cleanContent)
         return;
     var channel = msg.guild.channels.find('name', 'logs');
     if (channel) {
