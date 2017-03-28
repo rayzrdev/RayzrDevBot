@@ -26,7 +26,7 @@ const levels = bot.levels = new (require('./managers/levels'))();
 let invite_template = 'https://discordapp.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot&permissions=268443648';
 
 process.on('unhandledRejection', err => {
-    console.error(`Uncaught error (${err.status}): ${err.response ? JSON.parse(err.response.text).message : err}`);
+    console.error(`Uncaught error (${err.status}): ${err}`);
 });
 
 try {
@@ -128,7 +128,7 @@ bot.on('message', (msg) => {
 });
 
 function logMessageStatus(msg, type, color, description) {
-    if (!msg.guild || !msg.guild.channel || !msg.cleanContent)
+    if (!msg.guild || !msg.guild.channels || !msg.cleanContent)
         return;
     var channel = msg.guild.channels.find('name', 'logs');
     if (channel) {

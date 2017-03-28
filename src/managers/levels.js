@@ -15,14 +15,45 @@ class Levels {
     }
 
     async remainingXP(id) {
-        var xp = await this.getXP(id);
-        var level = await this.getLevel(id);
+        return this.remainingXPFromTotal(await this.getXP(id));
+    }
+
+    remainingXPFromTotal(xp) {
+        var level = this.levelFromXP(xp);
 
         for (var i = 0; i < level; i++) {
             xp -= this.neededXP(i);
         }
 
         return xp;
+    }
+
+    /**
+     * Gets the data for a user
+     * 
+     * @param {string} id The user ID
+     * @returns {Promise<{total: number, currentLevel: number, xpToLevel: number, remaining: number}>} The user data
+     * 
+     * @memberOf Levels
+     */
+    async getUserData(id) {
+        var total = await this.getXP(id);
+        var currentLevel = await this.levelFromXP(total);
+        var xpToLevel = this.neededXP(currentLevel);
+        var remaining = await this.remainingXPFromTotal(total);
+
+        var users = (await this.getUsers()).map(e => e.key);
+
+        return {
+            total,
+            currentLevel,
+            xpToLevel,
+            remaining,
+            rank: {
+                place: users.indexOf(id) + 1,
+                total: users.length
+            }
+        };
     }
 
     _now() {
@@ -76,8 +107,11 @@ class Levels {
     }
 
     async getTop(num) {
-        var entries = await db.entries();
-        return entries.sort((a, b) => b.value - a.value).splice(0, num);
+        return (await this.getUsers()).splice(0, num);
+    }
+
+    async getUsers() {
+        return (await db.entries()).sort((a, b) => b.value - a.value);
     }
 }
 
