@@ -111,6 +111,9 @@ bot.on('message', (msg) => {
 
     levels.checkMessage(msg);
 
+    if (/^ay+$/i.test(msg.cleanContent))
+        return msg.channel.sendMessage(`${msg.cleanContent}${msg.cleanContent.length > 1000 ? '' : 'yyyyy'}`);
+
     if (!msg.content.startsWith(config.prefix)) return;
     let content = msg.content.substr(config.prefix.length);
     let command = content.split(' ')[0];
