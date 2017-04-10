@@ -18,14 +18,21 @@ exports.run = async (bot, msg, args) => {
             return `**${i + 1}.** <@${e.key}> (Lvl. ${bot.levels.levelFromXP(e.value)})`;
         }).filter(text => !!text);
 
-        msg.channel.sendEmbed(
-            new RichEmbed()
-                .setTitle(`Top ${amount} users on **${msg.guild}**`)
-                .setDescription(`\u200b\n${users.join('\n\n')}`)
-                .setColor(bot.config.color)
-        );
+        var messages = [];
+        while (users.length > 50) {
+            messages.push(users.splice(0, 50));
+        }
+        messages.push(users);
+
+        messages.forEach(single => {
+            msg.channel.sendEmbed(
+                new RichEmbed()
+                    .setTitle(`Top ${amount} users on **${msg.guild}**`)
+                    .setDescription(`\u200b\n${single.join('\n\n')}`)
+                    .setColor(bot.config.color)
+            );
+        });
     } catch (err) {
-        msg.guild.owner.sendMessage('**Found culprit:** -top');
         msg.guild.owner.sendMessage(err);
     }
 };
