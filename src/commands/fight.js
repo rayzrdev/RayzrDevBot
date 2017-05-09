@@ -46,6 +46,8 @@ Player.prototype.debug = function () {
     console.log(`${this.user.username}'s HP: ${this.hp}`);
 };
 
+this.end = 0;
+
 Player.cache = {};
 
 exports.run = (bot, message) => {
@@ -125,7 +127,14 @@ function fight(message, player1, player2, turn) {
     }).catch(() => {
         message.channel.send(`**${currentPlayer.user.username}** didn't respond, so we can assume that he has lost his turn.`);
         fight(message, player1, player2, !turn);
+        end++
     });
+if (end === 4) {
+    message.channel.send(':x: Looks like No one is Responding, Terminating the game')
+     currentPlayer.reset();
+    targetPlayer.reset();
+    return;
+}
 }
 
 exports.info = {
