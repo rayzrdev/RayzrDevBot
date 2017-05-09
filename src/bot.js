@@ -115,17 +115,20 @@ bot.on('message', (msg) => {
         return msg.channel.sendMessage(`${msg.cleanContent}${msg.cleanContent.length > 1000 ? '' : 'yyyyy'}`);
 
     if (!msg.content.startsWith(config.prefix)) return;
+
     let content = msg.content.substr(config.prefix.length);
     let command = content.split(' ')[0];
     let args = content.split(' ').splice(1);
+
     if (commands[command]) {
+        msg.editEmbed = (embed) => {
+            msg.edit('', { embed });
+        };
+
         try {
-            msg.editEmbed = (embed) => {
-                msg.edit('', { embed });
-            };
             commands[command].run(bot, msg, args);
-        } catch (e) {
-            msg.edit('Failed to run command:\n```' + e + '```').then(m => m.delete(5000));
+        } catch (err) {
+            msg.channel.send(`:x: ${err}`).then(m => m.delete(5000));
         }
     }
 });
