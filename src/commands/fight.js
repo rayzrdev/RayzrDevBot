@@ -34,21 +34,19 @@ function Player(user) {
     Player.cache[user.id] = this;
 
     this.user = user;
+
+    this.reset();
+}
+
+Player.prototype.reset = function () {
     this.hp = 100;
     this.isFighting = false;
     this.miss = 0;
-}
-
-Player.prototype.reset = function() {
-    this.hp = 100;
-    this.miss = 0;
 };
 
-Player.prototype.debug = function() {
+Player.prototype.debug = function () {
     console.log(`${this.user.username}'s HP: ${this.hp}`);
 };
-
-
 
 Player.cache = {};
 
@@ -84,6 +82,14 @@ exports.run = (bot, message) => {
 };
 
 function fight(message, player1, player2, turn) {
+    if (!player1.isFighting || !player2.isFighting) {
+        // If either one of them isn't supposed to be fighting, reset and exit.
+        player1.reset();
+        player2.reset();
+
+        return;
+    }
+
     const currentPlayer = turn ? player1 : player2;
     const targetPlayer = turn ? player2 : player1;
 
@@ -129,13 +135,17 @@ function fight(message, player1, player2, turn) {
     }).catch(() => {
         message.channel.send(`**${currentPlayer.user.username}** didn't respond, so we can assume that he has lost his turn.`);
         currentPlayer.miss++;
-        fight(message, player1, player2, !turn);
+
         if (currentPlayer.miss >= 2) {
-            message.channel.send(':x: Looks like no one is responding, terminating the game.')
+            message.channel.send(':x: Looks like no one is responding, terminating the game.');
+
             currentPlayer.reset();
             targetPlayer.reset();
+
             return;
         }
+
+        fight(message, player1, player2, !turn);
     });
 }
 
