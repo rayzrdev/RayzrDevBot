@@ -130,8 +130,8 @@ function fight(message, player1, player2, turn) {
         message.channel.send(`**${currentPlayer.user.username}** didn't respond, so we can assume that he has lost his turn.`);
         currentPlayer.miss++;
         fight(message, player1, player2, !turn);
-        if (currentPlayer.miss === 2) {
-            message.channel.send(':x: Looks like No one is Responding, Terminating the game')
+        if (currentPlayer.miss >= 2) {
+            message.channel.send(':x: no one was responding to the fight ;therefore, the game was terminated.')
             currentPlayer.reset();
             targetPlayer.reset();
             return;
