@@ -36,17 +36,19 @@ function Player(user) {
     this.user = user;
     this.hp = 100;
     this.isFighting = false;
+    this.miss = 0;
 }
 
 Player.prototype.reset = function () {
     this.hp = 100;
+    this.miss = 0;
 };
 
 Player.prototype.debug = function () {
     console.log(`${this.user.username}'s HP: ${this.hp}`);
 };
 
-this.end = 0;
+
 
 Player.cache = {};
 
@@ -126,10 +128,10 @@ function fight(message, player1, player2, turn) {
 
     }).catch(() => {
         message.channel.send(`**${currentPlayer.user.username}** didn't respond, so we can assume that he has lost his turn.`);
+        currentPlayer.miss++;
         fight(message, player1, player2, !turn);
-        end++
-    });
-if (end === 4) {
+            });
+if (currentPlayer.miss === 2) {
     message.channel.send(':x: Looks like No one is Responding, Terminating the game')
      currentPlayer.reset();
     targetPlayer.reset();
