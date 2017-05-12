@@ -1,29 +1,17 @@
-const request = require('request');
+const got = require('got');
 
-function get(url) {
-    return new Promise((resolve, reject) => {
-        request(url, (err, res, body) => {
-            err ? reject(err) : resolve(body);
-        });
-    });
-}
-
-exports.run = async (bot, msg, args) => {
+exports.run = async (bot, msg) => {
     msg.delete();
 
-    var m = await msg.channel.sendMessage(':arrows_counterclockwise:');
+    const m = await msg.channel.send(':arrows_counterclockwise:');
+    const res = await got('http://random.cat/meow');
 
-    try {
-        var res = await get('http://random.cat/meow');
-        if (!JSON.isJSON(res)) {
-            m.edit(':no_entry_sign: Failed to load cat picture!').then(m => m.delete(5000));
-            return;
-        }
-        await msg.channel.sendFile(JSON.parse(res).file);
-        m.delete();
-    } catch (err) {
-        m.channel.sendMessage(`:no_entry_sign: ${err}`);
+    if (!JSON.isJSON(res.body)) {
+        throw 'Failed to load cat picture!';
     }
+
+    await msg.channel.send({ file: JSON.parse(res.body).file });
+    m.delete();
 };
 
 exports.info = {

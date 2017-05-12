@@ -1,39 +1,58 @@
 const RichEmbed = require('discord.js').RichEmbed;
+const stripIndents = require('common-tags').stripIndents;
 
 exports.run = (bot, msg, args) => {
-    var commands = {};
+    const manager = bot.managers.get('commands');
+
+    let commands = {};
 
     if (args.length > 0) {
-        if (!bot.commands[args[0]]) {
-            msg.channel.sendMessage(`:no_entry_sign: The command '${args[0]}' doesn't exist!`);
-            return;
+        const command = manager.findCommand(args[0]);
+        if (!command) {
+            throw `The command '${args[0]}' doesn't exist!`;
         }
-        commands = [bot.commands[args[0]]];
+        commands = [command];
     } else {
-        commands = bot.commands;
+        commands = manager.commands;
     }
 
-    let fields = [];
+    const fields = [];
 
     for (const key in commands) {
-        let command = commands[key];
+        const command = commands[key];
+
         if (!command.info.hidden) {
             fields.push(getField(bot, command));
         }
     }
 
-    msg.channel.sendEmbed(
-        new RichEmbed({ fields })
-            .setTitle(`Help for ${bot.config.name}`)
-            .setDescription('\n\u200b')
-            .setColor(bot.config.color)
-    );
+    while (fields.length > 0) {
+        const slice = fields.splice(0, 15);
+
+        msg.channel.send({
+            embed: new RichEmbed({ fields: slice })
+                .setTitle(`Help for ${global.config.name}`)
+                .setDescription('\n\u200b')
+                .setColor(global.config.color)
+        });
+    }
+
+
 };
 
 function getField(bot, command) {
+    let description = stripIndents`
+        **Usage:** \`${global.config.prefix}${command.info.usage}\`
+        **Description:** ${command.info.description}
+    `;
+
+    if (command.info.aliases) {
+        description += `\n**Aliases:** ${command.info.aliases.join(', ')}`;
+    }
+
     return {
         name: command.info.name,
-        value: `**Usage:** \`${bot.config.prefix}${command.info.usage}\`\n**Description:** ${command.info.description}`
+        value: description
     };
 }
 

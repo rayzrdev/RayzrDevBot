@@ -6,7 +6,7 @@
         220,
         255
     ],
-    "token": "Get one at https://discordapp.com/developers/applications/me/create",
-    "curseforgeAPIToken": "Get one at https://www.curseforge.com/account/api-tokens",
+    "token": "",
+    "curseforgeAPIToken": "",
     "joinMessage": "Welcome to the offical RayzrDev server, {user}!"
 }

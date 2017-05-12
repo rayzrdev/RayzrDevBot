@@ -1,52 +1,34 @@
 const RichEmbed = require('discord.js').RichEmbed;
 const stripIndents = require('common-tags').stripIndents;
 
-const mc = require('minecraft-protocol');
+const pinger = require('minecraft-pinger');
 const embedFixer = ' '.repeat(51);
 
 exports.run = async (bot, msg, args) => {
-    msg.delete();
     if (args.length < 1) {
-        msg.channel.sendMessage(':no_entry_sign: You must enter a server IP!');
-        return;
+        throw 'You must enter a server IP!';
     }
 
-    let host = args[0].split(':')[0];
-    let port = args[0].split(':')[1] || '25565';
+    msg.delete();
 
-    var m = await msg.channel.sendMessage(':arrows_counterclockwise:');
+    const host = args[0].split(':')[0];
+    const port = args[0].split(':')[1] || '25565';
 
-    mc.ping({ host, port }, (err, res) => {
-        if (err) {
-            var message = 'Something went wrong!';
+    const m = await msg.channel.send(':arrows_counterclockwise:');
 
-            if (err.code === 'ENOTFOUND') message = 'That is not a valid server address!';
-            else if (err.code === 'ETIMEDOUT') message = 'Timed out.';
-            else if (err.code === 'ECONNREFUSED') message = 'That server is offline.';
+    pinger.ping(host, port, (err, result) => {
+        if (err) throw err;
 
-            m.delete();
-            msg.channel.sendEmbed(
-                new RichEmbed()
-                    .setTitle(`:x: ${args[0]}`)
-                    .setDescription(message)
-                    .setColor(bot.config.color)
-            );
-        } else {
-            if (res.description.extra) {
-                res.description.text = res.description.extra.map(i => i.text).join('');
-            }
-            m.delete();
-            msg.channel.sendEmbed(
-                new RichEmbed()
-                    .setTitle(`:white_check_mark: **${args[0]}**`)
-                    .setDescription(stripIndents`
-                                    **Ping:** \`${res.latency}ms\`
-                                    **Players:** \`${res.players.online}/${res.players.max}\`
-                                    **Version:** \`${res.version.name}\`
-                                    **Motd:**\`\`\`${embedFixer}\n${(res.description.text || res.description).replace(/\u00a7[0-9a-fklmnor]/g, '')}\n${embedFixer}\`\`\``
-                    ).setColor(bot.config.color)
-            );
-        }
+        m.edit({
+            embed: new RichEmbed()
+                .setTitle(`:white_check_mark: **${args[0]}**`)
+                .setDescription(stripIndents`
+                    **Ping:** \`${result.ping}ms\`
+                    **Players:** \`${result.players.online}/${result.players.max}\`
+                    **Version:** \`${result.version.name}\`
+                    **Motd:**\`\`\`\n${(result.description).replace(/\u00a7[0-9a-fklmnor]/g, '')}\n\`\`\`
+            `).setColor(global.config.color)
+        });
     });
 };
 
