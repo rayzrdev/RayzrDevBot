@@ -2,7 +2,6 @@ const RichEmbed = require('discord.js').RichEmbed;
 const stripIndents = require('common-tags').stripIndents;
 
 const pinger = require('minecraft-pinger');
-const embedFixer = ' '.repeat(51);
 
 exports.run = async (bot, msg, args) => {
     if (args.length < 1) {

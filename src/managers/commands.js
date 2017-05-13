@@ -1,5 +1,5 @@
 const path = require('path');
-const read = require('fs-readdir-recursive');
+const readdir = require('fs-readdir-recursive');
 const chalk = require('chalk');
 
 const Manager = require('./manager');
@@ -27,24 +27,26 @@ class CommandManager extends Manager {
     loadCommands() {
         const commandsFolder = path.resolve(__dirname, '..', 'commands');
 
-        read(commandsFolder, file => !path.basename(file).startsWith('_') && file.endsWith('.js')).forEach(file => {
-            try {
-                const command = require(path.resolve(commandsFolder, file));
-                const check = this.validateCommand(command);
+        readdir(commandsFolder)
+            .filter(file => !path.basename(file).startsWith('_') && file.endsWith('.js'))
+            .forEach(file => {
+                try {
+                    const command = require(path.resolve(commandsFolder, file));
+                    const check = this.validateCommand(command);
 
-                if (check) {
-                    return console.error(`Error in '${file}': ${chalk.red(check)}`);
+                    if (check) {
+                        return console.error(`Error in '${file}': ${chalk.red(check)}`);
+                    }
+
+                    if (this.findCommand(command.info.name)) {
+                        return console.error(`Duplicate command: An entry already exists for command ${chalk.red(command.info.name)} in file '${file}'`);
+                    }
+
+                    this._commands.push(command);
+                } catch (error) {
+                    console.error(`Failed to load command file '${file}': ${error}`);
                 }
-
-                if (this.findCommand(command.info.name)) {
-                    return console.error(`Duplicate command: An entry already exists for command ${chalk.red(command.info.name)} in file '${file}'`);
-                }
-
-                this._commands.push(command);
-            } catch (error) {
-                console.error(`Failed to load command file '${file}': ${error}`);
-            }
-        });
+            });
     }
 
     findCommand(input) {

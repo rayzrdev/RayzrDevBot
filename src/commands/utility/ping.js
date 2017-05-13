@@ -1,5 +1,5 @@
 exports.run = async (bot, msg) => {
-    var m = await msg.channel.sendMessage('Pong!');
+    const m = await msg.channel.sendMessage('Pong!');
     m.edit(`Pong! \`${m.createdTimestamp - msg.createdTimestamp}ms\` :watch:`);
 };
 

@@ -65,12 +65,12 @@ exports.run = (bot, message) => {
         throw 'You can\'t play with yourself!';
     }
 
-    var you = new Player(message.author);
+    const you = new Player(message.author);
     if (you.isFighting) {
         throw 'You\'re already fighting someone!';
     }
 
-    var opponent = new Player(mention);
+    const opponent = new Player(mention);
     if (opponent.isFighting) {
         throw 'Your opponent is already in a fight!';
     }
@@ -99,7 +99,7 @@ function fight(message, player1, player2, turn) {
         time: 30000,
         errors: ['time'],
     }).then(collected => {
-        let msg = collected.first();
+        const msg = collected.first();
 
         if (msg.content === 'leave') {
             msg.channel.send(`**${currentPlayer.user.username}** surrendered to **${targetPlayer.user.username}**!`);
@@ -110,14 +110,14 @@ function fight(message, player1, player2, turn) {
             return;
         }
 
-        let action = randomItem(actions[msg.content]);
-        let result = randomItem([miss, action]);
+        const action = randomItem(actions[msg.content]);
+        const result = randomItem([miss, action]);
 
         if (result === miss) {
             message.channel.send(miss);
         } else {
             // Damage from 5 to 20 (0 + 5 to 15 + 5)
-            let damage = Math.floor(Math.random() * 15 + 5);
+            const damage = Math.floor(Math.random() * 15 + 5);
 
             targetPlayer.hp -= damage;
             message.channel.send(`**${targetPlayer.user.username}** ${result} **${currentPlayer.user.username}**\n**${targetPlayer.user.username}**'s health is now ${targetPlayer.hp}, he lost ${damage} HP.`);
