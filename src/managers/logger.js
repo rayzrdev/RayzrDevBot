@@ -31,14 +31,14 @@ class Logger extends Manager {
         const channel = message.guild.channels.find('name', 'logs');
 
         if (channel) {
-            channel.sendEmbed(
-                new RichEmbed()
+            channel.send({
+                embed: new RichEmbed()
                     .setTitle(type)
                     .setDescription(`\`\`\`\n${(description || message.cleanContent).substr(0, 1950)}\n\`\`\`\n **Channel:** ${message.channel}`)
                     .setColor(color)
                     .setTimestamp(new Date())
                     .setFooter(message.author.username, message.author.avatarURL)
-            );
+            });
         }
     }
 }

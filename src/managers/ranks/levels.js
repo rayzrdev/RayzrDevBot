@@ -1,9 +1,7 @@
-const Manager = require('./manager');
+const Manager = require('../manager');
 
 class Levels extends Manager {
-    getName() {
-        return 'levels';
-    }
+    getName() { return 'levels'; }
 
     preInit() {
         this._speakTimes = {};
@@ -77,7 +75,13 @@ class Levels extends Manager {
         const newLevel = await this.getLevel(message.author.id);
 
         if (newLevel > currentLevel) {
-            message.author.sendMessage(`You're now level **${newLevel}** on **${message.guild.name}**`);
+            this.handler.events.emit('levelChange', {
+                member: message.member,
+                from: currentLevel,
+                to: newLevel
+            });
+
+            message.author.send(`You're now level **${newLevel}** on **${message.guild.name}**`);
         }
     }
 

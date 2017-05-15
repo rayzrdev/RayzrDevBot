@@ -5,6 +5,15 @@ const chalk = require('chalk');
 const Discord = require('discord.js');
 const ManagerHandler = require('./managers');
 
+require('readline').createInterface(process.stdin).on('line', line => {
+    try {
+        const output = eval(line);
+        console.log(output);
+    } catch (err) {
+        console.error('/!\\ Error: ', err);
+    }
+});
+
 global.settings = {
     baseDir: path.resolve(__dirname, '..'),
     dataFolder: path.resolve(__dirname, '..', 'data')
@@ -16,7 +25,9 @@ const managers = bot.managers = new ManagerHandler()
     .add('data')
     .add('config')
     .add('migrators')
-    .add('levels')
+    .add('settings')
+    .add('ranks/levels')
+    .add('ranks/autorole')
     .add('logger')
     .add('commands');
 
@@ -29,7 +40,6 @@ bot.on('ready', () => {
     managers.init(bot);
 
     bot.user.setAvatar(path.resolve(global.settings.baseDir, 'avatar.png')).catch(() => { });
-
 
     bot.setInterval(updateDisplay, 15000);
     updateDisplay();
@@ -56,7 +66,7 @@ bot.on('guildMemberAdd', (member) => {
 
 bot.on('message', message => {
     if (/^ay+$/i.test(message.cleanContent)) {
-        return message.channel.sendMessage(`${message.cleanContent}${message.cleanContent.length > 1000 ? '' : 'yyyyy'}`);
+        message.channel.send(`${message.cleanContent}${message.cleanContent.length > 1000 ? '' : 'yyyyy'}`);
     }
 });
 

@@ -14,6 +14,13 @@ class CommandManager extends Manager {
         this.loadCommands();
     }
 
+    init() {
+        const bot = this.bot;
+
+        this._commands.filter(command => command && command.init)
+            .forEach(command => command.init(bot));
+    }
+
     validateCommand(command) {
         if (typeof command !== 'object') return 'Exports are empty';
         if (typeof command.run !== 'function') return 'Missing run function';

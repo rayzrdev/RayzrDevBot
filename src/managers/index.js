@@ -1,15 +1,20 @@
 const chalk = require('chalk');
 const Manager = require('./manager');
-
+const EventEmitter = require('events');
 
 /**
  * Handles all managers
  * 
+ * @member {EventEmitter} events The EventEmitter that is shared between managers
+ * @member {Manager[]} managers An array of all Manager objects
+ * 
  * @class ManagerHandler
  */
 class ManagerHandler {
+
     constructor() {
-        this._managers = [];
+        this.events = new EventEmitter();
+        this.managers = [];
     }
 
     add(name) {
@@ -22,7 +27,7 @@ class ManagerHandler {
                 throw 'Class must extend Manager.';
             }
 
-            this._managers.push(new manager());
+            this.managers.push(new manager());
         } catch (err) {
             console.error(`Failed to load manager '${name}': ${err}`);
             process.exit(1);
@@ -32,7 +37,7 @@ class ManagerHandler {
     }
 
     get(name) {
-        return this._managers.find(manager => manager.getName() === name);
+        return this.managers.find(manager => manager.getName() === name);
     }
 
     _runAll(methodName, params) {
@@ -40,7 +45,7 @@ class ManagerHandler {
             params = [params];
         }
 
-        this._managers.forEach(manager => {
+        this.managers.forEach(manager => {
             if (manager[methodName]) {
                 try {
                     manager[methodName].apply(manager, params);
@@ -52,6 +57,10 @@ class ManagerHandler {
         });
     }
 
+    _setAll(property, value) {
+        this.managers.forEach(manager => manager[property] = value);
+    }
+
     /**
      * Calls preInit on all managers
      * 
@@ -59,6 +68,7 @@ class ManagerHandler {
      * @memberOf ManagerHandler
      */
     preInit() {
+        this._setAll('handler', this);
         this._runAll('preInit');
     }
 
@@ -79,8 +89,7 @@ class ManagerHandler {
             this.onMessage(message);
         });
 
-        this._managers.forEach(manager => manager.bot = bot);
-
+        this._setAll('bot', bot);
         this._runAll('init', bot);
     }
 
@@ -91,9 +100,8 @@ class ManagerHandler {
      * @memberOf ManagerHandler
      */
     disconnect() {
+        this._setAll('bot', undefined);
         this._runAll('disconnect');
-
-        this._managers.forEach(manager => delete manager.bot);
     }
 
     /**

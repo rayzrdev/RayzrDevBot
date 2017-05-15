@@ -22,7 +22,7 @@ gulp.task('lint', () => {
         .pipe(eslint.failAfterError());
 });
 
-gulp.task('main'/*, ['lint']*/, () => {
+gulp.task('main', ['lint'], () => {
     killBot();
 
     bot = spawn('node', ['--harmony', project.main], { 'stdio': 'inherit' });
