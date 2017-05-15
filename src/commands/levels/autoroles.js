@@ -3,22 +3,7 @@ exports.init = bot => {
 };
 
 exports.run = async (bot, msg, args) => {
-    const roles = await this.autorole.getRoles(msg.guild.id);
-
-    if (args.length < 1) {
-        if (Object.keys(roles).length < 1) {
-            throw 'No auto-roles have been set up yet.';
-        }
-
-        let message = '__**ROLES**__\n\n';
-
-        Object.keys(roles).forEach(level => {
-            const role = msg.guild.roles.get(roles[level]) || { name: '~~INVALID-ROLE~~' };
-            message += `:arrow_right: ${role.name}\n:white_small_square: Given at level ${level}\n\n`;
-        });
-
-        return msg.channel.send(message);
-    }
+    msg.delete();
 
     if (/add/i.test(args[0])) {
         if (args.length < 2) {
@@ -57,6 +42,9 @@ exports.run = async (bot, msg, args) => {
             throw 'The level must be at least 1!';
         }
 
+
+        const roles = await this.autorole.getRoles(msg.guild.id);
+
         if (!roles[level]) {
             throw `There are no roles set for level ${level}.`;
         }
@@ -74,7 +62,8 @@ exports.run = async (bot, msg, args) => {
 
 exports.info = {
     name: 'autoroles',
-    usage: 'autoroles [add|remove]',
-    aliases: ['roles'],
-    description: 'Shows or modifies the auto-role settings.'
+    usage: 'autoroles <add|remove> <level> [role]',
+    aliases: ['autorole'],
+    description: 'Modifies the auto-role settings.',
+    perms: ['MANAGE_GUILD']
 };

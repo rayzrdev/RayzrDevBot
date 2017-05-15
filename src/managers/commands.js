@@ -63,6 +63,28 @@ class CommandManager extends Manager {
         });
     }
 
+    _checkPermissions(member, command) {
+        if (command.info.perms) {
+            let perms = command.info.perms;
+            if (!(command.info.perms instanceof Array)) {
+                perms = [perms];
+            }
+
+            for (const key in perms) {
+                const perm = perms[key];
+                if (!member.hasPermission(perm)) {
+                    return `You need the permission \`${perm}\` to use this command.`;
+                }
+            }
+        }
+
+        if (command.info.ownerOnly && member.id !== (global.config.ownerID || '138048234819026944')) {
+            return 'Only the owner of the bot can use this command.';
+        }
+
+        return '';
+    }
+
     get commands() {
         return this._commands.slice(0);
     }
@@ -80,13 +102,21 @@ class CommandManager extends Manager {
 
         const command = this.findCommand(base);
 
-        if (command) {
-            try {
-                await command.run(this.bot, message, args);
-            } catch (err) {
-                message.channel.send(`:x: ${err && err.message || err || 'An unknown error has occurred!'}`)
-                    .then(m => m.delete(5000));
-            }
+        if (!command) {
+            return;
+        }
+
+        const permMessage = this._checkPermissions(message.member, command);
+        if (permMessage) {
+            return message.channel.send(`:no_entry_sign: ${permMessage}`)
+                .then(m => m.delete(5000));
+        }
+
+        try {
+            await command.run(this.bot, message, args);
+        } catch (err) {
+            message.channel.send(`:x: ${err && err.message || err || 'An unknown error has occurred!'}`)
+                .then(m => m.delete(5000));
         }
     }
 }
