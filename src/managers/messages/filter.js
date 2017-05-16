@@ -54,6 +54,14 @@ function randomItem(arr) {
 }
 
 class FilterManager extends Manager {
+    getName() { return 'filter'; }
+
+    init() {
+        this.bot.on('messageUpdate', (_, message) => {
+            this.onMessage(message);
+        });
+    }
+
     onMessage(message) {
         if (message.content.startsWith('//')) return;
         let warning = this.getFilterMessage(message.content);
