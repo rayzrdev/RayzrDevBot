@@ -8,11 +8,10 @@ exports.run = async (bot, msg, args) => {
         throw 'You must enter a server IP!';
     }
 
-    msg.delete();
-
     const host = args[0].split(':')[0];
     const port = args[0].split(':')[1] || '25565';
 
+    msg.delete();
     const m = await msg.channel.send(':arrows_counterclockwise:');
 
     pinger.ping(host, port, (err, result) => {
@@ -25,8 +24,9 @@ exports.run = async (bot, msg, args) => {
                     **Ping:** \`${result.ping}ms\`
                     **Players:** \`${result.players.online}/${result.players.max}\`
                     **Version:** \`${result.version.name}\`
-                    **Motd:**\`\`\`\n${(result.description).replace(/\u00a7[0-9a-fklmnor]/g, '')}\n\`\`\`
-            `).setColor(global.config.color)
+                    **Motd:**\`\`\`\n${(result.description).replace(/\u00a7[0-9a-fklmnor]/g, '')}\n\`\`\``)
+                .setFooter(`Requested by ${msg.author.tag}`)
+                .setColor(global.config.color)
         });
     });
 };

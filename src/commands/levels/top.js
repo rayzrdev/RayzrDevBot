@@ -21,11 +21,14 @@ exports.run = async (bot, msg, args) => {
     }
     messages.push(users);
 
+    msg.delete();
+
     messages.forEach(single => {
         msg.channel.send({
             embed: new RichEmbed()
                 .setTitle(`Top ${amount} users on **${msg.guild}**`)
                 .setDescription(`\u200b\n${single.join('\n\n')}`)
+                .setFooter(`Requested by ${msg.author.tag}`)
                 .setColor(bot.config.color)
         });
     });

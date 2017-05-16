@@ -26,13 +26,14 @@ exports.run = (bot, msg, args) => {
         }
     }
 
-    while (fields.length > 0) {
-        const slice = fields.splice(0, 15);
+    msg.delete();
 
+    while (fields.length > 0) {
         msg.channel.send({
-            embed: new RichEmbed({ fields: slice })
+            embed: new RichEmbed({ fields: fields.splice(0, 15) })
                 .setTitle(`Help for ${global.config.name}`)
                 .setDescription('\n\u200b')
+                .setFooter(`Requested by ${msg.author.tag}`)
                 .setColor(global.config.color)
         });
     }
