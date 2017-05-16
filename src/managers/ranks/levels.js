@@ -1,5 +1,7 @@
 const Manager = require('../manager');
 
+const keyPrefix = 'level.';
+
 class Levels extends Manager {
     getName() { return 'levels'; }
 
@@ -41,7 +43,7 @@ class Levels extends Manager {
         const xpToLevel = this.neededXP(currentLevel);
         const remaining = await this.remainingXPFromTotal(total);
 
-        const users = (await this.getUsers()).map(e => e.key);
+        const users = (await this.getUsers()).map(e => e.id);
 
         return {
             total,
@@ -99,11 +101,11 @@ class Levels extends Manager {
     }
 
     async getXP(id) {
-        return await this.db.get(`level.${id}`) || 0;
+        return await this.db.get(`${keyPrefix}${id}`) || 0;
     }
 
     async setXP(id, value) {
-        await this.db.put(`level.${id}`, value);
+        await this.db.put(`${keyPrefix}${id}`, value);
     }
 
     async addXP(id, value) {
@@ -117,8 +119,12 @@ class Levels extends Manager {
 
     async getUsers() {
         return (await this.db.entries())
-            .filter(entry => entry.key.startsWith('level.'))
-            .sort((a, b) => b.value - a.value);
+            .filter(entry => entry.key.startsWith(keyPrefix))
+            .map(entry => ({
+                id: entry.key.slice(keyPrefix.length),
+                xp: entry.value
+            }))
+            .sort((a, b) => b.xp - a.xp);
     }
 }
 

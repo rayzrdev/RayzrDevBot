@@ -15,8 +15,8 @@ exports.run = async (bot, msg, args) => {
 
     const top = await this.levels.getTop(amount);
 
-    const users = top.map((e, i) => {
-        return `**${i + 1}.** <@${e.key}> (Lvl. ${this.levels.levelFromXP(e.value)})`;
+    const users = top.map((user, i) => {
+        return `**${i + 1}.** <@${user.id}> (Lvl. ${this.levels.levelFromXP(user.xp)})`;
     }).filter(text => !!text);
 
     const messages = [];
