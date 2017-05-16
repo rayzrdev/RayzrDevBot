@@ -1,12 +1,11 @@
-const path = require('path');
-const XPDB = require('xpdb');
+const Manager = require('../manager');
 
-const db = new XPDB(path.join(__dirname, '../../levelsdb'));
+class Levels extends Manager {
+    getName() { return 'levels'; }
 
-class Levels {
-
-    constructor() {
+    preInit() {
         this._speakTimes = {};
+        this.db = global.db;
     }
 
     neededXP(n) {
@@ -19,9 +18,9 @@ class Levels {
     }
 
     remainingXPFromTotal(xp) {
-        var level = this.levelFromXP(xp);
+        const level = this.levelFromXP(xp);
 
-        for (var i = 0; i < level; i++) {
+        for (let i = 0; i < level; i++) {
             xp -= this.neededXP(i);
         }
 
@@ -37,12 +36,12 @@ class Levels {
      * @memberOf Levels
      */
     async getUserData(id) {
-        var total = await this.getXP(id);
-        var currentLevel = await this.levelFromXP(total);
-        var xpToLevel = this.neededXP(currentLevel);
-        var remaining = await this.remainingXPFromTotal(total);
+        const total = await this.getXP(id);
+        const currentLevel = await this.levelFromXP(total);
+        const xpToLevel = this.neededXP(currentLevel);
+        const remaining = await this.remainingXPFromTotal(total);
 
-        var users = (await this.getUsers()).map(e => e.key);
+        const users = (await this.getUsers()).map(e => e.key);
 
         return {
             total,
@@ -64,19 +63,25 @@ class Levels {
         return this._speakTimes[id] || (this._speakTimes[id] = this._now());
     }
 
-    async checkMessage(msg) {
-        if (msg.author.bot) return;
-        if (this._now() - this._lastSpoke(msg.author.id) < 60) {
+    async onMessage(message) {
+        if (message.author.bot) return;
+        if (this._now() - this._lastSpoke(message.author.id) < 60) {
             return;
         }
-        this._speakTimes[msg.author.id] = this._now();
+        this._speakTimes[message.author.id] = this._now();
 
-        var currentLevel = await this.getLevel(msg.author.id);
-        await this.addXP(msg.author.id, 15 + (Math.random() * 10));
-        var newLevel = await this.getLevel(msg.author.id);
+        const currentLevel = await this.getLevel(message.author.id);
+        await this.addXP(message.author.id, 15 + (Math.random() * 10));
+        const newLevel = await this.getLevel(message.author.id);
 
         if (newLevel > currentLevel) {
-            msg.author.sendMessage(`You're now level **${newLevel}** on **${msg.guild.name}**`);
+            this.handler.events.emit('levelChange', {
+                member: message.member,
+                from: currentLevel,
+                to: newLevel
+            });
+
+            message.author.send(`You're now level **${newLevel}** on **${message.guild.name}**`);
         }
     }
 
@@ -85,7 +90,7 @@ class Levels {
     }
 
     levelFromXP(xp) {
-        var level = 0;
+        let level = 0;
         while (xp >= this.neededXP(level)) {
             xp -= this.neededXP(level);
             level++;
@@ -94,15 +99,15 @@ class Levels {
     }
 
     async getXP(id) {
-        return await db.get(id) || 0;
+        return await this.db.get(`level.${id}`) || 0;
     }
 
     async setXP(id, value) {
-        await db.put(id, value);
+        await this.db.put(`level.${id}`, value);
     }
 
     async addXP(id, value) {
-        var current = await this.getXP(id);
+        const current = await this.getXP(id);
         await this.setXP(id, current + value);
     }
 
@@ -111,7 +116,9 @@ class Levels {
     }
 
     async getUsers() {
-        return (await db.entries()).sort((a, b) => b.value - a.value);
+        return (await this.db.entries())
+            .filter(entry => entry.key.startsWith('level.'))
+            .sort((a, b) => b.value - a.value);
     }
 }
 

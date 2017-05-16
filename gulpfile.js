@@ -3,7 +3,11 @@ const eslint = require('gulp-eslint');
 const spawn = require('child_process').spawn;
 const project = require('./package.json');
 
-var bot;
+let bot;
+
+function killBot() {
+    if (bot) bot.kill();
+}
 
 const paths = {
     srcFiles: 'src/**/!(_)*.js',
@@ -18,12 +22,14 @@ gulp.task('lint', () => {
         .pipe(eslint.failAfterError());
 });
 
-gulp.task('main'/*, ['lint']*/, () => {
-    if (bot) bot.kill();
+gulp.task('main', ['lint'], () => {
+    killBot();
+
     bot = spawn('node', ['--harmony', project.main], { 'stdio': 'inherit' });
-    bot.on('close', (code) => {
-        if (code === 8) {
-            console.log('Error detected, waiting for changes...');
+    bot.on('close', code => {
+        if (code === 42) {
+            console.log('Restart code detected, rebooting...');
+            gulp.task('main');
         }
     });
 });
@@ -38,4 +44,4 @@ gulp.task('watch', () => {
 
 gulp.task('default', ['main', 'watch']);
 
-process.on('exit', () => { if (bot) bot.kill(); });
+process.on('exit', killBot);

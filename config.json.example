@@ -1,0 +1,13 @@
+{
+    "name": "RayzrDev Bot",
+    "prefix": "-",
+    "color": [
+        185,
+        220,
+        255
+    ],
+    "token": "",
+    "curseforgeAPIToken": "",
+    "joinMessage": "Welcome to the offical RayzrDev server, {user}!",
+    "ownerID": "138048234819026944"
+}
