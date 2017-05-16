@@ -1,3 +1,5 @@
+const fuhk = require('fuhk');
+
 const Manager = require('../manager');
 const emojis = [
     ':angry:',
@@ -15,7 +17,7 @@ const emojis = [
 
 const filters = [
     {
-        filter: new RegExp(require('badwords-list').regex.source, 'i'),
+        filter: input => fuhk(input).length > 0,
         messages: [
             'Swearing is not allowed!',
             'Don\'t do that.',
