@@ -26,7 +26,7 @@ const filters = [
         ]
     },
     {
-        filter: /[A-Z\s]{5,}/,
+        filter: /[A-Z\s]{15,}/,
         messages: [
             'Please don\'t do that.',
             'Don\'t spam caps.',
@@ -37,7 +37,7 @@ const filters = [
     {
         // In the regex token '{X,}', the number of
         // chars needed to count as char spam is X + 1
-        filter: /([a-z])\1{5,}/i,
+        filter: /([a-z])\1{12,}/i,
         messages: [
             'Don\'t spam characters, really.',
             'Character spam is pointless.',
@@ -45,6 +45,18 @@ const filters = [
             'Character spam is not allowed here!',
             'Are you done yet?',
             'No more of that!'
+        ]
+    },
+    {
+        filter: (input, context) => {
+            return context.channel.name !== 'promote-yourself'
+                && !context.member.hasPermission('MANAGE_MESSAGES')
+                && /(https?)?(:\/\/)?discord\.(io|gg|me)\/?[^/]+/i.test(input);
+        },
+        messages: [
+            'Please post server invites in #promote-yourself.',
+            'Server invites belong in #promote-yourself.',
+            'Please move all server invites to #promote-yourself.'
         ]
     }
 ];
@@ -63,31 +75,32 @@ class FilterManager extends Manager {
     }
 
     onMessage(message) {
-        if (message.content.startsWith('//')) return;
-        let warning = this.getFilterMessage(message.content);
+        let warning = this.getFilterMessage(message, message.content);
+
         if (!warning && message.embeds.length > 0) {
             message.embeds.forEach(embed => {
                 warning = warning
-                    || this.getFilterMessage(embed.title)
-                    || this.getFilterMessage(embed.description)
-                    || this.getFilterMessage((embed.footer || {}).text);
+                    || this.getFilterMessage(message, embed.title)
+                    || this.getFilterMessage(message, embed.description)
+                    || this.getFilterMessage(message, (embed.footer || {}).text);
             });
         }
 
         if (warning) {
             message.delete();
             message.channel.send(warning).then(m => m.delete(2000));
+            return;
         }
     }
 
-    getFilterMessage(content) {
+    getFilterMessage(context, content) {
         if (!content) return;
 
         const violatedFilter = filters.find(item => {
             if (item.filter instanceof RegExp) {
                 return item.filter.test(content);
             } else if (typeof item.filter === 'function') {
-                return item.filter(content);
+                return item.filter(content, context);
             }
         });
 
