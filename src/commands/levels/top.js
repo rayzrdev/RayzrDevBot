@@ -20,8 +20,8 @@ exports.run = async (bot, msg, args) => {
     }).filter(text => !!text);
 
     const messages = [];
-    while (users.length > 50) {
-        messages.push(users.splice(0, 50));
+    while (users.length > 25) {
+        messages.push(users.splice(0, 25));
     }
     messages.push(users);
 
