@@ -34,7 +34,7 @@ exports.run = async (bot, msg, args) => {
                 .setDescription(`\u200b\n${single.join('\n\n')}`)
                 .setFooter(`Requested by ${msg.author.tag}`)
                 .setColor(global.config.color)
-        });
+        }).then(m => m.delete(60000));
     });
 };
 

@@ -15,7 +15,7 @@ exports.run = async (bot, msg) => {
             .setAuthor(user.username, user.avatarURL)
             .setFooter(`Requested by ${msg.author.tag}`)
             .setColor(global.config.color)
-    }).then(m => m.delete(15000));
+    }).then(m => m.delete(30000));
 };
 
 exports.info = {
