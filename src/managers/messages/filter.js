@@ -16,17 +16,17 @@ const emojis = [
 ];
 
 const filters = [
-    {
-        filter: input => fuhk(input).length > 0,
-        messages: [
-            'Swearing is not allowed!',
-            'Don\'t do that.',
-            'Denied.',
-            'Please follow the rules.',
-            'Nope.',
-            'No swearing here!'
-        ]
-    },
+    // {
+    //     filter: input => fuhk(input).length > 0,
+    //     messages: [
+    //         'Swearing is not allowed!',
+    //         'Don\'t do that.',
+    //         'Denied.',
+    //         'Please follow the rules.',
+    //         'Nope.',
+    //         'No swearing here!'
+    //     ]
+    // },
     {
         filter: /[A-Z\s]{15,}/,
         messages: [
