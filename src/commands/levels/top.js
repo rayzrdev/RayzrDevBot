@@ -1,5 +1,9 @@
 const RichEmbed = require('discord.js').RichEmbed;
 
+exports.init = bot => {
+    this.levels = bot.managers.get('levels');
+};
+
 exports.run = async (bot, msg, args) => {
     let amount = 10;
     if (!isNaN(args[0])) {
@@ -9,10 +13,10 @@ exports.run = async (bot, msg, args) => {
         }
     }
 
-    const top = await bot.levels.getTop(amount);
+    const top = await this.levels.getTop(amount);
 
     const users = top.map((e, i) => {
-        return `**${i + 1}.** <@${e.key}> (Lvl. ${bot.levels.levelFromXP(e.value)})`;
+        return `**${i + 1}.** <@${e.key}> (Lvl. ${this.levels.levelFromXP(e.value)})`;
     }).filter(text => !!text);
 
     const messages = [];
