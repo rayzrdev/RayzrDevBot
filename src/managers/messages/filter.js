@@ -1,7 +1,6 @@
 const Manager = require('../manager');
 const emojis = [
     ':angry:',
-    ':rage:',
     ':face_palm:',
     ':confused:',
     ':unamused:',
@@ -38,13 +37,14 @@ const filters = [
     {
         // In the regex token '{X,}', the number of
         // chars needed to count as char spam is X + 1
-        filter: /([a-z])\1{8,}/i,
+        filter: /([a-z])\1{5,}/i,
         messages: [
             'Don\'t spam characters, really.',
             'Character spam is pointless.',
             'No need to repeat yourself.',
             'Character spam is not allowed here!',
-            'Are you done yet?'
+            'Are you done yet?',
+            'No more of that!'
         ]
     }
 ];
