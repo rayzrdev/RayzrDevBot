@@ -28,7 +28,8 @@ const managers = bot.managers = new ManagerHandler()
     .add('settings')
     .add('ranks/levels')
     .add('ranks/autorole')
-    .add('logger')
+    .add('messages/logger')
+    .add('messages/filter')
     .add('commands');
 
 managers.preInit();

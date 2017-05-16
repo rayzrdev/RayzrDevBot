@@ -1,5 +1,5 @@
 const RichEmbed = require('discord.js').RichEmbed;
-const Manager = require('./manager');
+const Manager = require('../manager');
 
 class Logger extends Manager {
     getName() {
