@@ -10,15 +10,15 @@ exports.run = async (bot, msg, args) => {
 
     const reason = args.slice(1).join(' ');
 
-    await member.user.send(`You were banned for **${reason}**`);
-    member.ban({ reason });
+    await member.user.send(`You were kicked for **${reason}**`);
+    member.kick(reason);
 
-    msg.channel.send(`Banned **${member.user.tag}**. :boom: :hammer:`);
+    msg.channel.send(`Kicked **${member.user.tag}**. :boot: :zap:`);
 };
 
 exports.info = {
-    name: 'ban',
-    usage: 'ban <user> <reason>',
-    description: 'Bans a user',
-    perms: 'BAN_MEMBERS'
+    name: 'kick',
+    usage: 'kick <user> <reason>',
+    description: 'Kicks a user',
+    perms: 'KICK_MEMBERS'
 };
