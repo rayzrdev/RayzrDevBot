@@ -5,14 +5,14 @@ const chalk = require('chalk');
 const Discord = require('discord.js');
 const ManagerHandler = require('./managers');
 
-require('readline').createInterface(process.stdin).on('line', line => {
-    try {
-        const output = eval(line);
-        console.log(output);
-    } catch (err) {
-        console.error('/!\\ Error: ', err);
-    }
-});
+// require('readline').createInterface(process.stdin).on('line', line => {
+//     try {
+//         const output = eval(line);
+//         console.log(output);
+//     } catch (err) {
+//         console.error('/!\\ Error: ', err);
+//     }
+// });
 
 global.settings = {
     baseDir: path.resolve(__dirname, '..'),
@@ -65,6 +65,8 @@ bot.on('guildMemberAdd', (member) => {
 });
 
 bot.on('message', message => {
+    if (message.author.bot) return;
+
     if (/^ay+$/i.test(message.cleanContent)) {
         message.channel.send(`${message.cleanContent}${message.cleanContent.length > 1000 ? '' : 'yyyyy'}`);
     }
