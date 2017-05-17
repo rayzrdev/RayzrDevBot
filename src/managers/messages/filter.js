@@ -15,6 +15,7 @@ const emojis = [
 
 const filters = [
     {
+        name: 'caps spam',
         filter: /(([A-Z]{2,}\s+){5,}[A-Z]{2,})|([A-Z]{15,})/,
         messages: [
             'Please don\'t do that.',
@@ -24,6 +25,7 @@ const filters = [
         ]
     },
     {
+        name: 'character spam',
         // In the regex token '{X,}', the number of
         // chars needed to count as char spam is X + 1
         filter: /([a-z])\1{12,}/i,
@@ -58,8 +60,16 @@ class FilterManager extends Manager {
     getName() { return 'filter'; }
 
     init() {
-        this.bot.on('messageUpdate', (_, message) => {
-            this.onMessage(message);
+        const bot = this.bot;
+
+        bot.on('messageUpdate', (oldMessage, newMessage) => {
+            if (!newMessage.guild || newMessage.author.id === bot.user.id || newMessage.author.bot) {
+                return;
+            }
+
+            if (oldMessage.content === newMessage.content) return;
+
+            this.onMessage(newMessage);
         });
     }
 
@@ -94,7 +104,7 @@ class FilterManager extends Manager {
         });
 
         if (violatedFilter) {
-            return randomItem(violatedFilter.messages) + ' ' + randomItem(emojis);
+            return `${randomItem(violatedFilter.messages)} ${randomItem(emojis)} **[${violatedFilter.name}]**`;
         }
     }
 }
