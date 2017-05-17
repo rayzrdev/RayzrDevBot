@@ -15,7 +15,7 @@ const emojis = [
 
 const filters = [
     {
-        filter: /([A-Z]{2,}\s+){3,}[A-Z]{2,}/,
+        filter: /(([A-Z]{2,}\s+){5,}[A-Z]{2,})|([A-Z]{15,})/,
         messages: [
             'Please don\'t do that.',
             'Don\'t spam caps.',
