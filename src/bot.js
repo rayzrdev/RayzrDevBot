@@ -53,11 +53,14 @@ bot.on('ready', () => {
 });
 
 function updateDisplay() {
-    bot.user.setGame(`${config.prefix}help | ${bot.users.size} users`);
+    let totalUsers = 0;
 
     bot.guilds.forEach(g => {
+        totalUsers += g.memberCount;
         g.defaultChannel.setTopic(`Members: ${g.memberCount} | Online: ${g.members.filter(m => m.presence.status !== 'offline').size}`);
     });
+
+    bot.user.setGame(`${config.prefix}help | ${totalUsers} users`);
 }
 
 bot.on('guildMemberAdd', (member) => {
