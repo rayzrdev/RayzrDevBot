@@ -82,7 +82,7 @@ class ManagerHandler {
         this.bot = bot;
 
         bot.on('message', message => {
-            if (!message.guild || message.author.id === bot.user.id || message.author.bot) {
+            if (!message.guild || !message.member || message.author.id === bot.user.id || message.author.bot) {
                 return;
             }
 

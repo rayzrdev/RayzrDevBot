@@ -63,7 +63,7 @@ class FilterManager extends Manager {
         const bot = this.bot;
 
         bot.on('messageUpdate', (oldMessage, newMessage) => {
-            if (!newMessage.guild || newMessage.author.id === bot.user.id || newMessage.author.bot) {
+            if (!newMessage.guild || !newMessage.member || newMessage.author.id === bot.user.id || newMessage.author.bot) {
                 return;
             }
 
