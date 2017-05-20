@@ -26,19 +26,17 @@ exports.run = (bot, msg, args) => {
         }
     }
 
-    msg.delete();
-
     while (fields.length > 0) {
-        msg.channel.send({
+        msg.author.send({
             embed: new RichEmbed({ fields: fields.splice(0, 15) })
                 .setTitle(`Help for ${global.config.name}`)
                 .setDescription('\n\u200b')
-                .setFooter(`Requested by ${msg.author.tag}`)
                 .setColor(global.config.color)
         });
     }
 
-
+    msg.delete();
+    msg.channel.send(':inbox_tray: Sent you a DM with help! :grin:').then(m => m.delete(5000));
 };
 
 function getField(bot, command) {
