@@ -5,16 +5,43 @@ const EventEmitter = require('events');
 /**
  * Handles all managers
  * 
- * @member {EventEmitter} events The EventEmitter that is shared between managers
- * @member {Manager[]} managers An array of all Manager objects
- * 
  * @class ManagerHandler
  */
 class ManagerHandler {
-
+    /**
+     * Creates an instance of ManagerHandler.
+     * 
+     * @memberof ManagerHandler
+     */
     constructor() {
-        this.events = new EventEmitter();
-        this.managers = [];
+        this._events = new EventEmitter();
+        this._managers = [];
+    }
+
+    /**
+     * The event bus
+     * 
+     * @type {EventEmitter}
+     * 
+     * @readonly
+     * 
+     * @memberof ManagerHandler
+     */
+    get events() {
+        return this._events;
+    }
+
+    /**
+     * The array of managers
+     * 
+     * @type {Array<Manager>}
+     * 
+     * @readonly
+     * 
+     * @memberof ManagerHandler
+     */
+    get managers() {
+        return this._managers;
     }
 
     add(name) {
@@ -64,19 +91,17 @@ class ManagerHandler {
     /**
      * Calls preInit on all managers
      * 
-     * 
-     * @memberOf ManagerHandler
+     * @memberof ManagerHandler
      */
     preInit() {
-        this._setAll('handler', this);
+        this._setAll('_handler', this);
         this._runAll('preInit');
     }
 
     /**
      * Calls init on all managers
      * 
-     * 
-     * @memberOf ManagerHandler
+     * @memberof ManagerHandler
      */
     init(bot) {
         this.bot = bot;
@@ -89,7 +114,7 @@ class ManagerHandler {
             this.onMessage(message);
         });
 
-        this._setAll('bot', bot);
+        this._setAll('_bot', bot);
         this._runAll('init', bot);
     }
 
@@ -97,7 +122,7 @@ class ManagerHandler {
      * Calls disconnect on all managers
      * 
      * 
-     * @memberOf ManagerHandler
+     * @memberof ManagerHandler
      */
     disconnect() {
         this._setAll('bot', undefined);
@@ -107,8 +132,7 @@ class ManagerHandler {
     /**
      * Calls onMessage on all managers
      * 
-     * 
-     * @memberOf ManagerHandler
+     * @memberof ManagerHandler
      */
     onMessage(message) {
         this._runAll('onMessage', [message]);

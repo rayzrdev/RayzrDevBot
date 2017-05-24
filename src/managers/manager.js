@@ -1,9 +1,6 @@
 /**
  * Represents a manager. Could manage commands, a config, a database, anything. Override individual methods to run setup.
  * 
- * @member {object} handler The ManagerHandler instance. Only available starting with preInit().
- * @member {object} bot The bot instance. Only available between init() and disconnect().
- * 
  * @class Manager
  */
 class Manager {
@@ -12,7 +9,7 @@ class Manager {
      * 
      * @returns The name of this manager. Overwrite to change from the default.
      * 
-     * @memberOf Manager
+     * @memberof Manager
      */
     getName() {
         return '[Manager]';
@@ -21,23 +18,49 @@ class Manager {
     /**
      * Called when the bot loads, before it logs into Discord. Used for one-time setup methods.
      * 
-     * @memberOf Manager
+     * @memberof Manager
      */
     preInit() { }
 
     /**
      * Called when the bot logs into Discord. Keep in mind, this may be called multiple times when running a bot if it has to reconnect to Discord.
      * 
-     * @memberOf Manager
+     * @memberof Manager
      */
     init() { }
 
     /**
      * Called when the bot disconnects from Discord.
      * 
-     * @memberOf Manager
+     * @memberof Manager
      */
     disconnect() { }
+
+    /**
+     * The ManagerHandler that owns this manager
+     * 
+     * @type {ManagerHandler}
+     * 
+     * @readonly
+     * 
+     * @memberof Manager
+     */
+    get handler() {
+        return this._handler;
+    }
+
+    /**
+     * A reference to the bot object
+     * 
+     * @type {Discord.Client}
+     * 
+     * @readonly
+     * 
+     * @memberof Manager
+     */
+    get bot() {
+        return this._bot;
+    }
 }
 
 module.exports = Manager;

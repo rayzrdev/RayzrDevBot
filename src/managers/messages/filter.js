@@ -90,6 +90,13 @@ class FilterManager extends Manager {
             message.channel.send(warning).then(m => m.delete(2000));
             return;
         }
+
+        this.handler.get('levels').getLevel(message.author.id).then(level => {
+            if (level < 5) {
+                message.delete();
+                message.author.send(':x: You must be at least level **5** to post in #promote-yourself');
+            }
+        });
     }
 
     getFilterMessage(context, content) {
