@@ -91,12 +91,14 @@ class FilterManager extends Manager {
             return;
         }
 
-        this.handler.get('levels').getLevel(message.author.id).then(level => {
-            if (level < 5) {
-                message.delete();
-                message.author.send(':x: You must be at least level **5** to post in #promote-yourself');
-            }
-        });
+        if (message.channel.name === 'promote-yourself') {
+            this.handler.get('levels').getLevel(message.author.id).then(level => {
+                if (level < 5) {
+                    message.delete();
+                    message.author.send(':x: You must be at least level **5** to post in #promote-yourself');
+                }
+            });
+        }
     }
 
     getFilterMessage(context, content) {
