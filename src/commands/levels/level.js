@@ -17,7 +17,7 @@ exports.run = (bot, msg, args) => {
     const xp = this.levels.xpFromLevel(level - 1);
     this.levels.setXP(member.id, xp).then(() => {
         msg.channel.send(`:white_check_mark: Set ${member}'s level to ${level}`);
-    }
+    });
 };
 
 exports.info = {
