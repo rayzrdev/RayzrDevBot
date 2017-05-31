@@ -29,6 +29,15 @@ class Levels extends Manager {
         return xp;
     }
 
+    xpFromLevel(level) {
+        let xp = 0;
+        while (level >= 0) {
+            xp += this.neededXP(level);
+            level--;
+        }
+        return xp;
+    }
+
     /**
      * Gets the data for a user
      * 
