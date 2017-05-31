@@ -4,14 +4,14 @@ exports.init = bot => {
 
 exports.run = (bot, msg, args) => {
     if (args.length < 2) {
-        throw 'Please provide a user and an XP amount';
+        throw 'Please provide a user and a level';
     }
 
     const member = msg.mentions.members.first();
     const level = parseInt(args[1]);
 
     if (isNaN(level)) {
-        throw `\`${args[1]}\` is not a valid XP amount.`;
+        throw `\`${args[1]}\` is not a valid level.`;
     }
 
     const xp = this.levels.xpFromLevel(level - 1);
