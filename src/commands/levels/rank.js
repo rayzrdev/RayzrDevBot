@@ -1,7 +1,16 @@
 const RichEmbed = require('discord.js').RichEmbed;
 
-exports.run = async (bot, msg) => {
-    const user = msg.mentions.users.first() || msg.author;
+exports.run = async (bot, msg, args) => {
+    let user;
+    if (msg.mentions.users.first()) {
+        user = msg.mentions.users.first();
+    } else if (args.length === 1) {
+        user = bot.users.get(args[0]);
+    }
+
+    if (!user) {
+        user = msg.author;
+    }
 
     const data = await bot.managers.get('levels').getUserData(user.id);
 
