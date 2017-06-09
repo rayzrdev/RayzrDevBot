@@ -24,7 +24,7 @@ class Logger extends Manager {
     }
 
     logMessageStatus(message, type, color, description) {
-        if (!message.guild || !message.guild.channels || !message.cleanContent) {
+        if (!message.guild || !message.guild.channels || (!message.cleanContent && !message.attachments.first())) {
             return;
         }
 
@@ -34,7 +34,7 @@ class Logger extends Manager {
             channel.send({
                 embed: new RichEmbed()
                     .setTitle(type)
-                    .setDescription(`\`\`\`\n${(description || message.cleanContent).substr(0, 1950)}`)
+                    .setDescription(`\`\`\`\n${(description || message.cleanContent).substr(0, 1950)}\n\`\`\``)
                     .addField('Channel', `${message.channel}`)
                     .setImage((message.attachments.first() || {}).url)
                     .setColor(color)
