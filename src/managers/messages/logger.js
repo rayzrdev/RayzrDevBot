@@ -36,7 +36,6 @@ class Logger extends Manager {
                     .setTitle(type)
                     .setDescription(`\`\`\`\n${(description || message.cleanContent).substr(0, 1950)}\n\`\`\``)
                     .addField('Channel', `${message.channel}`)
-                    .setImage((message.attachments.first() || {}).url)
                     .setColor(color)
                     .setTimestamp(new Date())
                     .setFooter(message.author.username, message.author.avatarURL)
