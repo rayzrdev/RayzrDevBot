@@ -39,6 +39,7 @@ const filters = [
         ]
     },
     {
+        name: 'invite link',
         filter: (input, context) => {
             return context.channel.name !== 'promote-yourself'
                 && !context.member.hasPermission('MANAGE_MESSAGES')

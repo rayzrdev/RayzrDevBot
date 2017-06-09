@@ -34,7 +34,9 @@ class Logger extends Manager {
             channel.send({
                 embed: new RichEmbed()
                     .setTitle(type)
-                    .setDescription(`\`\`\`\n${(description || message.cleanContent).substr(0, 1950)}\n\`\`\`\n **Channel:** ${message.channel}`)
+                    .setDescription(`\`\`\`\n${(description || message.cleanContent).substr(0, 1950)}`)
+                    .addField('Channel', `${message.channel}`)
+                    .setImage((message.attachments.first() || {}).url)
                     .setColor(color)
                     .setTimestamp(new Date())
                     .setFooter(message.author.username, message.author.avatarURL)
