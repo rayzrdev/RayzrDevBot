@@ -16,7 +16,7 @@ const emojis = [
 const filters = [
     {
         name: 'caps spam',
-        filter: /(([A-Z]{2,}\s+){5,}[A-Z]{2,})|([A-Z]{15,})/,
+        filter: /(([A-Z]{3,}\s+){25,}[A-Z]{3,})|([A-Z]{150,})/,
         messages: [
             'Please don\'t do that.',
             'Don\'t spam caps.',
@@ -28,7 +28,7 @@ const filters = [
         name: 'character spam',
         // In the regex token '{X,}', the number of
         // chars needed to count as char spam is X + 1
-        filter: /([a-z])\1{12,}/i,
+        filter: /([a-z])\1{50,}/i,
         messages: [
             'Don\'t spam characters, really.',
             'Character spam is pointless.',
@@ -89,6 +89,10 @@ class FilterManager extends Manager {
         if (warning) {
             message.delete();
             message.channel.send(warning).then(m => m.delete(2000));
+
+            message.author.send('**The following message was deleted:**').then(() => {
+                message.author.send(message.content);
+            });
             return;
         }
 
