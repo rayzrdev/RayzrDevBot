@@ -18,8 +18,8 @@ exports.run = (bot, msg, args) => {
         const output = clean(eval(input));
         msg.channel.send({
             embed: new RichEmbed()
-                .addField('Input', `\`\`\`javascript\n${input.substr(0, 250)}\n\`\`\``)
-                .addField('Output', `\`\`\`javascript\n${output.substr(0, 1500)}\n\`\`\``)
+                .addField('Input', `\`\`\`javascript\n${input.substr(0, 1024)}\n\`\`\``)
+                .addField('Output', `\`\`\`javascript\n${output.substr(0, 1024)}\n\`\`\``)
                 .setFooter(`Requested by ${msg.author.tag}`)
                 .setColor(global.config.color)
         }).then(m => m.delete(15000));
