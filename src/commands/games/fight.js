@@ -2,29 +2,49 @@ function randomItem(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
 
-const actions = {
-    punch: [
-        'was punched in the gut by',
-        'was punched in the face by',
-        'was punched in the stomach by'
-    ],
-    kick: [
-        'was kicked in his gut by',
-        'was dropkicked by',
-        'was kicked in his butt by'
-    ],
-    slam: [
-        'was slammed on the head with a ladder by',
-        'was slammed in the face with a hammer by',
-        'was slammed on the head with a metal door by',
-        'was slammed into the wall by'
-    ]
+const attacks = {
+    punch: {
+        damage: {
+            min: 5.0,
+            max: 7.0
+        },
+        attackChance: 0.64,
+        messages: [
+            'was punched in the gut by',
+            'was punched in the face by',
+            'was punched in the stomach by'
+        ]
+    },
+    kick: {
+        damage: {
+            min: 6.0,
+            max: 10.0
+        },
+        attackChance: 0.38,
+        messages: [
+            'was kicked in the gut by',
+            'was dropkicked by',
+            'was kicked in the butt by'
+        ]
+    },
+    slam: {
+        damage: {
+            min: 9.0,
+            max: 20.0
+        },
+        attackChance: 0.23,
+        messages: [
+            'was slammed on the head with a ladder by',
+            'was slammed in the face with a hammer by',
+            'was slammed on the head with a metal door by',
+            'was slammed into the wall by'
+        ]
+    }
 };
 
-const validActions = Object.keys(actions).concat('leave');
+const validActions = Object.keys(attacks).concat('leave');
+const validActionRegex = new RegExp(validActions.join('|'), 'i');
 const validActionString = validActions.map(action => `**${action}**`).join(' || ');
-
-const miss = 'You missed!';
 
 function Player(user) {
     if (Player.cache[user.id]) {
@@ -50,7 +70,20 @@ Player.prototype.debug = function () {
 
 Player.cache = {};
 
-exports.run = (bot, message) => {
+function generateMessage() {
+    return Object.keys(attacks).map(name => {
+        const attack = attacks[name];
+        return `**${name}**\nDamage: \`${attack.damage.min}-${attack.damage.max}\`\nAccuracy: \`${Math.floor(attack.attackChance * 100)}%\``;
+    }).join('\n\n');
+}
+
+exports.run = (bot, message, args) => {
+    if (args[0] === 'info') {
+        message.author.send(generateMessage());
+        message.channel.send(':crossed_swords: Sent attack information in DMs!');
+        return;
+    }
+
     const mention = message.mentions.users.first();
 
     if (!mention) {
@@ -62,7 +95,7 @@ exports.run = (bot, message) => {
     }
 
     if (mention.id === message.author.id) {
-        throw 'You can\'t play with yourself!';
+        throw 'You can\'t fight by yourself!';
     }
 
     const you = new Player(message.author);
@@ -94,14 +127,15 @@ function fight(message, player1, player2, turn) {
     const targetPlayer = turn ? player2 : player1;
 
     message.channel.send(`**${currentPlayer.user.username}**, it's your turn. Type ${validActionString} to hit the enemy.`);
-    message.channel.awaitMessages(response => response.author.id === currentPlayer.user.id && validActions.indexOf(response.content) > -1, {
+    message.channel.awaitMessages(response => response.author.id === currentPlayer.user.id && validActionRegex.test(response.content), {
         max: 1,
         time: 30000,
         errors: ['time'],
     }).then(collected => {
         const msg = collected.first();
+        const input = msg.content.toLowerCase();
 
-        if (msg.content === 'leave') {
+        if (input === 'leave') {
             msg.channel.send(`**${currentPlayer.user.username}** surrendered to **${targetPlayer.user.username}**!`);
 
             currentPlayer.reset();
@@ -110,30 +144,32 @@ function fight(message, player1, player2, turn) {
             return;
         }
 
-        const action = randomItem(actions[msg.content]);
-        const result = randomItem([miss, action]);
+        currentPlayer.miss = 0;
 
-        if (result === miss) {
-            message.channel.send(miss);
+        const attack = attacks[input];
+
+        if (Math.random() > attack.attackChance) {
+            message.channel.send('You missed!');
         } else {
-            // Damage from 5 to 20 (0 + 5 to 15 + 5)
-            const damage = Math.floor(Math.random() * 15 + 5);
+            // variation = max - min
+            // rand * variation + min
+            const damage = Math.round(Math.random() * (attack.damage.max - attack.damage.min) + attack.damage.min);
 
             targetPlayer.hp -= damage;
-            message.channel.send(`**${targetPlayer.user.username}** ${result} **${currentPlayer.user.username}**\n**${targetPlayer.user.username}**'s health is now ${targetPlayer.hp}, he lost ${damage} HP.`);
+            message.channel.send(`**${targetPlayer.user.username}** ${randomItem(attack.messages)} **${currentPlayer.user.username}**\n**${targetPlayer.user.username}**'s health is now ${targetPlayer.hp} (-${damage} HP).`);
+
+            if (targetPlayer.hp <= 0) {
+                message.channel.send(`**${targetPlayer.user.username}** was defeated by **${currentPlayer.user.username}**!`);
+                targetPlayer.reset();
+                currentPlayer.reset();
+                return;
+            }
         }
 
-        if (targetPlayer.hp <= 0) {
-            message.channel.send(`**${targetPlayer.user.username}** was defeated by **${currentPlayer.user.username}**!`);
-            targetPlayer.reset();
-            currentPlayer.reset();
-        } else {
-            // By doing !turn it inverts the turn state. Ezpz ;)
-            fight(message, player1, player2, !turn);
-        }
-
+        // By doing !turn it inverts the turn state. Ezpz ;)
+        fight(message, player1, player2, !turn);
     }).catch(() => {
-        message.channel.send(`**${currentPlayer.user.username}** didn't respond, so we can assume that he has lost his turn.`);
+        message.channel.send(`**${currentPlayer.user.username}** didn't respond, skipping their turn.`);
         currentPlayer.miss++;
 
         if (currentPlayer.miss >= 2) {
@@ -151,6 +187,6 @@ function fight(message, player1, player2, turn) {
 
 exports.info = {
     name: 'fight',
-    usage: 'fight <@user>',
+    usage: 'fight info|<@user>',
     description: 'Start a fight with another user and see who will win.'
 };
