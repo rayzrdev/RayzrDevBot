@@ -30,6 +30,7 @@ const managers = bot.managers = new ManagerHandler()
     .add('ranks/autorole')
     .add('messages/logger')
     .add('messages/filter')
+    .add('messages/ayy') // Because I can
     .add('commands');
 
 managers.preInit();
@@ -66,14 +67,6 @@ function updateDisplay() {
 bot.on('guildMemberAdd', (member) => {
     member.guild.defaultChannel.send(config.joinMessage.replace('{user}', `<@${member.id}>`));
     member.guild.owner.send(`${member} has joined ${member.guild}`);
-});
-
-bot.on('message', message => {
-    if (message.author.bot) return;
-
-    if (/^ay+$/i.test(message.cleanContent)) {
-        message.channel.send(`${message.cleanContent}${message.cleanContent.length > 1000 ? '' : 'yyyyy'}`);
-    }
 });
 
 process.on('unhandledRejection', err => {
