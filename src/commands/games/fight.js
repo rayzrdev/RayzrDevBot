@@ -8,7 +8,7 @@ const attacks = {
             min: 5.0,
             max: 7.0
         },
-        attackChance: 0.64,
+        attackChance: 0.75,
         messages: [
             'was punched in the gut by',
             'was punched in the face by',
@@ -20,7 +20,7 @@ const attacks = {
             min: 6.0,
             max: 10.0
         },
-        attackChance: 0.38,
+        attackChance: 0.60,
         messages: [
             'was kicked in the gut by',
             'was dropkicked by',
@@ -32,7 +32,7 @@ const attacks = {
             min: 9.0,
             max: 20.0
         },
-        attackChance: 0.23,
+        attackChance: 0.35,
         messages: [
             'was slammed on the head with a ladder by',
             'was slammed in the face with a hammer by',
