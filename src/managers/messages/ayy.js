@@ -17,6 +17,10 @@ class AyyManager extends Manager {
     }
 
     onMessage(message) {
+        if (!/^ay+$/i.test(message.cleanContent)) {
+            return;
+        }
+
         const now = Date.now();
         if (this.cooldowns[message.author.id] && now - this.cooldowns[message.author.id] < COOLDOWN_TIME) {
             message.delete();
@@ -26,19 +30,17 @@ class AyyManager extends Manager {
 
         this.cooldowns[message.author.id] = now;
 
-        if (/^ay+$/i.test(message.cleanContent)) {
-            const content = message.cleanContent;
-            const percentUpper = content.substr(1).split('').filter(c => c === 'Y').reduce(mem => mem + 1, 0) / (content.length - 1);
-            const length = Math.min(content.length + 5, 2000);
+        const content = message.cleanContent;
+        const percentUpper = content.substr(1).split('').filter(c => c === 'Y').reduce(mem => mem + 1, 0) / (content.length - 1);
+        const length = Math.min(content.length + 5, 2000);
 
-            let output = content[0];
+        let output = content[0];
 
-            for (let i = 1; i < length; i++) {
-                output += Math.random() > percentUpper ? 'y' : 'Y';
-            }
-
-            message.channel.send(output);
+        for (let i = 1; i < length; i++) {
+            output += Math.random() > percentUpper ? 'y' : 'Y';
         }
+
+        message.channel.send(output);
     }
 }
 
