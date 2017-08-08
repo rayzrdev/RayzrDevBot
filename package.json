@@ -26,7 +26,6 @@
     "leven": "^2.1.0",
     "minecraft-pinger": "^1.0.1",
     "path": "^0.12.7",
-    "webdict": "^0.1.0",
     "xpdb": "^1.0.1"
   }
 }

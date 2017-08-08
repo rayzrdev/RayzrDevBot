@@ -8,5 +8,5 @@ exports.run = (bot, msg) => {
 exports.info = {
     name: 'face',
     usage: 'face',
-    description: 'Shows a random ascii face'
+    description: 'Shows a random ASCII face'
 };

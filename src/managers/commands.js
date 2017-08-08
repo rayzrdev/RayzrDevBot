@@ -37,23 +37,34 @@ class CommandManager extends Manager {
         readdir(commandsFolder)
             .filter(file => !path.basename(file).startsWith('_') && file.endsWith('.js'))
             .forEach(file => {
+                let command;
+
                 try {
-                    const command = require(path.resolve(commandsFolder, file));
-                    const check = this.validateCommand(command);
-
-                    if (check) {
-                        return console.error(`Error in '${file}': ${chalk.red(check)}`);
-                    }
-
-                    if (this.findCommand(command.info.name)) {
-                        return console.error(`Duplicate command: An entry already exists for command ${chalk.red(command.info.name)} in file '${file}'`);
-                    }
-
-                    this._commands.push(command);
+                    command = require(path.resolve(commandsFolder, file));
                 } catch (error) {
-                    console.error(`Failed to load command file '${file}': ${error}`);
+                    return console.error(`Failed to load command file '${file}': ${error}`);
+                }
+
+                if (command instanceof Array) {
+                    command.forEach(single => this._loadSingle(single, file));
+                } else {
+                    this._loadSingle(command, file);
                 }
             });
+    }
+
+    _loadSingle(command, file) {
+        const check = this.validateCommand(command);
+
+        if (check) {
+            return console.error(`Error in '${file}': ${chalk.red(check)}`);
+        }
+
+        if (this.findCommand(command.info.name)) {
+            return console.error(`Duplicate command: An entry already exists for command ${chalk.red(command.info.name)} in file '${file}'`);
+        }
+
+        this._commands.push(command);
     }
 
     findCommand(input) {
