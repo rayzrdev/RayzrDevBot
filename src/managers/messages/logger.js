@@ -1,4 +1,3 @@
-const RichEmbed = require('discord.js').RichEmbed;
 const Manager = require('../manager');
 
 class Logger extends Manager {
@@ -32,7 +31,7 @@ class Logger extends Manager {
 
         if (channel) {
             channel.send({
-                embed: new RichEmbed()
+                embed: global.factory.embed()
                     .setTitle(type)
                     .setDescription(`\`\`\`\n${(description || message.cleanContent).substr(0, 1950)}\n\`\`\``)
                     .addField('Channel', `${message.channel}`)

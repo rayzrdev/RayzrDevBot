@@ -1,4 +1,3 @@
-const RichEmbed = require('discord.js').RichEmbed;
 const inspect = require('util').inspect;
 
 function clean(input) {

@@ -1,5 +1,3 @@
-const RichEmbed = require('discord.js').RichEmbed;
-
 exports.run = async (bot, msg, args) => {
     let user;
     if (msg.mentions.users.first()) {

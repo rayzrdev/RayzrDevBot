@@ -1,4 +1,3 @@
-const RichEmbed = require('discord.js').RichEmbed;
 const stripIndents = require('common-tags').stripIndents;
 
 exports.run = (bot, msg, args) => {

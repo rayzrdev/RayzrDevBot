@@ -5,9 +5,9 @@
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaVersion": 8
     },
-    "parser": "babel-eslint",
     "rules": {
         "indent": [
             "error",

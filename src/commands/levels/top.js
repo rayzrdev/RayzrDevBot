@@ -1,5 +1,3 @@
-const RichEmbed = require('discord.js').RichEmbed;
-
 exports.init = bot => {
     this.levels = bot.managers.get('levels');
 };
