@@ -17,11 +17,10 @@ exports.run = (bot, msg, args) => {
     try {
         const output = clean(eval(input));
         msg.channel.send({
-            embed: new RichEmbed()
+            embed: global.factory.embed()
                 .addField('Input', `\`\`\`javascript\n${input.substr(0, 256)}\n\`\`\``)
                 .addField('Output', `\`\`\`javascript\n${output.substr(0, 768)}\n\`\`\``)
                 .setFooter(`Requested by ${msg.author.tag}`)
-                .setColor(global.config.color)
         }).then(m => m.delete(15000));
     } catch (err) {
         msg.channel.send(`:x: An error has occurred: \`\`\`\n${err.toString().substr(0, 1500)}\n\`\`\``);

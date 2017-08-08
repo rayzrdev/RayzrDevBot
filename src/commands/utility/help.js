@@ -28,10 +28,9 @@ exports.run = (bot, msg, args) => {
 
     while (fields.length > 0) {
         msg.author.send({
-            embed: new RichEmbed({ fields: fields.splice(0, 15) })
-                .setTitle(`Help for ${global.config.name}`)
-                .setDescription('\n\u200b')
-                .setColor(global.config.color)
+            embed: global.factory.embed({
+                fields: fields.splice(0, 15)
+            })
         });
     }
 

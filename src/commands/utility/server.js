@@ -1,4 +1,3 @@
-const RichEmbed = require('discord.js').RichEmbed;
 const stripIndents = require('common-tags').stripIndents;
 
 const pinger = require('minecraft-pinger');
@@ -18,7 +17,7 @@ exports.run = async (bot, msg, args) => {
         if (err) throw err;
 
         m.edit({
-            embed: new RichEmbed()
+            embed: global.factory.embed()
                 .setTitle(`:white_check_mark: **${args[0]}**`)
                 .setDescription(stripIndents`
                     **Ping:** \`${result.ping}ms\`
@@ -26,7 +25,6 @@ exports.run = async (bot, msg, args) => {
                     **Version:** \`${result.version.name}\`
                     **Motd:**\`\`\`\n${(result.description).replace(/\u00a7[0-9a-fklmnor]/g, '')}\n\`\`\``)
                 .setFooter(`Requested by ${msg.author.tag}`)
-                .setColor(global.config.color)
         });
     });
 };

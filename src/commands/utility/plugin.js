@@ -1,5 +1,3 @@
-const RichEmbed = require('discord.js').RichEmbed;
-
 const got = require('got');
 const leven = require('leven');
 
@@ -31,9 +29,8 @@ exports.run = async function (bot, msg, args) {
         const query = args.join('-').toLowerCase();
         const data = await search(query);
         msg.channel.send({
-            embed: new RichEmbed({ fields: getResults(data) })
+            embed: global.factory.embed({ fields: getResults(data) })
                 .setTitle(`Search results for __\`${query}\`__`)
-                .setColor(global.config.color)
         });
 
     } else if (sub === 'info') {
@@ -54,9 +51,8 @@ exports.run = async function (bot, msg, args) {
         });
 
         msg.channel.send({
-            embed: new RichEmbed({ fields })
+            embed: global.factory.embed({ fields })
                 .setDescription(`Click [here](https://dev.bukkit.org/projects/${args.join('-')}/) to see the project page.`)
-                .setColor(global.config.color)
         });
 
     } else if (sub === 'download') {
@@ -134,24 +130,11 @@ async function download(url, name, user) {
 
 function usage(bot, msg) {
     msg.channel.send({
-        embed: new RichEmbed({
-            fields: [
-                {
-                    name: 'search',
-                    value: `\`${global.config.prefix}plugin search <name>\``
-                },
-                {
-                    name: 'info',
-                    value: `\`${global.config.prefix}plugin info <slug|id>\``
-                },
-                {
-                    name: 'download',
-                    value: `\`${global.config.prefix}plugin download <projectid>\``
-                }
-            ]
-        })
+        embed: global.factory.embed()
             .setTitle(`Usage for \`${global.config.prefix}plugin\`:`)
-            .setColor(global.config.color)
+            .addField('search', `\`${global.config.prefix}plugin search <name>\``)
+            .addField('info', `\`${global.config.prefix}plugin info <slug|id>\``)
+            .addField('download', `\`${global.config.prefix}plugin download <projectid>\``)
     });
 }
 

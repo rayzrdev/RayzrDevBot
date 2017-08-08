@@ -4,13 +4,13 @@ exports.run = async (bot, msg) => {
     msg.delete();
 
     const m = await msg.channel.send(':arrows_counterclockwise:');
-    const res = await got('http://random.cat/meow');
+    const res = await got('http://random.cat/meow', { json: true });
 
-    if (!JSON.isJSON(res.body)) {
+    if (!res.body || !res.body.file) {
         throw 'Failed to load cat picture!';
     }
 
-    await msg.channel.send({ file: JSON.parse(res.body).file });
+    await msg.channel.send({ file: res.body.file });
     m.delete();
 };
 

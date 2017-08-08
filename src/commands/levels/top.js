@@ -29,11 +29,10 @@ exports.run = async (bot, msg, args) => {
 
     messages.forEach(single => {
         msg.channel.send({
-            embed: new RichEmbed()
+            embed: global.factory.embed()
                 .setTitle(`Top ${amount} users on **${msg.guild}**`)
                 .setDescription(`\u200b\n${single.join('\n\n')}`)
                 .setFooter(`Requested by ${msg.author.tag}`)
-                .setColor(global.config.color)
         }).then(m => m.delete(60000));
     });
 };

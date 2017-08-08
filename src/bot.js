@@ -1,5 +1,3 @@
-require('./polyfills');
-
 const path = require('path');
 const chalk = require('chalk');
 const Discord = require('discord.js');
@@ -18,6 +16,8 @@ global.settings = {
     baseDir: path.resolve(__dirname, '..'),
     dataFolder: path.resolve(__dirname, '..', 'data')
 };
+
+global.factory = require('./factory');
 
 const bot = new Discord.Client();
 
