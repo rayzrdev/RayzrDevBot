@@ -34,7 +34,7 @@ exports.run = (bot, msg, args) => {
     }
 
     msg.delete();
-    msg.channel.send(':inbox_tray: Sent you a DM with help! :grin:').then(m => m.delete(5000));
+    msg.channel.send(':inbox_tray: Sent you a DM with help.').then(m => m.delete(5000));
 };
 
 function getField(bot, command) {
