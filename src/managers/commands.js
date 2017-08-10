@@ -100,6 +100,31 @@ class CommandManager extends Manager {
         return this._commands.slice(0);
     }
 
+    showHelp(command, message) {
+        this.executeCommand(this.findCommand('help'), message, [command]);
+    }
+
+    async executeCommand(command, message, args) {
+        const permMessage = this._checkPermissions(message.member, command);
+        if (permMessage) {
+            return message.channel.send(`:no_entry_sign: ${permMessage}`)
+                .then(m => m.delete(5000));
+        }
+
+        try {
+            await command.run(this.bot, message, args);
+        } catch (err) {
+            const displayMessage = `${err && err.message || err || 'An unknown error has occurred!'}`;
+
+            if (displayMessage == 'help') {
+                return this.showHelp(command.info.name, message);
+            }
+
+            message.channel.send(`:x: ${displayMessage}`)
+                .then(m => m.delete(5000));
+        }
+    }
+
     async onMessage(message) {
         const prefix = global.config.prefix;
 
@@ -117,18 +142,7 @@ class CommandManager extends Manager {
             return;
         }
 
-        const permMessage = this._checkPermissions(message.member, command);
-        if (permMessage) {
-            return message.channel.send(`:no_entry_sign: ${permMessage}`)
-                .then(m => m.delete(5000));
-        }
-
-        try {
-            await command.run(this.bot, message, args);
-        } catch (err) {
-            message.channel.send(`:x: ${err && err.message || err || 'An unknown error has occurred!'}`)
-                .then(m => m.delete(5000));
-        }
+        this.executeCommand(command, message, args);
     }
 }
 
