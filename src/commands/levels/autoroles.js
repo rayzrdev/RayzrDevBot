@@ -1,5 +1,6 @@
 exports.init = bot => {
     this.autorole = bot.managers.get('autorole');
+    this.levels = bot.managers.get('levels');
 };
 
 exports.run = async (bot, msg, args) => {
@@ -55,14 +56,38 @@ exports.run = async (bot, msg, args) => {
         }
 
         msg.channel.send(`Removed auto-roles for level ${level}`);
+    } else if (/retro/i.test(args[0])) {
+        const autoroles = await this.autorole.getRoles(msg.guild.id);
+
+        const { members } = await msg.guild.fetchMembers();
+
+        let updated = 0;
+
+        await Promise.all(members.map(async member => {
+            const level = await this.levels.getLevel(member.id);
+            let changed = false;
+
+            for (let i = 0; i <= level; i++) {
+                const role = autoroles[i];
+                
+                if (role && !member.roles.has(role)) {
+                    member.addRole(msg.guild.roles.get(role));
+                    changed = true;
+                }
+            }
+
+            if (changed) updated++;
+        }));
+
+        msg.channel.send(`:white_check_mark: Updated \`${updated}\` users.`);
     } else {
-        msg.channel.send('Please check the help message for this command for information on how to use it!');
+        throw 'help';
     }
 };
 
 exports.info = {
     name: 'autoroles',
-    usage: 'autoroles <add|remove> <level> [role]',
+    usage: 'autoroles add <level> <role>|remove <level>|retro',
     aliases: ['autorole'],
     description: 'Modifies the auto-role settings.',
     perms: ['MANAGE_GUILD']
