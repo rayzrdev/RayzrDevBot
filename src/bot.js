@@ -61,7 +61,8 @@ function updateDisplay() {
         g.defaultChannel.setTopic(`Members: ${g.memberCount} | Online: ${g.members.filter(m => m.presence.status !== 'offline').size}`);
     });
 
-    bot.user.setGame(`${config.prefix}help | ${totalUsers} users`);
+    // bot.user.setGame(`${config.prefix}help | ${totalUsers} users`);
+    bot.user.setPresence({ game: { name: `${config.prefix}help | ${totalUsers} users`, type: 0 } });
 }
 
 bot.on('guildMemberAdd', (member) => {
