@@ -41,14 +41,14 @@ const filters = [
     {
         name: 'invite link',
         filter: (input, context) => {
-            return context.channel.name !== 'promote-yourself'
+            return context.channel.name !== 'advertisements'
                 && !context.member.hasPermission('MANAGE_MESSAGES')
                 && /(https?)?(:\/\/)?discord\.(io|gg|me)\/?[^/]+/i.test(input);
         },
         messages: [
-            'Please post server invites in #promote-yourself.',
-            'Server invites belong in #promote-yourself.',
-            'Please move all server invites to #promote-yourself.'
+            'Please post server invites in #advertisements.',
+            'Server invites belong in #advertisements.',
+            'Please move all server invites to #advertisements.'
         ]
     }
 ];
@@ -96,11 +96,11 @@ class FilterManager extends Manager {
             return;
         }
 
-        if (message.channel.name === 'promote-yourself') {
+        if (message.channel.name === 'advertisements') {
             this.handler.get('levels').getLevel(message.author.id).then(level => {
                 if (level < 5) {
                     message.delete();
-                    message.author.send(':x: You must be at least level **5** to post in #promote-yourself');
+                    message.author.send(':x: You must be at least level **5** to post in #advertisements');
                 }
             });
         }
