@@ -58,7 +58,17 @@ function updateDisplay() {
 
     bot.guilds.forEach(g => {
         totalUsers += g.memberCount;
-        g.defaultChannel.setTopic(`Members: ${g.memberCount} | Online: ${g.members.filter(m => m.presence.status !== 'offline').size}`);
+
+        if (!g.member(bot.user).hasPermission('MANAGE_CHANNELS')) {
+            return;
+        }
+        
+        const topic = `Members: ${g.memberCount} | Online: ${g.members.filter(m => m.presence.status !== 'offline').size}`;
+
+        // Check first to not spam the crap out of audit-log
+        if (g.defaultChannel.topic !== topic) {
+            g.defaultChannel.setTopic(topic);
+        }
     });
 
     // bot.user.setGame(`${config.prefix}help | ${totalUsers} users`);
