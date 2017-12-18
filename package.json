@@ -4,7 +4,7 @@
   "description": "The official Discord bot for RayzrDev",
   "main": "src/bot.js",
   "repository": "https://github.com/Rayzr522/RayzrDevBot",
-  "author": "Rayzr",
+  "author": "Rayzr522 <rayzr522@gmail.com>",
   "license": "MIT",
   "scripts": {
     "start": "gulp",
