@@ -3,15 +3,6 @@ const chalk = require('chalk');
 const Discord = require('discord.js');
 const ManagerHandler = require('./managers');
 
-// require('readline').createInterface(process.stdin).on('line', line => {
-//     try {
-//         const output = eval(line);
-//         console.log(output);
-//     } catch (err) {
-//         console.error('/!\\ Error: ', err);
-//     }
-// });
-
 global.settings = {
     baseDir: path.resolve(__dirname, '..'),
     dataFolder: path.resolve(__dirname, '..', 'data')
@@ -53,7 +44,7 @@ bot.on('ready', () => {
     });
 });
 
-function updateDisplay() {
+const updateDisplay = () => {
     let totalUsers = 0;
 
     bot.guilds.forEach(g => {
@@ -73,7 +64,7 @@ function updateDisplay() {
 
     // bot.user.setGame(`${config.prefix}help | ${totalUsers} users`);
     bot.user.setPresence({ game: { name: `${config.prefix}help | ${totalUsers} users`, type: 0 } });
-}
+};
 
 bot.on('guildMemberAdd', (member) => {
     bot.channels.get(config.mainChannel)

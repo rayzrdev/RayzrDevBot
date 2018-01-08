@@ -1,4 +1,4 @@
-async function deleteLotsOfMessages(channel, amount) {
+const deleteLotsOfMessages = async (channel, amount) => {
     let amountDeleted = 0;
 
     while (amountDeleted < amount) {
@@ -17,7 +17,7 @@ async function deleteLotsOfMessages(channel, amount) {
     }
 
     return amountDeleted;
-}
+};
 
 exports.run = async (bot, msg, args) => {
     await msg.delete();

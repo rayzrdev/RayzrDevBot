@@ -53,9 +53,7 @@ const filters = [
     }
 ];
 
-function randomItem(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-}
+const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
 
 class FilterManager extends Manager {
     getName() { return 'filter'; }

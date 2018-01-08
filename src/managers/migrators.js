@@ -3,17 +3,6 @@ const fse = require('fs-extra');
 const XPDB = require('xpdb');
 const Manager = require('./manager');
 
-// function migrate(from, to) {
-//     if (!fse.existsSync(to) && fse.existsSync(from)) {
-//         const folder = path.dirname(to);
-//         if (!fse.statSync(folder).isDirectory()) {
-//             fse.mkdirpSync(folder);
-//         }
-
-//         fse.moveSync(from, to);
-//     }
-// }
-
 class Migrators extends Manager {
     async preInit() {
         const oldLevelsDB = path.resolve(global.settings.baseDir, 'levelsdb');

@@ -9,7 +9,7 @@ const opts = {
     }
 };
 
-exports.run = async function (bot, msg, args) {
+exports.run = async (bot, msg, args) => {
     if (!apiToken) {
         throw 'Please get a CurseForge API token at https://www.curseforge.com/account/api-tokens, put it in your config file, and restart the bot.';
     }
@@ -70,7 +70,7 @@ exports.run = async function (bot, msg, args) {
     }
 };
 
-function getResults(data) {
+const getResults = data => {
     return data
         .map(p => {
             return {
@@ -82,9 +82,9 @@ function getResults(data) {
             };
         })
         .slice(0, 5);
-}
+};
 
-async function search(query) {
+const search = async query => {
     const res = await got(`https://api.curseforge.com/servermods/projects?search=${query}`, opts);
     const data = JSON.parse(res.body);
 
@@ -93,9 +93,9 @@ async function search(query) {
     }
 
     return data.sort((a, b) => leven(query, a.slug) - leven(query, b.slug));
-}
+};
 
-async function getVersions(args) {
+const getVersions = async args => {
     let id = args[0];
     if (isNaN(id)) {
         const query = args.join('-').toLowerCase();
@@ -111,9 +111,9 @@ async function getVersions(args) {
     }
 
     return data.splice(data.length - 5).reverse();
-}
+};
 
-async function download(url, name, user) {
+const download = async (url, name, user) => {
     const result = await got(url, Object.assign(opts, { encoding: null }));
 
     if (result.body.length > 8 * 1024 * 1024) {
@@ -126,17 +126,17 @@ async function download(url, name, user) {
             }
         });
     }
-}
+};
 
-function usage(bot, msg) {
+const usage = (bot, msg) => {
     msg.channel.send({
-        embed: global.factory.embed()
-            .setTitle(`Usage for \`${global.config.prefix}plugin\`:`)
-            .addField('search', `\`${global.config.prefix}plugin search <name>\``)
-            .addField('info', `\`${global.config.prefix}plugin info <slug|id>\``)
-            .addField('download', `\`${global.config.prefix}plugin download <projectid>\``)
+        embed: global.factory.usageBuilder('plugin')
+            .addCommand('search <name>', 'Searches for a plugin by name')
+            .addCommand('info <slug|id>', 'Gets info about a plugin by its slug or ID')
+            .addCommand('download <slug|id>', 'Downloads the plugin with the given project ID')
+            .build()
     });
-}
+};
 
 exports.info = {
     name: 'plugin',

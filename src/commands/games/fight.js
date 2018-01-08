@@ -1,6 +1,4 @@
-function randomItem(array) {
-    return array[Math.floor(Math.random() * array.length)];
-}
+const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
 
 const attacks = {
     punch: {
@@ -46,36 +44,36 @@ const validActions = Object.keys(attacks).concat('leave');
 const validActionRegex = new RegExp(validActions.join('|'), 'i');
 const validActionString = validActions.map(action => `**${action}**`).join(' || ');
 
-function Player(user) {
-    if (Player.cache[user.id]) {
-        return Player.cache[user.id];
+class Player {
+    constructor(user) {
+        if (Player.cache[user.id]) {
+            return Player.cache[user.id];
+        }
+
+        Player.cache[user.id] = this;
+
+        this.user = user;
+
+        this.reset();
     }
 
-    Player.cache[user.id] = this;
+    reset() {
+        this.hp = 100;
+        this.isFighting = false;
+        this.miss = 0;
+    }
 
-    this.user = user;
-
-    this.reset();
+    debug() {
+        console.log(`${this.user.username}'s HP: ${this.hp}`);
+    }
 }
-
-Player.prototype.reset = function () {
-    this.hp = 100;
-    this.isFighting = false;
-    this.miss = 0;
-};
-
-Player.prototype.debug = function () {
-    console.log(`${this.user.username}'s HP: ${this.hp}`);
-};
 
 Player.cache = {};
 
-function generateMessage() {
-    return Object.keys(attacks).map(name => {
-        const attack = attacks[name];
-        return `**${name}**\nDamage: \`${attack.damage.min}-${attack.damage.max}\`\nAccuracy: \`${Math.floor(attack.attackChance * 100)}%\``;
-    }).join('\n\n');
-}
+const generateMessage = () => Object.keys(attacks).map(name => {
+    const attack = attacks[name];
+    return `**${name}**\nDamage: \`${attack.damage.min}-${attack.damage.max}\`\nAccuracy: \`${Math.floor(attack.attackChance * 100)}%\``;
+}).join('\n\n');
 
 exports.run = (bot, message, args) => {
     if (args[0] === 'info') {
@@ -114,7 +112,7 @@ exports.run = (bot, message, args) => {
     fight(message, you, opponent, true);
 };
 
-function fight(message, player1, player2, turn) {
+const fight = (message, player1, player2, turn) => {
     if (!player1.isFighting || !player2.isFighting) {
         // If either one of them isn't supposed to be fighting, reset and exit.
         player1.reset();
@@ -183,7 +181,7 @@ function fight(message, player1, player2, turn) {
 
         fight(message, player1, player2, !turn);
     });
-}
+};
 
 exports.info = {
     name: 'fight',

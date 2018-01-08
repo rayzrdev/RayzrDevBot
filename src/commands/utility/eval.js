@@ -1,9 +1,9 @@
 const inspect = require('util').inspect;
 
-function clean(input) {
+const clean = input => {
     const output = typeof input === 'string' ? input : inspect(input);
     return output.replace(/(@|`)/g, '$1\u200b');
-}
+};
 
 exports.run = (bot, msg, args) => {
     const input = args.join(' ');

@@ -14,9 +14,7 @@ const responses = [
     'Haha, funny joke'
 ];
 
-function randomItem(array) {
-    return array[Math.floor(Math.random() * array.length)];
-}
+const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
 
 exports.run = (bot, msg, args) => {
     if (args.length < 1) {

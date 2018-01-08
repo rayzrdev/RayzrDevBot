@@ -3,9 +3,9 @@ const got = require('got');
 const API = 'http://api.urbandictionary.com';
 const ENDPOINT = '/v0/define?term=';
 
-async function searchFor(input) {
-    return (await got(API + ENDPOINT + encodeURIComponent(input), { json: true })).body;
-}
+const searchFor = async input => (
+    await got(API + ENDPOINT + encodeURIComponent(input), { json: true })
+).body;
 
 exports.run = async (bot, msg, args) => {
     if (args.length < 1) {
