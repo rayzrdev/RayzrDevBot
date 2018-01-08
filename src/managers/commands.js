@@ -45,11 +45,8 @@ class CommandManager extends Manager {
                     return console.error(`Failed to load command file '${file}': ${error}`);
                 }
 
-                if (command instanceof Array) {
-                    command.forEach(single => this._loadSingle(single, file));
-                } else {
-                    this._loadSingle(command, file);
-                }
+                // Handle multi-command exports
+                [].concat(command).forEach(single => this._loadSingle(single, file));
             });
     }
 
@@ -76,13 +73,9 @@ class CommandManager extends Manager {
 
     _checkPermissions(member, command) {
         if (command.info.perms) {
-            let perms = command.info.perms;
-            if (!(command.info.perms instanceof Array)) {
-                perms = [perms];
-            }
+            const perms = [].concat(command.info.perms);
 
-            for (const key in perms) {
-                const perm = perms[key];
+            for (const perm of perms) {
                 if (!member.hasPermission(perm)) {
                     return `You need the permission \`${perm}\` to use this command.`;
                 }
@@ -96,7 +89,12 @@ class CommandManager extends Manager {
         return '';
     }
 
+    canUse(member, command) {
+        return !this._checkPermissions(member, command);
+    }
+
     get commands() {
+        // Essentially return a clone
         return this._commands.slice(0);
     }
 

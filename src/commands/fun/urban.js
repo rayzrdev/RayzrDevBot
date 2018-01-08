@@ -4,7 +4,7 @@ const API = 'http://api.urbandictionary.com';
 const ENDPOINT = '/v0/define?term=';
 
 async function searchFor(input) {
-    return (await got(API + ENDPOINT + encodeURIComponent(input), {json: true})).body;
+    return (await got(API + ENDPOINT + encodeURIComponent(input), { json: true })).body;
 }
 
 exports.run = async (bot, msg, args) => {
@@ -23,10 +23,10 @@ exports.run = async (bot, msg, args) => {
 
     msg.channel.send({
         embed: global.factory.embed()
-        .setTitle(`:book: ${result.word}`)
-        .setURL(result.permalink)
-        .setDescription(result.definition)
-        .setFooter(`Author: ${result.author} | +${result.thumbs_up}/-${result.thumbs_down}`)
+            .setTitle(`:book: ${result.word}`)
+            .setURL(result.permalink)
+            .setDescription(result.definition)
+            .setFooter(`Author: ${result.author} | +${result.thumbs_up}/-${result.thumbs_down}`)
     });
 };
 

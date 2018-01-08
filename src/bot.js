@@ -62,12 +62,12 @@ function updateDisplay() {
         if (!g.member(bot.user).hasPermission('MANAGE_CHANNELS')) {
             return;
         }
-        
+
         const topic = `Members: ${g.memberCount} | Online: ${g.members.filter(m => m.presence.status !== 'offline').size}`;
 
         // Check first to not spam the crap out of audit-log
-        if (g.defaultChannel.topic !== topic) {
-            g.defaultChannel.setTopic(topic);
+        if (bot.channels.get(config.mainChannel).topic !== topic) {
+            bot.channels.get(config.mainChannel).setTopic(topic);
         }
     });
 
@@ -76,7 +76,9 @@ function updateDisplay() {
 }
 
 bot.on('guildMemberAdd', (member) => {
-    member.guild.defaultChannel.send(config.joinMessage.replace('{user}', `<@${member.id}>`));
+    bot.channels.get(config.mainChannel)
+        .send(config.joinMessage.replace('{user}', `${member}`));
+
     member.guild.owner.send(`${member} has joined ${member.guild}`);
 });
 

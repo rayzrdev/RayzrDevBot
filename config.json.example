@@ -9,5 +9,6 @@
     "token": "",
     "curseforgeAPIToken": "",
     "joinMessage": "Welcome to the offical RayzrDev server, {user}!",
+    "mainChannel": "282207139752050688",
     "ownerID": "138048234819026944"
 }

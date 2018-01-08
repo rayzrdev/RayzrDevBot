@@ -30,5 +30,6 @@ exports.info = {
     name: 'eval',
     usage: 'eval <js code>',
     description: 'Evaluates some JavaScript code',
+    hidden: true,
     ownerOnly: true
 };

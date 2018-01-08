@@ -22,7 +22,7 @@ class ConfigManager extends Manager {
 
         const config = fse.readJSONSync(this._configPath);
 
-        if (!config.token || !/^[A-Za-z0-9\._\-]+$/.test(config.token)) {
+        if (!config.token || !/^[A-Za-z0-9._-]+$/.test(config.token)) {
             throw 'Config is missing a valid bot token! Please acquire one at https://discordapp.com/developers/applications/me';
         }
 

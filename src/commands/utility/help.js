@@ -1,5 +1,3 @@
-const stripIndents = require('common-tags').stripIndents;
-
 exports.run = (bot, msg, args) => {
     const manager = bot.managers.get('commands');
 
@@ -15,20 +13,14 @@ exports.run = (bot, msg, args) => {
         commands = manager.commands;
     }
 
-    const fields = [];
-
-    for (const key in commands) {
-        const command = commands[key];
-
-        if (!command.info.hidden) {
-            fields.push(getField(bot, command));
-        }
-    }
+    const fields = commands.filter(command => !command.info.hidden)
+        .filter(command => manager.canUse(msg.member, command))
+        .map(getField);
 
     while (fields.length > 0) {
         msg.author.send({
             embed: global.factory.embed({
-                fields: fields.splice(0, 15)
+                fields: fields.splice(0, 20)
             })
         });
     }
@@ -37,21 +29,18 @@ exports.run = (bot, msg, args) => {
     msg.channel.send(':inbox_tray: Sent you a DM with help.').then(m => m.delete(5000));
 };
 
-function getField(bot, command) {
-    let description = stripIndents`
-        **Usage:** \`${global.config.prefix}${command.info.usage}\`
-        **Description:** ${command.info.description}
-    `;
+const getField = command => {
+    let value = `*${command.info.description}*`;
 
     if (command.info.aliases) {
-        description += `\n**Aliases:** ${command.info.aliases.join(', ')}`;
+        value += `\n*Aliases:* **\`${command.info.aliases.join(', ')}\`**`;
     }
 
     return {
-        name: command.info.name,
-        value: description
+        name: `\`${command.info.usage}\``,
+        value: value
     };
-}
+};
 
 exports.info = {
     name: 'help',
