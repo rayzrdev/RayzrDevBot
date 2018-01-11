@@ -57,27 +57,10 @@ exports.run = async (bot, msg, args) => {
 
         msg.channel.send(`Removed auto-roles for level ${level}`);
     } else if (/retro/i.test(args[0])) {
-        const autoroles = await this.autorole.getRoles(msg.guild.id);
-
         const { members } = await msg.guild.fetchMembers();
 
-        let updated = 0;
-
-        await Promise.all(members.map(async member => {
-            const level = await this.levels.getLevel(member.id);
-            let changed = false;
-
-            for (let i = 0; i <= level; i++) {
-                const role = autoroles[i];
-                
-                if (role && !member.roles.has(role)) {
-                    member.addRole(msg.guild.roles.get(role));
-                    changed = true;
-                }
-            }
-
-            if (changed) updated++;
-        }));
+        const results = await Promise.all(members.map(member => this.autorole.applyRoles(member)));
+        const updated = results.filter(result => result).length;
 
         msg.channel.send(`:white_check_mark: Updated \`${updated}\` users.`);
     } else {

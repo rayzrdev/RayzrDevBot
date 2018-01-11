@@ -1,8 +1,9 @@
 exports.init = bot => {
     this.levels = bot.managers.get('levels');
+    this.autorole = bot.managers.get('autorole');
 };
 
-exports.run = (bot, msg, args) => {
+exports.run = async (bot, msg, args) => {
     if (args.length < 2) {
         throw 'Please provide a user and a level';
     }
@@ -15,9 +16,12 @@ exports.run = (bot, msg, args) => {
     }
 
     const xp = this.levels.xpFromLevel(level - 1);
-    this.levels.setXP(member.id, xp).then(() => {
-        msg.channel.send(`:white_check_mark: Set ${member}'s level to ${level}`);
-    });
+
+    await this.levels.setXP(member.id, xp);
+    await this.autorole.applyRoles(member);
+
+    msg.channel.send(`:white_check_mark: Set ${member}'s level to ${level}`);
+
 };
 
 exports.info = {

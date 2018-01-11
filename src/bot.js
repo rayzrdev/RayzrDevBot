@@ -66,10 +66,12 @@ const updateDisplay = () => {
     bot.user.setPresence({ game: { name: `${config.prefix}help | ${totalUsers} users`, type: 0 } });
 };
 
-bot.on('guildMemberAdd', (member) => {
+bot.on('guildMemberAdd', member => {
     bot.channels.get(config.mainChannel)
         .send(config.joinMessage.replace('{user}', `${member}`));
 
+    managers.get('autorole').applyRoles(member);
+    
     member.guild.owner.send(`${member} has joined ${member.guild}`);
 });
 

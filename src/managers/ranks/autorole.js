@@ -54,6 +54,24 @@ class AutoRole extends Manager {
 
         return true;
     }
+
+    async applyRoles(member) {
+        const roles = await this.getRoles(member.guild.id);
+        const level = await this.handler.get('levels').getLevel(member.id);
+
+        let changed = false;
+
+        for (let i = 0; i <= level; i++) {
+            const role = roles[i];
+
+            if (role && !member.roles.has(role)) {
+                member.addRole(member.guild.roles.get(role));
+                changed = true;
+            }
+        }
+
+        return changed;
+    }
 }
 
 module.exports = AutoRole;
