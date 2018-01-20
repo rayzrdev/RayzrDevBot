@@ -123,19 +123,31 @@ class CommandManager extends Manager {
         }
     }
 
-    async onMessage(message) {
-        const prefix = global.config.prefix;
+    getContent(message) {
+        const { content } = message;
+        const { prefix } = global.config;
+        let out = '';
 
-        if (!message.content.startsWith(prefix)) {
+        if (content.startsWith(prefix)) {
+            out = content.substr(prefix.length);
+        } else if (content.startsWith(this.bot.user.toString())) {
+            out = content.substr(this.bot.user.toString().length);
+        }
+
+        return out.trim();
+    }
+
+    async onMessage(message) {
+        const content = this.getContent(message);
+        if (!content) {
             return;
         }
 
-        const split = message.content.substr(prefix.length).trim().split(' ');
+        const split = content.split(' ');
         const base = split[0];
         const args = split.slice(1);
 
         const command = this.findCommand(base);
-
         if (!command) {
             return;
         }
