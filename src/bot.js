@@ -54,7 +54,10 @@ const updateDisplay = () => {
             return;
         }
 
-        const topic = `Members: ${g.memberCount} | Online: ${g.members.filter(m => m.presence.status !== 'offline').size}`;
+
+        const topic = config.statusFormat
+            .replace(/{members}/g, g.memberCount)
+            .replace(/{online}/g, g.members.filter(m => m.presence.status !== 'offline').size);
 
         // Check first to not spam the crap out of audit-log
         if (bot.channels.get(config.mainChannel).topic !== topic) {
@@ -71,7 +74,7 @@ bot.on('guildMemberAdd', member => {
         .send(config.joinMessage.replace('{user}', `${member}`));
 
     managers.get('autorole').applyRoles(member);
-    
+
     member.guild.owner.send(`${member} has joined ${member.guild}`);
 });
 
