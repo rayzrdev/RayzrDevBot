@@ -23,7 +23,7 @@ exports.run = async (bot, msg, args) => {
                     **Ping:** \`${result.ping}ms\`
                     **Players:** \`${result.players.online}/${result.players.max}\`
                     **Version:** \`${result.version.name}\`
-                    **Motd:**\`\`\`\n${(result.description).replace(/\u00a7[0-9a-fklmnor]/g, '')}\n\`\`\``)
+                    **Motd:**\`\`\`\n${(result.description.text || result.description).replace(/\u00a7[0-9a-fklmnor]/g, '')}\n\`\`\``)
                 .setFooter(`Requested by ${msg.author.tag}`)
         });
     });
