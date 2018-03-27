@@ -22,6 +22,7 @@ const managers = bot.managers = new ManagerHandler()
     .add('messages/logger')
     .add('messages/filter')
     .add('messages/ayy') // Because I can
+    .add('messages/counting')
     .add('commands');
 
 managers.preInit();

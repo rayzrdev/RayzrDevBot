@@ -11,5 +11,6 @@
     "joinMessage": "Welcome to the offical RayzrDev server, {user}!",
     "mainChannel": "282207139752050688",
     "statusFormat": "Members: {members} | Online: {online} | Please mention the @SharpBot Support role in #general-support for help with SharpBot.",
-    "ownerID": "138048234819026944"
+    "ownerID": "138048234819026944",
+    "countingChannel": "428294211541139479"
 }
