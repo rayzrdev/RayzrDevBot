@@ -29,17 +29,34 @@ class Logger extends Manager {
 
         const channel = message.guild.channels.find('name', 'logs');
 
-        if (channel) {
-            channel.send({
-                embed: global.factory.embed()
-                    .setTitle(type)
-                    .setDescription(`\`\`\`\n${(description || message.cleanContent).substr(0, 1950)}\n\`\`\``)
-                    .addField('Channel', `${message.channel}`)
-                    .setColor(color)
-                    .setTimestamp(new Date())
-                    .setFooter(message.author.username, message.author.avatarURL)
-            });
+        if (!channel) {
+            return;
         }
+
+        const content = description || message.cleanContent;
+
+        const embed = global.factory.embed()
+            .setTitle(type)
+            .addField('Channel', `${message.channel}`)
+            .setColor(color)
+            .setTimestamp(new Date())
+            .setFooter(message.author.username, message.author.avatarURL);
+
+        if (content) {
+            embed.setDescription(`\`\`\`\n${content.substr(0, 1750)}\n\`\`\``);
+        }
+
+        if (message.attachments.size > 0) {
+            const attachment = message.attachments.first();
+            
+            embed.attachFile(attachment);
+
+            if (/.(jpg|png|gif|webm)$/i.test(attachment.name)) {
+                embed.setImage(`attachment://${attachment.name}`);
+            }
+        }
+
+        channel.send({ embed });
     }
 }
 
