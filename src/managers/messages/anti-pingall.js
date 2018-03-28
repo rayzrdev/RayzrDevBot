@@ -11,11 +11,16 @@ class AntiPingall extends Manager {
                 return;
             }
 
-            if (/^.{0,3}pingall/i.test(message.content)) {
+            if (/^.{0,3}pingall/i.test(message.content) || this.lolm8noyadont(message.content)) {
                 message.channel.send('<:OOF:401835306216718337>');
+                message.author.send(':angry: Go DM a staff member and beg them for forgiveness for spamming @mentions.');
                 message.member.addRole(message.guild.roles.find('name', 'Muted'));
             }
         });
+    }
+
+    lolm8noyadont(content) {
+        return (content.match(/<@[&!]?\d{18}>/g) || []).length > 10;
     }
 }
 
