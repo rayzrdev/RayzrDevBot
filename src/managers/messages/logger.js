@@ -48,11 +48,15 @@ class Logger extends Manager {
 
         if (message.attachments.size > 0) {
             const attachment = message.attachments.first();
-            
-            embed.attachFile(attachment);
 
-            if (/.(jpg|png|gif|webm)$/i.test(attachment.name)) {
-                embed.setImage(`attachment://${attachment.name}`);
+            if (attachment.width) {
+                embed.setImage(attachment.url);
+            } else {
+                embed.attachFile(attachment.url);
+            }
+
+            if (!content) {
+                embed.setDescription(`[File](${attachment.url})`);
             }
         }
 
