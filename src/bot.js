@@ -23,6 +23,7 @@ const managers = bot.managers = new ManagerHandler()
     .add('messages/filter')
     .add('messages/ayy') // Because I can
     .add('messages/counting')
+    .add('messages/anti-pingall')
     .add('commands');
 
 managers.preInit();
