@@ -1,5 +1,7 @@
 const Manager = require('../manager');
 
+const identical = array => array.length > 0 && array.findIndex(item => item !== array[0]) === -1;
+
 class AntiPingall extends Manager {
     getName() {
         return 'anti-pingall';
@@ -20,7 +22,8 @@ class AntiPingall extends Manager {
     }
 
     lolm8noyadont(content) {
-        return (content.match(/<@[&!]?\d{18}>/g) || []).length > 10;
+        const matches = content.match(/<@[&!]?\d{18}>/g) || [];
+        return !identical(matches) && matches.length > 20;
     }
 }
 
