@@ -48,24 +48,21 @@ bot.on('ready', () => {
 
 const updateDisplay = () => {
     let totalUsers = 0;
+    let totalOnline = 0;
 
     bot.guilds.forEach(g => {
         totalUsers += g.memberCount;
-
-        if (!g.member(bot.user).hasPermission('MANAGE_CHANNELS')) {
-            return;
-        }
-
-
-        const topic = config.statusFormat
-            .replace(/{members}/g, g.memberCount)
-            .replace(/{online}/g, g.members.filter(m => m.presence.status !== 'offline').size);
-
-        // Check first to not spam the crap out of audit-log
-        if (bot.channels.get(config.mainChannel).topic !== topic) {
-            bot.channels.get(config.mainChannel).setTopic(topic);
-        }
+        totalOnline += g.members.filter(m => m.presence.status !== 'offline').size;
     });
+
+    const topic = config.statusFormat
+        .replace(/{members}/g, totalUsers)
+        .replace(/{online}/g, totalOnline);
+
+    // Check first to not spam the crap out of audit-log
+    if (bot.channels.get(config.mainChannel).topic !== topic) {
+        bot.channels.get(config.mainChannel).setTopic(topic);
+    }
 
     // bot.user.setGame(`${config.prefix}help | ${totalUsers} users`);
     bot.user.setPresence({ game: { name: `${config.prefix}help | ${totalUsers} users`, type: 0 } });
