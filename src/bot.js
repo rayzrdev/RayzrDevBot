@@ -77,6 +77,16 @@ bot.on('guildMemberAdd', member => {
     member.guild.owner.send(`${member} has joined ${member.guild}`);
 });
 
+bot.on('warn', console.warn);
+bot.on('error', console.error);
+bot.on('disconnect', ({ code }) => {
+    if (code === 1000) {
+        console.log('Bot exited cleanly.');
+    } else {
+        console.error(`Bot exited with error code ${code}!`);
+    }
+});
+
 process.on('unhandledRejection', err => {
     console.error(`Uncaught Promise rejection (${err.status}): ${err && err.stack || err}`);
 });
