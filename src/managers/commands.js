@@ -21,16 +21,6 @@ class CommandManager extends Manager {
             .forEach(command => command.init(bot));
     }
 
-    validateCommand(command) {
-        if (typeof command !== 'object') return 'Exports are empty';
-        if (typeof command.run !== 'function') return 'Missing run function';
-        if (typeof command.info !== 'object') return 'Missing info object';
-        if (typeof command.info.name !== 'string') return 'Info object missing "name"';
-        if (typeof command.info.usage !== 'string') return 'Info object missing "usage"';
-        if (typeof command.info.description !== 'string') return 'Info object missing "description"';
-        return '';
-    }
-
     loadCommands() {
         const commandsFolder = path.resolve(__dirname, '..', 'commands');
 
@@ -50,6 +40,16 @@ class CommandManager extends Manager {
             });
     }
 
+    validateCommand(command) {
+        if (typeof command !== 'object') return 'Exports are empty';
+        if (typeof command.run !== 'function') return 'Missing run function';
+        if (typeof command.info !== 'object') return 'Missing info object';
+        if (typeof command.info.name !== 'string') return 'Info object missing "name"';
+        if (typeof command.info.usage !== 'string') return 'Info object missing "usage"';
+        if (typeof command.info.description !== 'string') return 'Info object missing "description"';
+        return '';
+    }
+
     _loadSingle(command, file) {
         const check = this.validateCommand(command);
 
@@ -65,28 +65,12 @@ class CommandManager extends Manager {
     }
 
     findCommand(input) {
+        const lower = input.toLowerCase();
+
         return this._commands.find(command => {
             return command.info.name.toLowerCase() === input.toLowerCase() ||
-                (command.info.aliases && command.info.aliases.find(alias => alias.toLowerCase() === input.toLowerCase()));
+                (command.info.aliases && command.info.aliases.find(alias => alias === lower));
         });
-    }
-
-    _checkPermissions(member, command) {
-        if (command.info.perms) {
-            const perms = [].concat(command.info.perms);
-
-            for (const perm of perms) {
-                if (!member.hasPermission(perm)) {
-                    return `You need the permission \`${perm}\` to use this command.`;
-                }
-            }
-        }
-
-        if (command.info.ownerOnly && member.id !== (global.config.ownerID || '138048234819026944')) {
-            return 'Only the owner of the bot can use this command.';
-        }
-
-        return '';
     }
 
     canUse(member, command) {
@@ -98,8 +82,35 @@ class CommandManager extends Manager {
         return this._commands.slice(0);
     }
 
-    showHelp(command, message) {
-        this.executeCommand(this.findCommand('help'), message, [command]);
+    getContent(message) {
+        const { content } = message;
+        const { prefix } = global.config;
+        let out = '';
+
+        if (content.startsWith(prefix)) {
+            out = content.substr(prefix.length);
+        } else if (content.startsWith(this.bot.user.toString())) {
+            out = content.substr(this.bot.user.toString().length);
+        }
+
+        return out.trim();
+    }
+
+    async onMessage(message) {
+        const content = this.getContent(message);
+        if (!content) {
+            return;
+        }
+
+        const args = content.split(' ');
+        const label = args.shift();
+
+        const command = this.findCommand(label);
+        if (!command) {
+            return;
+        }
+
+        this.executeCommand(command, message, args);
     }
 
     async executeCommand(command, message, args) {
@@ -123,36 +134,26 @@ class CommandManager extends Manager {
         }
     }
 
-    getContent(message) {
-        const { content } = message;
-        const { prefix } = global.config;
-        let out = '';
+    _checkPermissions(member, command) {
+        if (command.info.perms) {
+            const perms = [].concat(command.info.perms);
 
-        if (content.startsWith(prefix)) {
-            out = content.substr(prefix.length);
-        } else if (content.startsWith(this.bot.user.toString())) {
-            out = content.substr(this.bot.user.toString().length);
+            for (const perm of perms) {
+                if (!member.hasPermission(perm)) {
+                    return `You need the permission \`${perm}\` to use this command.`;
+                }
+            }
         }
 
-        return out.trim();
+        if (command.info.ownerOnly && member.id !== (global.config.ownerID || '138048234819026944')) {
+            return 'Only the owner of the bot can use this command.';
+        }
+
+        return '';
     }
 
-    async onMessage(message) {
-        const content = this.getContent(message);
-        if (!content) {
-            return;
-        }
-
-        const split = content.split(' ');
-        const base = split[0];
-        const args = split.slice(1);
-
-        const command = this.findCommand(base);
-        if (!command) {
-            return;
-        }
-
-        this.executeCommand(command, message, args);
+    showHelp(command, message) {
+        this.executeCommand(this.findCommand('help'), message, [command]);
     }
 }
 
