@@ -1,26 +1,18 @@
-exports.run = async (bot, msg, args) => {
-    let user;
-    if (msg.mentions.users.first()) {
-        user = msg.mentions.users.first();
-    } else if (args.length === 1) {
-        user = bot.users.get(args[0]);
-    }
+exports.run = async (bot, message, args) => {
+    const target = message.mentions.users.first() || bot.users.get(args[0]) || message.author;
 
-    if (!user) {
-        user = msg.author;
-    }
+    const data = await bot.managers.get('levels').getUserData(target.id);
 
-    const data = await bot.managers.get('levels').getUserData(user.id);
-
-    msg.delete();
-    msg.channel.send({
+    message.delete();
+    message.channel.send({
         embed: global.factory.embed()
-            .addField('Rank', `${data.rank.place || data.rank.total}/${data.rank.total}`)
-            .addField('Level', data.currentLevel)
-            .addField('Next Level', `${data.remaining.toFixed(0)}/${data.xpToLevel.toFixed(0)}`)
-            .addField('Total XP', data.total.toFixed(0))
-            .setAuthor(user.username, user.avatarURL)
-            .setFooter(`Requested by ${msg.author.tag}`)
+            .addField('Rank', `${data.rank.place || data.rank.total}/${data.rank.total}`, true)
+            .addField('Level', data.currentLevel, true)
+            .addField('Next Level', `${data.remaining.toFixed(0)}/${data.xpToLevel.toFixed(0)}`, true)
+            .addField('Total XP', data.total.toFixed(0), true)
+            .setAuthor(target.username, target.avatarURL)
+            .setThumbnail(target.avatarURL)
+            .setFooter(`Requested by ${message.author.tag}`)
     }).then(m => m.delete(30000));
 };
 
