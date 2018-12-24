@@ -39,18 +39,17 @@ bot.on('ready', () => {
 
     console.log('Bot has loaded successfully. We\'re in business!');
 
-    bot.generateInvite(['MANAGE_MESSAGES', 'MANAGE_CHANNELS', 'BAN_MEMBERS', 'KICK_MEMBERS']).then(invite => {
-        console.log(`Use the following link to invite ${config.name} to your server:\n` + chalk.blue(invite));
-    });
+    bot.generateInvite(['MANAGE_MESSAGES', 'MANAGE_CHANNELS', 'BAN_MEMBERS', 'KICK_MEMBERS'])
+        .then(invite => console.log(chalk.blue(invite)));
 });
 
 const updateDisplay = () => {
     let totalUsers = 0;
     let totalOnline = 0;
 
-    bot.guilds.forEach(g => {
-        totalUsers += g.memberCount;
-        totalOnline += g.members.filter(m => m.presence.status !== 'offline').size;
+    bot.guilds.forEach(guild => {
+        totalUsers += guild.memberCount;
+        totalOnline += guild.members.filter(member => member.presence.status !== 'offline').size;
     });
 
     const topic = config.statusFormat
@@ -62,8 +61,12 @@ const updateDisplay = () => {
         bot.channels.get(config.mainChannel).setTopic(topic);
     }
 
-    // bot.user.setGame(`${config.prefix}help | ${totalUsers} users`);
-    bot.user.setPresence({ game: { name: `${config.prefix}help | ${totalUsers} users`, type: 0 } });
+    bot.user.setPresence({
+        game: {
+            name: `${config.prefix}help | ${totalUsers} users`,
+            type: 'PLAYING'
+        }
+    });
 };
 
 bot.on('guildMemberAdd', member => {
@@ -77,16 +80,13 @@ bot.on('guildMemberAdd', member => {
 
 bot.on('warn', console.warn);
 bot.on('error', console.error);
-bot.on('disconnect', ({ code }) => {
-    if (code === 1000) {
-        console.log('Bot exited cleanly.');
-    } else {
-        console.error(`Bot exited with error code ${code}!`);
-    }
-});
-
-process.on('unhandledRejection', err => {
-    console.error(`Uncaught Promise rejection (${err.status}): ${err && err.stack || err}`);
+bot.on('disconnect', () => {
+    setTimeout(() => {
+        bot.user || (
+            bot.destroy(),
+            bot.login(config.tokens.discord)
+        );
+    }, 15000);
 });
 
 bot.login(config.token);
