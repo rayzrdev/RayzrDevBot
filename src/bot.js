@@ -34,8 +34,6 @@ bot.on('ready', () => {
     console.log('Running init...');
     managers.init(bot);
 
-    bot.user.setAvatar(path.resolve(global.settings.baseDir, 'avatar.png')).catch(() => { });
-
     bot.setInterval(updateDisplay, 15000);
     updateDisplay();
 

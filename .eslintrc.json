@@ -10,12 +10,11 @@
     },
     "rules": {
         "indent": [
-            "error",
+            "warn",
             4
         ],
         "linebreak-style": [
-            "error",
-            "unix"
+            "off"
         ],
         "quotes": [
             "error",
@@ -25,9 +24,18 @@
             "error",
             "always"
         ],
-        "no-console": "off",
-        "no-unused-vars": "error",
-        "no-var": "error",
-        "prefer-const": "error"
+        "no-console": [
+            "off"
+        ],
+        "no-unused-vars": [
+            "warn"
+        ],
+        "no-var": [
+            "error"
+        ],
+        "eol-last": [
+            "warn",
+            "always"
+        ]
     }
 }

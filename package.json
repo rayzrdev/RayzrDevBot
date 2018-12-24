@@ -11,7 +11,8 @@
     "dev": "nodemon -w src src/bot.js"
   },
   "devDependencies": {
-    "eslint": "^5.11.0"
+    "eslint": "^5.11.0",
+    "nodemon": "^1.18.9"
   },
   "dependencies": {
     "chalk": "^2.4.1",
