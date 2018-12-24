@@ -37,7 +37,7 @@ const getField = command => {
     }
 
     return {
-        name: `\`${command.info.usage}\``,
+        name: `\`${command.info.usage || command.info.name}\``,
         value: value
     };
 };

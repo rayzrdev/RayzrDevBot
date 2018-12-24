@@ -45,7 +45,6 @@ class CommandManager extends Manager {
         if (typeof command.run !== 'function') return 'Missing run function';
         if (typeof command.info !== 'object') return 'Missing info object';
         if (typeof command.info.name !== 'string') return 'Info object missing "name"';
-        if (typeof command.info.usage !== 'string') return 'Info object missing "usage"';
         if (typeof command.info.description !== 'string') return 'Info object missing "description"';
         return '';
     }
