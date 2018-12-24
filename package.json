@@ -7,28 +7,26 @@
   "author": "Rayzr522 <rayzr522@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "gulp",
-    "background": "screen -dmS rayzrDevBot gulp"
+    "start": "node src/bot.js",
+    "dev": "nodemon -w src src/bot.js"
   },
   "devDependencies": {
-    "eslint": "^5.2.0",
-    "gulp": "^3.9.1",
-    "gulp-eslint": "^5.0.0"
+    "eslint": "^5.11.0"
   },
   "dependencies": {
     "chalk": "^2.4.1",
     "common-tags": "^1.8.0",
     "cool-ascii-faces": "^1.3.4",
-    "discord.js": "^11.3.2",
+    "discord.js": "^11.4.2",
     "erlpack": "^0.1.2",
-    "fs-extra": "^7.0.0",
+    "fs-extra": "^7.0.1",
     "fs-readdir-recursive": "^1.1.0",
-    "got": "^8.3.2",
+    "got": "^9.5.0",
     "level": "^4.0.0",
     "leven": "^2.1.0",
     "minecraft-pinger": "^1.0.3",
     "path": "^0.12.7",
-    "uws": "^10.148.1",
+    "uws": "^99.0.0",
     "xpdb": "^1.0.3"
   }
 }
