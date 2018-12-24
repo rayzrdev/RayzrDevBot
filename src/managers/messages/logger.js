@@ -27,7 +27,7 @@ class Logger extends Manager {
             return;
         }
 
-        const channel = message.guild.channels.find('name', 'logs');
+        const channel = message.guild.channels.find(channel => channel.name === 'logs');
 
         if (!channel) {
             return;
