@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/bot.js",
+    "lint": "eslint --fix -c .eslintrc.json 'src/**/!(_)*.js'",
     "dev": "nodemon -w src src/bot.js"
   },
   "devDependencies": {
