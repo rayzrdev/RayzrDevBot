@@ -21,7 +21,7 @@ const settings = {
 exports.run = async (bot, message, args) => {
     if (args.length < 1) {
         return message.channel.send(stripIndents`
-            :information_source: **Available options:** ${Object.keys(settings).map(setting => `\`${setting}\``).join('\n')}
+            :information_source: **Available options:** ${Object.keys(settings).map(setting => `\`${setting}\``).join(', ')}
         `);
     }
 
@@ -33,7 +33,7 @@ exports.run = async (bot, message, args) => {
     const setting = settings[settingName];
 
     if (args.length < 2) {
-        const value = setting.getter ? setting.getter(bot.config) : bot.config[settingName];
+        const value = setting.getter ? setting.getter(global.config) : global.config[settingName];
 
         return message.channel.send(`:information_source: \`${settingName}\` = \`${value}\``);
     }
@@ -57,12 +57,12 @@ exports.run = async (bot, message, args) => {
     }
 
     if (setting.setter) {
-        setting.setter(bot.config, value);
+        setting.setter(global.config, value);
     } else {
-        bot.config[settingName] = value;
+        global.config[settingName] = value;
     }
 
-    bot.config.save();
+    global.config.save();
     message.channel.send(`:white_check_mark: Updated value of \`${settingName}\` to be \`${value}\``);
 };
 
