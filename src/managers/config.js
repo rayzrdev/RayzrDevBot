@@ -30,7 +30,7 @@ class ConfigManager extends Manager {
     }
 
     get config() {
-        return this._config;
+        return Object.assign(this._config, { save: () => this.save() });
     }
 
     save() {
