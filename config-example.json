@@ -9,8 +9,9 @@
     "token": "",
     "curseforgeAPIToken": "",
     "joinMessage": "Welcome to the offical RayzrDev server, {user}!",
-    "mainChannel": "282207139752050688",
     "statusFormat": "Members: {members} | Online: {online} | Please mention the @SharpBot Support role in #general-support for help with SharpBot.",
-    "ownerID": "138048234819026944",
-    "countingChannel": "428294211541139479"
+    "ownerID": "112233445566778899",
+    "mainChannel": "112233445566778899",
+    "countingChannel": "112233445566778899",
+    "communismChannel": "112233445566778899"
 }
