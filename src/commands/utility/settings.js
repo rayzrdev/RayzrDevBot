@@ -15,7 +15,8 @@ const settings = {
     },
     mainChannel: generators.channel(),
     countingChannel: generators.channel(),
-    statusFormat: generators.channel()
+    communismChannel: generators.channel(),
+    statusFormat: {}
 };
 
 exports.run = async (bot, message, args) => {
