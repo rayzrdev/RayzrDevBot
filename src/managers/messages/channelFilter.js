@@ -11,21 +11,21 @@ class ChannelFilter extends Manager {
     }
 
     checkMessage(msg) {
-        if (msg.channel.id !== getChannelID()) {
+        if (msg.channel.id !== this.getChannelID()) {
             return;
         }
 
-        if (!global.config.communism.emojis.includes(msg.content.trim().toLowerCase())) {
+        if (!this.getEmojis().includes(msg.content.trim().toLowerCase())) {
             msg.delete();
         }
     }
 
     getChannelID() {
-        return global.config[getName()].channel;
+        return global.config[this.getName()].channel;
     }
 
     getEmojis() {
-        return global.config[getName()].emojis;
+        return global.config[this.getName()].emojis;
     }
 }
 
