@@ -28,6 +28,7 @@ const managers = bot.managers = new ManagerHandler()
     // Channel filter managers
     .add('messages/counting')
     .add('messages/communism')
+    .add('messages/capitalism')
     .add('commands');
 
 managers.preInit();
