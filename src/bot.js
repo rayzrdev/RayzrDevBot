@@ -17,14 +17,17 @@ const managers = bot.managers = new ManagerHandler()
     .add('config')
     .add('migrators')
     .add('settings')
+    // Ranks system
     .add('ranks/levels')
     .add('ranks/autorole')
+    // Message moderation
     .add('messages/logger')
     .add('messages/filter')
+    .add('messages/anti-pingall')
     .add('messages/ayy') // Because I can
+    // Channel filter managers
     .add('messages/counting')
     .add('messages/communism')
-    .add('messages/anti-pingall')
     .add('commands');
 
 managers.preInit();

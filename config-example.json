@@ -13,5 +13,17 @@
     "ownerID": "112233445566778899",
     "mainChannel": "112233445566778899",
     "countingChannel": "112233445566778899",
-    "communismChannel": "112233445566778899"
+    "communism": {
+        "channel": "112233445566778899",
+        "emojis": [
+            "\uD83E\uDD54",
+            "<:stalin:527988483948675082>"
+        ]
+    },
+    "capitalism": {
+        "channel": "112233445566778899",
+        "emojis": [
+            "\uD83D\uDCB5"
+        ]
+    }
 }
