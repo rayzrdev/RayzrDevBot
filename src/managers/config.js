@@ -9,7 +9,7 @@ class ConfigManager extends Manager {
 
     preInit() {
         this._configPath = path.resolve(global.settings.baseDir, 'config.json');
-        this._examplePath = this._configPath + '.example';
+        this._examplePath = path.resolve(global.settings.baseDir, 'config-example.json');
 
         this.loadConfig();
     }

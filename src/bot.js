@@ -83,10 +83,17 @@ bot.on('guildMemberAdd', member => {
     member.guild.owner.send(`${member} has joined ${member.guild}`);
 });
 
+let processExiting = false;
+
+process.on('exit', () => {
+    processExiting = true;
+    bot.destroy();
+});
+
 bot.on('warn', console.warn);
 bot.on('error', console.error);
 bot.on('disconnect', () => {
-    setTimeout(() => {
+    processExiting || setTimeout(() => {
         bot.user || (
             bot.destroy(),
             bot.login(config.tokens.discord)
