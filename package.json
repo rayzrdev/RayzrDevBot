@@ -16,19 +16,18 @@
     "nodemon": "^1.18.9"
   },
   "dependencies": {
-    "chalk": "^2.4.1",
+    "@discordjs/uws": "^11.149.1",
+    "chalk": "^2.4.2",
     "common-tags": "^1.8.0",
     "cool-ascii-faces": "^1.3.4",
-    "discord.js": "^11.4.2",
-    "erlpack": "^0.1.2",
-    "fs-extra": "^7.0.1",
+    "discord.js": "^11.5.1",
+    "erlpack": "github:discordapp/erlpack",
+    "fs-extra": "^8.0.1",
     "fs-readdir-recursive": "^1.1.0",
-    "got": "^9.5.0",
-    "level": "^4.0.0",
+    "got": "^9.6.0",
+    "level": "^5.0.1",
     "leven": "^2.1.0",
     "minecraft-pinger": "^1.0.3",
-    "path": "^0.12.7",
-    "uws": "^99.0.0",
     "xpdb": "^1.0.3"
   }
 }
