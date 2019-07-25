@@ -80,7 +80,7 @@ bot.on('guildMemberAdd', member => {
 
     managers.get('autorole').applyRoles(member);
 
-    member.guild.owner.send(`${member} has joined ${member.guild}`);
+    member.guild.owner.send(`> \`${member.guild}\` | **New member:** ${member} - \`${member.user.tag}\``);
 });
 
 let processExiting = false;
