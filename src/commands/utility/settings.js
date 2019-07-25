@@ -16,6 +16,7 @@ const settings = {
         validator: input => /^#?[a-fA-F0-9]{6}$/.test(input),
         mapper: input => (input.startsWith('#') ? '' : '#') + input
     },
+    joinMessage: {},
     mainChannel: generators.channel(),
     countingChannel: generators.channel(),
     statusFormat: {},

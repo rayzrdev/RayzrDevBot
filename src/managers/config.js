@@ -34,7 +34,7 @@ class ConfigManager extends Manager {
     }
 
     save() {
-        fse.writeJSONSync(this._configPath, this._config);
+        fse.writeFileSync(this._configPath, JSON.stringify(this._config, null, 4));
     }
 }
 
