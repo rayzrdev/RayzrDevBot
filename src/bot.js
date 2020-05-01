@@ -83,23 +83,12 @@ bot.on('guildMemberAdd', member => {
     member.guild.owner.send(`> \`${member.guild}\` | **New member:** ${member} - \`${member.user.tag}\``);
 });
 
-let processExiting = false;
-
 process.on('exit', () => {
-    processExiting = true;
     bot.destroy();
 });
 
 bot.on('warn', console.warn);
 bot.on('error', console.error);
-bot.on('disconnect', () => {
-    processExiting || setTimeout(() => {
-        bot.user || (
-            bot.destroy(),
-            bot.login(config.tokens.discord)
-        );
-    }, 15000);
-});
 
 bot.login(config.token);
 
