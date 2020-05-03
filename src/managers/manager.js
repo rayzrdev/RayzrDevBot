@@ -37,6 +37,13 @@ class Manager {
     disconnect() { }
 
     /**
+     * Called when the bot receives a message
+     * 
+     * @param {Message} message The message that was sent
+     */
+    onMessage(message) { }
+
+    /**
      * The ManagerHandler that owns this manager
      * 
      * @type {ManagerHandler}

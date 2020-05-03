@@ -5,13 +5,15 @@ class Counting extends Manager {
         return 'counting';
     }
 
-    init(bot) {
-        bot.on('message', msg => this.checkMessage(msg));
-
+    preInit(bot) {
         bot.on('messageUpdate', (oldMsg, newMsg) => {
             if (oldMsg.content === newMsg.content) return;
             this.checkMessage(newMsg);
         });
+    }
+
+    onMessage(message) {
+        this.checkMessage(message);
     }
 
     checkMessage(msg) {

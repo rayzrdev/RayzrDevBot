@@ -5,7 +5,7 @@ class Logger extends Manager {
         return 'logger';
     }
 
-    init(bot) {
+    preInit(bot) {
         bot.on('messageDelete', msg => {
             this.logMessageStatus(msg, 'Deleted', [255, 20, 50]);
         });

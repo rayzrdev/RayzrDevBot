@@ -31,13 +31,13 @@ const managers = bot.managers = new ManagerHandler()
     .add('messages/capitalism')
     .add('commands');
 
-managers.preInit();
+managers.preInit(bot);
 
 const config = global.config = managers.get('config').config;
 
 bot.on('ready', () => {
     console.log('Running init...');
-    managers.init(bot);
+    managers.init();
 
     bot.setInterval(updateDisplay, 15000);
     updateDisplay();

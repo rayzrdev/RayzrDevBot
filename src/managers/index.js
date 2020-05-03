@@ -93,18 +93,11 @@ class ManagerHandler {
      * 
      * @memberof ManagerHandler
      */
-    preInit() {
-        this._setAll('_handler', this);
-        this._runAll('preInit');
-    }
-
-    /**
-     * Calls init on all managers
-     * 
-     * @memberof ManagerHandler
-     */
-    init(bot) {
+    preInit(bot) {
         this.bot = bot;
+        this._setAll('_handler', this);
+        this._setAll('_bot', this.bot);
+        this._runAll('preInit', this);
 
         bot.on('message', message => {
             if (!message.guild || !message.member || message.author.id === bot.user.id || message.author.bot) {
@@ -113,9 +106,15 @@ class ManagerHandler {
 
             this.onMessage(message);
         });
+    }
 
-        this._setAll('_bot', bot);
-        this._runAll('init', bot);
+    /**
+     * Calls init on all managers
+     * 
+     * @memberof ManagerHandler
+     */
+    init() {
+        this._runAll('init', this.bot);
     }
 
     /**
@@ -135,7 +134,7 @@ class ManagerHandler {
      * @memberof ManagerHandler
      */
     onMessage(message) {
-        this._runAll('onMessage', [message]);
+        this._runAll('onMessage', message);
     }
 }
 

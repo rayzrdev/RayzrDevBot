@@ -58,9 +58,7 @@ const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
 class FilterManager extends Manager {
     getName() { return 'filter'; }
 
-    init() {
-        const bot = this.bot;
-
+    preInit(bot) {
         bot.on('messageUpdate', (oldMessage, newMessage) => {
             if (!newMessage.guild || !newMessage.member || newMessage.author.id === bot.user.id || newMessage.author.bot) {
                 return;
