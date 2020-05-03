@@ -3,7 +3,7 @@ const Manager = require('../manager');
 class AutoRole extends Manager {
     getName() { return 'autorole'; }
 
-    preInit() {
+    preInit(bot) {
         this.settings = this.handler.get('settings');
 
         const self = this;
@@ -16,6 +16,8 @@ class AutoRole extends Manager {
 
             event.member.addRole(role);
         });
+
+        bot.on('guildMemberAdd', member => this.applyRoles(member));
     }
 
     async getRoles(id) {

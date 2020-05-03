@@ -10,7 +10,7 @@ exports.run = async (bot, msg) => {
         throw 'Failed to load cat picture!';
     }
 
-    await msg.channel.send({ file });
+    await msg.channel.send({ files: [file] });
     m.delete();
 };
 

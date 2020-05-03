@@ -13,10 +13,10 @@ exports.run = async (bot, msg) => {
 
     let message = '__**ROLES**__\n\n';
 
-    Object.keys(roles).forEach(level => {
-        const role = msg.guild.roles.get(roles[level]) || { name: '~~INVALID-ROLE~~' };
+    await Promise.all(Object.keys(roles).map(async level => {
+        const role = await msg.guild.roles.fetch(roles[level]) || { name: '~~INVALID-ROLE~~' };
         message += `:arrow_right: ***${role.name}***\n:white_small_square: Given at level ${level}\n\n`;
-    });
+    }));
 
     msg.delete();
     msg.channel.send(message);

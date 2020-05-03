@@ -1,5 +1,5 @@
 exports.run = async (bot, message, args) => {
-    const target = message.mentions.users.first() || bot.users.get(args[0]) || message.author;
+    const target = message.mentions.users.first() || bot.users.cache.get(args[0]) || message.author;
 
     const data = await bot.managers.get('levels').getUserData(target.id);
 
@@ -10,10 +10,10 @@ exports.run = async (bot, message, args) => {
             .addField('Level', data.currentLevel, true)
             .addField('Next Level', `${data.remaining.toFixed(0)}/${data.xpToLevel.toFixed(0)}`, true)
             .addField('Total XP', data.total.toFixed(0), true)
-            .setAuthor(target.username, target.avatarURL)
-            .setThumbnail(target.avatarURL)
+            .setAuthor(target.username, target.avatarURL())
+            .setThumbnail(target.avatarURL())
             .setFooter(`Requested by ${message.author.tag}`)
-    }).then(m => m.delete(30000));
+    }).then(m => m.delete({timeout: 30000}));
 };
 
 exports.info = {

@@ -13,6 +13,10 @@ exports.run = async (bot, msg, args) => {
 
     const top = await this.levels.getTop(amount);
 
+    if (top.length < 1) {
+        throw 'No users have experience yet!';
+    }
+
     const users = top.map((user, i) => {
         return `**${i + 1}.** <@${user.id}> (Lvl. ${this.levels.levelFromXP(user.xp)})`;
     }).filter(text => !!text);
@@ -23,15 +27,20 @@ exports.run = async (bot, msg, args) => {
     }
     messages.push(users);
 
+    const thumbnail = await bot.users.fetch(top[0].id)
+        .then(user => user.avatarURL())
+        .catch(() => {});
+
     msg.delete();
 
     messages.forEach(single => {
         msg.channel.send({
             embed: global.factory.embed()
                 .setTitle(`Top ${amount} users on **${msg.guild}**`)
-                .setDescription(`\u200b\n${single.join('\n\n')}`)
+                .setDescription(`\u200b\n${single.join('\n\n')}\n\u200b`)
                 .setFooter(`Requested by ${msg.author.tag}`)
-        }).then(m => m.delete(60000));
+                .setThumbnail(thumbnail)
+        }).then(m => m.delete({timeout: 60000}));
     });
 };
 

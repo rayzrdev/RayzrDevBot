@@ -9,6 +9,11 @@ exports.run = async (bot, msg, args) => {
     }
 
     const member = msg.mentions.members.first();
+
+    if (!member) {
+        throw 'Please mention a member to set the level of!';
+    }
+
     const level = parseInt(args[1]);
 
     if (isNaN(level)) {

@@ -24,7 +24,7 @@ class AyyManager extends Manager {
         const now = Date.now();
         if (this.cooldowns[message.author.id] && now - this.cooldowns[message.author.id] < COOLDOWN_TIME) {
             message.delete();
-            message.channel.send('plzno ._.').then(m => m.delete(5000));
+            message.channel.send('plzno ._.').then(m => m.delete({timeout: 5000}));
             return;
         }
 

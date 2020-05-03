@@ -18,7 +18,7 @@ class Logger extends Manager {
 
         bot.on('messageUpdate', (oldMsg, newMsg) => {
             if (oldMsg.content === newMsg.content) return;
-            this.logMessageStatus(oldMsg, 'Edited', [250, 215, 30], `${oldMsg.cleanContent}\n\`\`\` \`\`\`\n${newMsg.cleanContent}`);
+            this.logMessageStatus(oldMsg, 'Edited', [250, 215, 30], `${oldMsg.cleanContent || '\u200b'}\n\`\`\` \`\`\`\n${newMsg.cleanContent || '\u200b'}`);
         });
     }
 
@@ -27,7 +27,7 @@ class Logger extends Manager {
             return;
         }
 
-        const channel = message.guild.channels.find(channel => channel.name === 'logs');
+        const channel = message.guild.channels.cache.find(channel => channel.name === 'logs');
 
         if (!channel) {
             return;
@@ -40,7 +40,7 @@ class Logger extends Manager {
             .addField('Channel', `${message.channel}`)
             .setColor(color)
             .setTimestamp(new Date())
-            .setFooter(message.author.username, message.author.avatarURL);
+            .setFooter(message.author.username, message.author.avatarURL());
 
         if (content) {
             embed.setDescription(`\`\`\`\n${content.substr(0, 1750)}\n\`\`\``);

@@ -25,8 +25,8 @@ exports.run = (bot, msg, args) => {
         });
     }
 
-    msg.delete();
-    msg.channel.send(':inbox_tray: Sent you a DM with help.').then(m => m.delete(5000));
+    msg.delete().catch(() => {});
+    msg.channel.send(':inbox_tray: Sent you a DM with help.').then(m => m.delete({timeout: 5000}));
 };
 
 const getField = command => {

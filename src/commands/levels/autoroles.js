@@ -27,7 +27,7 @@ exports.run = async (bot, msg, args) => {
         }
 
         await this.autorole.addRole(role, level);
-        msg.channel.send(`Added role \`${role.name}\` at level ${level}. :ok_hand:`).then(m => m.delete(5000));
+        msg.channel.send(`Added role \`${role.name}\` at level ${level}. :ok_hand:`).then(m => m.delete({timeout: 5000}));
 
     } else if (/remove/i.test(args[0])) {
         if (args.length < 1) {

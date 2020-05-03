@@ -13,19 +13,19 @@
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.3"
   },
   "dependencies": {
-    "chalk": "^3.0.0",
+    "@rayzr/minecraft-pinger": "^1.0.4",
+    "chalk": "^4.0.0",
     "common-tags": "^1.8.0",
     "cool-ascii-faces": "^1.3.4",
-    "discord.js": "^11.6.3",
+    "discord.js": "^12.2.0",
     "fs-extra": "^9.0.0",
     "fs-readdir-recursive": "^1.1.0",
-    "got": "^10.7.0",
-    "level": "^5.0.1",
+    "got": "^11.1.0",
+    "level": "^6.0.1",
     "leven": "^3.1.0",
-    "minecraft-pinger": "^1.0.3",
     "xpdb": "^1.0.4"
   }
 }

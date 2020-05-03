@@ -96,8 +96,8 @@ class ManagerHandler {
     preInit(bot) {
         this.bot = bot;
         this._setAll('_handler', this);
-        this._setAll('_bot', this.bot);
-        this._runAll('preInit', this);
+        this._setAll('_bot', bot);
+        this._runAll('preInit', bot);
 
         bot.on('message', message => {
             if (!message.guild || !message.member || message.author.id === bot.user.id || message.author.bot) {

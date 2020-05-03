@@ -20,7 +20,7 @@ exports.run = (bot, msg, args) => {
                 .addField('Input', `\`\`\`javascript\n${input.substr(0, 256)}\n\`\`\``)
                 .addField('Output', `\`\`\`javascript\n${output.substr(0, 768)}\n\`\`\``)
                 .setFooter(`Requested by ${msg.author.tag}`)
-        }).then(m => m.delete(15000));
+        }).then(m => m.delete({timeout: 15000}));
     } catch (err) {
         msg.channel.send(`:x: An error has occurred: \`\`\`\n${err.toString().substr(0, 1500)}\n\`\`\``);
     }

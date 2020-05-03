@@ -1,6 +1,6 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
-exports.embed = options => new RichEmbed(options)
+exports.embed = options => new MessageEmbed(options)
     // ----- Apply defaults -----
     .setColor(global.config.color);
 

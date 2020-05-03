@@ -15,7 +15,7 @@ exports.run = async (bot, msg, args) => {
     }
 
     if (args.length < 1) {
-        return usage(bot, msg);
+        return usage(msg);
     }
 
     const sub = args[0].toLowerCase();
@@ -35,7 +35,7 @@ exports.run = async (bot, msg, args) => {
 
     } else if (sub === 'info') {
         if (args.length < 1) {
-            return usage(bot, msg);
+            return usage(msg);
         }
 
         const versions = await getVersions(args);
@@ -57,7 +57,7 @@ exports.run = async (bot, msg, args) => {
 
     } else if (sub === 'download') {
         if (args.length < 1) {
-            return usage(bot, msg);
+            return usage(msg);
         }
 
         const versions = await getVersions(args);
@@ -66,7 +66,7 @@ exports.run = async (bot, msg, args) => {
         msg.channel.send(':inbox_tray: Downloading plugin, expect a PM shortly with the file!');
 
     } else {
-        usage(bot, msg);
+        usage(msg);
     }
 };
 
@@ -128,7 +128,7 @@ const download = async (url, name, user) => {
     }
 };
 
-const usage = (bot, msg) => {
+const usage = msg => {
     msg.channel.send({
         embed: global.factory.usageBuilder('plugin')
             .addCommand('search <name>', 'Searches for a plugin by name')

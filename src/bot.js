@@ -48,26 +48,27 @@ bot.on('ready', () => {
         .then(invite => console.log(chalk.blue(invite)));
 });
 
-const updateDisplay = () => {
-    let totalUsers = 0;
-    let totalOnline = 0;
-
-    bot.guilds.forEach(guild => {
-        totalUsers += guild.memberCount;
-        totalOnline += guild.members.filter(member => member.presence.status !== 'offline').size;
-    });
+const updateDisplay = async () => {
+    const totalUsers = bot.guilds.cache.reduce((total, guild) => total + guild.memberCount, 0);
+    const totalOnline = bot.users.cache.filter(user => user.presence.status !== 'offline');
 
     const topic = config.statusFormat
         .replace(/{members}/g, totalUsers)
         .replace(/{online}/g, totalOnline);
 
-    // Check first to not spam the crap out of audit-log
-    if (bot.channels.get(config.mainChannel).topic !== topic) {
-        bot.channels.get(config.mainChannel).setTopic(topic);
+    try {
+        const channel = await bot.channels.fetch(config.mainChannel);
+
+        // Check first to not spam the crap out of audit-log
+        if (channel.topic !== topic) {
+            channel.setTopic(topic);
+        }
+    } catch (e) {
+        console.warn(`Main channel could not be found! ID: ${config.mainChannel}`);
     }
 
     bot.user.setPresence({
-        game: {
+        activity: {
             name: `${config.prefix}help | ${totalUsers} users`,
             type: 'PLAYING'
         }
@@ -77,8 +78,6 @@ const updateDisplay = () => {
 bot.on('guildMemberAdd', member => {
     bot.channels.get(config.mainChannel)
         .send(config.joinMessage.replace('{user}', `${member}`));
-
-    managers.get('autorole').applyRoles(member);
 
     member.guild.owner.send(`> \`${member.guild}\` | **New member:** ${member} - \`${member.user.tag}\``);
 });

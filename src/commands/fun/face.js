@@ -1,6 +1,6 @@
 const cool = require('cool-ascii-faces');
 
-exports.run = (bot, msg) => {
+exports.run = (_bot, msg) => {
     msg.delete();
     msg.channel.send(cool());
 };

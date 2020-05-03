@@ -3,7 +3,7 @@ exports.run = async (bot, msg, args) => {
         throw 'You must provide both a user and a reason!';
     }
 
-    const member = msg.guild.members.get(args[0].substr(2, 18));
+    const member = msg.guild.members.cache.get(args[0].substr(2, 18));
     if (!member) {
         throw 'That user could not be found!';
     }

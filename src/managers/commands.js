@@ -116,7 +116,7 @@ class CommandManager extends Manager {
         const permMessage = this._checkPermissions(message.member, command);
         if (permMessage) {
             return message.channel.send(`:no_entry_sign: ${permMessage}`)
-                .then(m => m.delete(5000));
+                .then(m => m.delete({timeout: 5000}));
         }
 
         try {
@@ -129,7 +129,7 @@ class CommandManager extends Manager {
             }
 
             message.channel.send(`:x: ${displayMessage}`)
-                .then(m => m.delete(5000));
+                .then(m => m.delete({timeout: 5000}));
         }
     }
 

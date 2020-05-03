@@ -31,7 +31,7 @@ exports.run = async (bot, msg, args) => {
     }
 
     const amountDeleted = await deleteLotsOfMessages(msg.channel, amount);
-    msg.channel.send(`Deleted ${amountDeleted} messages. :flame:`).then(m => m.delete(3000));
+    msg.channel.send(`Deleted ${amountDeleted} messages. :flame:`).then(m => m.delete({timeout: 3000}));
 };
 
 exports.info = {

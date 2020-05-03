@@ -2,9 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
-const asyncGitPull = () => new Promise((resolve, reject) => {
-    spawn('git', ['pull'], { stdio: 'inherit' }).on('exit', code => (code === 0 ? resolve : reject)(code));
+const runCommandAsync = (command, args) => new Promise((resolve, reject) => {
+    spawn(command, args, { stdio: 'inherit' }).on('exit', code => (code === 0 ? resolve : reject)(code));
 });
+
+const asyncGitPull = () => runCommandAsync('git', ['pull']);
+const asyncNpmCi = () => runCommandAsync('npm', ['ci']);
 
 exports.run = async (bot, msg) => {
     const status = await msg.channel.send(':arrows_counterclockwise: | Updating...');
@@ -16,12 +19,19 @@ exports.run = async (bot, msg) => {
     try {
         await asyncGitPull();
     } catch (error) {
+        console.error(error);
         throw 'Failed to run `git pull`.';
+    }
+    
+    try {
+        await asyncNpmCi();
+    } catch (error) {
+        console.error(error);
+        throw 'Failed to run `npm ci`.';
     }
 
     await status.edit(':arrows_counterclockwise: | Restarting...');
 
-    // TODO: again, we need a better way to restart. systemd ftw tho amirite
     process.exit(1);
 };
 

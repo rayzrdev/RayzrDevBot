@@ -8,6 +8,11 @@ exports.run = (bot, msg, args) => {
     }
 
     const member = msg.mentions.members.first();
+
+    if (!member) {
+        throw 'Please mention the member to set the XP of!';
+    }
+
     const xp = parseInt(args[1]);
 
     if (isNaN(xp)) {

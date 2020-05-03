@@ -84,7 +84,7 @@ class FilterManager extends Manager {
 
         if (warning) {
             message.delete();
-            message.channel.send(warning).then(m => m.delete(2000));
+            message.channel.send(warning).then(m => m.delete({timeout: 2000}));
 
             message.author.send('**The following message was deleted:**').then(() => {
                 message.author.send(message.content);
