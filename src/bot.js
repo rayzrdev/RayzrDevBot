@@ -50,7 +50,7 @@ bot.on('ready', () => {
 
 const updateDisplay = async () => {
     const totalUsers = bot.guilds.cache.reduce((total, guild) => total + guild.memberCount, 0);
-    const totalOnline = bot.users.cache.filter(user => user.presence.status !== 'offline');
+    const totalOnline = bot.users.cache.filter(user => user.presence.status !== 'offline').size;
 
     const topic = config.statusFormat
         .replace(/{members}/g, totalUsers)
