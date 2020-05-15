@@ -76,8 +76,9 @@ const updateDisplay = async () => {
 };
 
 bot.on('guildMemberAdd', member => {
-    bot.channels.get(config.mainChannel)
-        .send(config.joinMessage.replace('{user}', `${member}`));
+    bot.channels.fetch(config.mainChannel).then(channel =>
+        channel.send(config.joinMessage.replace('{user}', `${member}`))
+    );
 
     member.guild.owner.send(`> \`${member.guild}\` | **New member:** ${member} - \`${member.user.tag}\``);
 });
