@@ -66,7 +66,7 @@ class AutoRole extends Manager {
         for (let i = 0; i <= level; i++) {
             const role = roles[i];
 
-            if (role && !member.roles.has(role)) {
+            if (role && !member.roles.cache.has(role)) {
                 promises.push(member.roles.add(role));
             }
         }
