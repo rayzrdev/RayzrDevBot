@@ -3,6 +3,12 @@ exports.init = bot => {
 };
 
 exports.run = async (bot, msg) => {
+    const member = msg.mentions.members.first();
+    if (member) {
+        await this.autorole.applyRoles(member);
+        return msg.channel.send(`:white_check_mark: Applied all autoroles to \`${member.user.tag}\``);
+    }
+
     const roles = await this.autorole.getRoles(msg.guild.id);
 
     const keys = Object.keys(roles);
