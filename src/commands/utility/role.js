@@ -1,6 +1,6 @@
 exports.run = async (bot, message, args) => {
     const userRoles = (global.config.userRoles || [])
-        .map(item => message.guild.roles.get(item))
+        .map(item => message.guild.roles.cache.get(item))
         .filter(item => !!item);
 
     let roleName = args.join(' ');
@@ -14,13 +14,13 @@ exports.run = async (bot, message, args) => {
         throw 'That is not an available self-assignable role.';
     }
 
-    let hadRole = message.member.roles.has(selectedRole.id);
+    let hadRole = message.member.roles.cache.has(selectedRole.id);
 
     try {
         if (hadRole) {
-            await message.member.removeRole(selectedRole);
+            await message.member.roles.remove(selectedRole);
         } else {
-            await message.member.addRole(selectedRole);
+            await message.member.roles.add(selectedRole);
         }
     } catch (error) {
         throw 'I could not add or remove that role to you! Please contact a staff member to have them correct this issue.';
