@@ -13,17 +13,17 @@
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.4"
   },
   "dependencies": {
     "@rayzr/minecraft-pinger": "^1.0.4",
-    "chalk": "^4.0.0",
+    "chalk": "^4.1.0",
     "common-tags": "^1.8.0",
     "cool-ascii-faces": "^1.3.4",
     "discord.js": "^12.2.0",
-    "fs-extra": "^9.0.0",
+    "fs-extra": "^9.0.1",
     "fs-readdir-recursive": "^1.1.0",
-    "got": "^11.1.0",
+    "got": "^11.5.1",
     "leven": "^3.1.0",
     "xpdb": "^1.0.5"
   }
