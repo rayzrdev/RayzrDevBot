@@ -3,7 +3,6 @@ exports.run = async (bot, message, args) => {
 
     const data = await bot.managers.get('levels').getUserData(target.id);
 
-    message.delete();
     message.channel.send({
         embed: global.factory.embed()
             .addField('Rank', `${data.rank.place || data.rank.total}/${data.rank.total}`, true)
@@ -13,7 +12,7 @@ exports.run = async (bot, message, args) => {
             .setAuthor(target.username, target.avatarURL())
             .setThumbnail(target.avatarURL())
             .setFooter(`Requested by ${message.author.tag}`)
-    }).then(m => m.delete({timeout: 30000}));
+    });
 };
 
 exports.info = {
