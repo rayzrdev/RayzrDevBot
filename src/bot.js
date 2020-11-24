@@ -10,7 +10,16 @@ global.settings = {
 
 global.factory = require('./factory');
 
-const bot = new Discord.Client();
+const bot = new Discord.Client({
+    ws: {
+        intents: [
+            'DIRECT_MESSAGES',
+            'GUILD_MESSAGES',
+            'GUILD_MEMBERS',
+            'GUILDS',
+        ]
+    }
+});
 
 const managers = bot.managers = new ManagerHandler()
     .add('data')
@@ -44,7 +53,9 @@ bot.on('ready', () => {
 
     console.log('Bot has loaded successfully. We\'re in business!');
 
-    bot.generateInvite(['MANAGE_MESSAGES', 'MANAGE_CHANNELS', 'BAN_MEMBERS', 'KICK_MEMBERS'])
+    bot.generateInvite({
+        permissions: ['MANAGE_MESSAGES', 'MANAGE_CHANNELS', 'BAN_MEMBERS', 'KICK_MEMBERS']
+    })
         .then(invite => console.log(chalk.blue(invite)));
 });
 
