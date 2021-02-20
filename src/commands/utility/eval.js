@@ -5,7 +5,7 @@ const clean = input => {
     return output.replace(/(@|`)/g, '$1\u200b');
 };
 
-exports.run = (bot, msg, args) => {
+exports.run = async (bot, msg, args) => {
     const input = args.join(' ');
     if (!input) {
         throw 'You must provide some code to evaluate!';
@@ -14,7 +14,7 @@ exports.run = (bot, msg, args) => {
     msg.delete();
 
     try {
-        const output = clean(eval(input));
+        const output = clean(await eval(input));
         msg.channel.send({
             embed: global.factory.embed()
                 .addField('Input', `\`\`\`javascript\n${input.substr(0, 256)}\n\`\`\``)
