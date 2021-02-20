@@ -1,15 +1,15 @@
+const {clamp} = require('../../utils/math');
+
 exports.init = bot => {
     this.levels = bot.managers.get('levels');
 };
 
 exports.run = async (bot, msg, args) => {
-    let amount = 10;
-    if (!isNaN(args[0])) {
-        amount = parseInt(args[0]);
-        if (amount < 1) {
-            throw `\`${args[0]}\` is an invalid number!`;
-        }
-    }
+    const amount = clamp(
+        parseInt(args[0], 10) || 10,
+        1,
+        100
+    );
 
     const top = await this.levels.getTop(amount);
 
@@ -27,9 +27,8 @@ exports.run = async (bot, msg, args) => {
     }
     messages.push(users);
 
-    const thumbnail = await bot.users.fetch(top[0].id)
-        .then(user => user.avatarURL())
-        .catch(() => {});
+    const topUser = await bot.users.fetch(top[0].id);
+    const thumbnail = topUser.avatarURL();
 
     messages.forEach(single => {
         msg.channel.send({
