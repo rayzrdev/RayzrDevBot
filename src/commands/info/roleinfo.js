@@ -1,17 +1,19 @@
+const {createEmbed} = require("../../factory")
+
 exports.run = (_bot, message, args) => {
     if (args.length < 1) {
-        throw 'Please enter the name or ID of the role youw ant to get the info for.';
+        throw 'Please enter the name or ID of the role youw ant to get the info for.'
     }
 
-    const input = args.join(' ').toLowerCase();
-    const role = message.mentions.roles.first() || message.guild.roles.cache.find(role => role.id === input || role.name.toLowerCase() === input);
+    const input = args.join(' ').toLowerCase()
+    const role = message.mentions.roles.first() || message.guild.roles.cache.find(role => role.id === input || role.name.toLowerCase() === input)
 
     if (!role) {
-        throw 'That role could not be found!';
+        throw 'That role could not be found!'
     }
 
     message.channel.send(
-        global.factory.embed()
+        createEmbed()
             .setTitle(`${role.name}`)
             .setThumbnail(`http://placehold.it/100x100/${role.hexColor.slice(1)}/${role.hexColor.slice(1)}`)
             .setColor(role.color)
@@ -19,11 +21,11 @@ exports.run = (_bot, message, args) => {
             .addField('Mentionable', role.mentionable ? 'Yes' : 'No')
             .addField('Color', role.hexColor)
             .addField('ID', role.id)
-    );
-};
+    )
+}
 
 exports.info = {
     name: 'roleinfo',
     usage: 'roleinfo <role>',
     description: 'Gives you information about the given role.'
-};
+}

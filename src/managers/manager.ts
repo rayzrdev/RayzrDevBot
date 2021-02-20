@@ -1,9 +1,17 @@
+import { Client, Message } from 'discord.js'
+import { ManagerHandler } from '.'
+
+export type ManagerType = Manager
+
 /**
  * Represents a manager. Could manage commands, a config, a database, anything. Override individual methods to run setup.
  * 
  * @class Manager
  */
-class Manager {
+export abstract class Manager {
+    private _handler: ManagerHandler
+    private _bot: Client
+
     /**
      * Used to identify managers.
      * 
@@ -11,37 +19,42 @@ class Manager {
      * 
      * @memberof Manager
      */
-    getName() {
-        return '[Manager]';
-    }
-
+    abstract getName(): string
     /**
      * Called when the bot loads, before it logs into Discord. Used for one-time setup methods.
      * 
      * @memberof Manager
      */
-    preInit() { }
+    preInit(bot: Client): void {
+        return
+    }
 
     /**
      * Called when the bot logs into Discord. Keep in mind, this may be called multiple times when running a bot if it has to reconnect to Discord.
      * 
      * @memberof Manager
      */
-    init() { }
+    init(): void {
+        return
+    }
 
     /**
      * Called when the bot disconnects from Discord.
      * 
      * @memberof Manager
      */
-    disconnect() { }
+    disconnect(): void {
+        return
+    }
 
     /**
      * Called when the bot receives a message
      * 
      * @param {Message} message The message that was sent
      */
-    onMessage(message) { }
+    onMessage(message: Message): void {
+        return
+    }
 
     /**
      * The ManagerHandler that owns this manager
@@ -52,8 +65,8 @@ class Manager {
      * 
      * @memberof Manager
      */
-    get handler() {
-        return this._handler;
+    get handler(): ManagerHandler {
+        return this._handler
     }
 
     /**
@@ -65,9 +78,9 @@ class Manager {
      * 
      * @memberof Manager
      */
-    get bot() {
-        return this._bot;
+    get bot(): Client {
+        return this._bot
     }
 }
 
-module.exports = Manager;
+module.exports = Manager

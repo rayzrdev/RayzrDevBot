@@ -7,3 +7,6 @@
 /levelsdb
 /data
 /backups
+
+build
+tsconfig.tsbuildinfo

@@ -1,4 +1,6 @@
-const Manager = require('../manager');
+import {Manager} from '../manager'
+import {LevelsManager} from '../ranks/levels'
+
 const emojis = [
     ':angry:',
     ':face_palm:',
@@ -11,7 +13,7 @@ const emojis = [
     ':upside_down:',
     ':stuck_out_tongue_winking_eye:',
     ':thinking:'
-];
+]
 
 const filters = [
     {
@@ -43,7 +45,7 @@ const filters = [
         filter: (input, context) => {
             return context.channel.name !== 'advertisements'
                 && !context.member.hasPermission('MANAGE_MESSAGES')
-                && /(https?)?(:\/\/)?discord\.(io|gg|me)\/?[^/]+/i.test(input);
+                && /(https?)?(:\/\/)?discord\.(io|gg|me)\/?[^/]+/i.test(input)
         },
         messages: [
             'Please post server invites in #advertisements.',
@@ -51,72 +53,72 @@ const filters = [
             'Please move all server invites to #advertisements.'
         ]
     }
-];
+]
 
-const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
+const randomItem = arr => arr[Math.floor(Math.random() * arr.length)]
 
 class FilterManager extends Manager {
-    getName() { return 'filter'; }
+    getName() { return 'filter' }
 
     preInit(bot) {
         bot.on('messageUpdate', (oldMessage, newMessage) => {
             if (!newMessage.guild || !newMessage.member || newMessage.author.id === bot.user.id || newMessage.author.bot) {
-                return;
+                return
             }
 
-            if (oldMessage.content === newMessage.content) return;
+            if (oldMessage.content === newMessage.content) return
 
-            this.onMessage(newMessage);
-        });
+            this.onMessage(newMessage)
+        })
     }
 
     onMessage(message) {
-        let warning = this.getFilterMessage(message, message.content);
+        let warning = this.getFilterMessage(message, message.content)
 
         if (!warning && message.embeds.length > 0) {
             message.embeds.forEach(embed => {
                 warning = warning
                     || this.getFilterMessage(message, embed.title)
                     || this.getFilterMessage(message, embed.description)
-                    || this.getFilterMessage(message, (embed.footer || {}).text);
-            });
+                    || this.getFilterMessage(message, (embed.footer || {}).text)
+            })
         }
 
         if (warning) {
-            message.delete();
-            message.channel.send(warning).then(m => m.delete({timeout: 2000}));
+            message.delete()
+            message.channel.send(warning).then(m => m.delete({timeout: 2000}))
 
             message.author.send('**The following message was deleted:**').then(() => {
-                message.author.send(message.content);
-            });
-            return;
+                message.author.send(message.content)
+            })
+            return
         }
 
         if (message.channel.name === 'advertisements') {
-            this.handler.get('levels').getLevel(message.author.id).then(level => {
+            this.handler.get<LevelsManager>('levels').getLevel(message.author.id).then(level => {
                 if (level < 5) {
-                    message.delete();
-                    message.author.send(':x: You must be at least level **5** to post in #advertisements');
+                    message.delete()
+                    message.author.send(':x: You must be at least level **5** to post in #advertisements')
                 }
-            });
+            })
         }
     }
 
     getFilterMessage(context, content) {
-        if (!content) return;
+        if (!content) return
 
         const violatedFilter = filters.find(item => {
             if (item.filter instanceof RegExp) {
-                return item.filter.test(content);
+                return item.filter.test(content)
             } else if (typeof item.filter === 'function') {
-                return item.filter(content, context);
+                return item.filter(content, context)
             }
-        });
+        })
 
         if (violatedFilter) {
-            return `${randomItem(violatedFilter.messages)} ${randomItem(emojis)} **[${violatedFilter.name}]**`;
+            return `${randomItem(violatedFilter.messages)} ${randomItem(emojis)} **[${violatedFilter.name}]**`
         }
     }
 }
 
-module.exports = FilterManager;
+module.exports = FilterManager

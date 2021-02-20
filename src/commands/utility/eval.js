@@ -1,30 +1,31 @@
-const inspect = require('util').inspect;
+const inspect = require('util').inspect
+import {createEmbed} from '../../factory'
 
 const clean = input => {
-    const output = typeof input === 'string' ? input : inspect(input);
-    return output.replace(/(@|`)/g, '$1\u200b');
-};
+    const output = typeof input === 'string' ? input : inspect(input)
+    return output.replace(/(@|`)/g, '$1\u200b')
+}
 
 exports.run = async (bot, msg, args) => {
-    const input = args.join(' ');
+    const input = args.join(' ')
     if (!input) {
-        throw 'You must provide some code to evaluate!';
+        throw 'You must provide some code to evaluate!'
     }
 
-    msg.delete();
+    msg.delete()
 
     try {
-        const output = clean(await eval(input));
+        const output = clean(await eval(input))
         msg.channel.send({
-            embed: global.factory.embed()
+            embed: createEmbed()
                 .addField('Input', `\`\`\`javascript\n${input.substr(0, 256)}\n\`\`\``)
                 .addField('Output', `\`\`\`javascript\n${output.substr(0, 768)}\n\`\`\``)
                 .setFooter(`Requested by ${msg.author.tag}`)
-        }).then(m => m.delete({timeout: 15000}));
+        }).then(m => m.delete({timeout: 15000}))
     } catch (err) {
-        msg.channel.send(`:x: An error has occurred: \`\`\`\n${err.toString().substr(0, 1500)}\n\`\`\``);
+        msg.channel.send(`:x: An error has occurred: \`\`\`\n${err.toString().substr(0, 1500)}\n\`\`\``)
     }
-};
+}
 
 exports.info = {
     name: 'eval',
@@ -32,4 +33,4 @@ exports.info = {
     description: 'Evaluates some JavaScript code',
     hidden: true,
     ownerOnly: true
-};
+}

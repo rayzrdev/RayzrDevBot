@@ -1,11 +1,7 @@
 import {getConfig} from '../../helpers/config'
 import {Manager} from '../manager'
 
-export class CountingManager extends Manager {
-    getName() {
-        return 'counting'
-    }
-
+export abstract class ChannelFilterManager extends Manager {
     preInit(bot) {
         bot.on('messageUpdate', (oldMsg, newMsg) => {
             if (oldMsg.content === newMsg.content) return
@@ -18,14 +14,26 @@ export class CountingManager extends Manager {
     }
 
     checkMessage(msg) {
-        if (msg.channel.id !== getConfig().countingChannel) {
+        if (msg.channel.id !== this.getChannelID()) {
             return
         }
 
-        if (!/^\d+$/.test(msg.content)) {
+        if (!this.getEmojis().includes(msg.content.trim().toLowerCase())) {
             msg.delete()
         }
     }
+
+    getConfig() {
+        return getConfig()[this.getName()]
+    }
+
+    getChannelID() {
+        return this.getConfig().channel
+    }
+
+    getEmojis() {
+        return this.getConfig().emojis
+    }
 }
 
-module.exports = CountingManager
+module.exports = ChannelFilterManager

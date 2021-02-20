@@ -12,26 +12,26 @@ const responses = [
     'What kind of a question is that?',
     'Over my dead body!',
     'Haha, funny joke'
-];
+]
 
-const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
+const randomItem = arr => arr[Math.floor(Math.random() * arr.length)]
 
 exports.run = (bot, msg, args) => {
     if (args.length < 1) {
-        throw 'Please specify something to ask of the magic 8-ball!';
+        throw 'Please specify something to ask of the magic 8-ball!'
     }
 
-    let response = randomItem(responses);
+    let response = randomItem(responses)
 
     if (msg.content.toLowerCase().indexOf('ipodtouch0218') > -1 || msg.content.indexOf('233360087979130882') > -1) {
-        response = 'HAH';
+        response = 'HAH'
     }
 
-    msg.channel.send(`:8ball: | **${response}**`);
-};
+    msg.channel.send(`:8ball: | **${response}**`)
+}
 
 exports.info = {
     name: '8ball',
     usage: '8ball <question>',
     description: 'Asks the magic 8-ball a question'
-};
+}

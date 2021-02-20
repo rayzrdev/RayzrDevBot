@@ -1,9 +1,9 @@
-const ChannelFilter = require('./channelFilter');
+const {ChannelFilterManager} = require('./channelFilter')
 
-class Communism extends ChannelFilter {
+class Communism extends ChannelFilterManager {
     getName() {
-        return 'communism';
+        return 'communism'
     }
 }
 
-module.exports = Communism;
+module.exports = Communism
