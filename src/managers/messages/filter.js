@@ -73,15 +73,6 @@ class FilterManager extends Manager {
     onMessage(message) {
         let warning = this.getFilterMessage(message, message.content);
 
-        if (!warning && message.embeds.length > 0) {
-            message.embeds.forEach(embed => {
-                warning = warning
-                    || this.getFilterMessage(message, embed.title)
-                    || this.getFilterMessage(message, embed.description)
-                    || this.getFilterMessage(message, (embed.footer || {}).text);
-            });
-        }
-
         if (warning) {
             message.delete();
             message.channel.send(warning).then(m => m.delete({timeout: 2000}));
