@@ -10,15 +10,16 @@ global.settings = {
 
 global.factory = require('./factory');
 
+const intents = new Intents([
+    Intents.NON_PRIVILEGED,
+    "GUILD_MEMBERS", 
+]);
+
 const bot = new Discord.Client({
     ws: {
-        intents: [
-            'DIRECT_MESSAGES',
-            'GUILD_MESSAGES',
-            'GUILD_MEMBERS',
-            'GUILDS',
-        ]
-    }
+        intents
+    },
+    fetchAllMembers: true
 });
 
 const managers = bot.managers = new ManagerHandler()
