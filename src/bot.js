@@ -1,6 +1,6 @@
 const path = require('path');
 const chalk = require('chalk');
-const Discord = require('discord.js');
+const { Discord, Intents } = require('discord.js');
 const ManagerHandler = require('./managers');
 
 global.settings = {
@@ -10,15 +10,16 @@ global.settings = {
 
 global.factory = require('./factory');
 
+const intents = new Intents([
+    Intents.NON_PRIVILEGED, 
+    Intents.FLAGS.GUILD_MEMBERS
+]);
+
 const bot = new Discord.Client({
     ws: {
-        intents: [
-            'DIRECT_MESSAGES',
-            'GUILD_MESSAGES',
-            'GUILD_MEMBERS',
-            'GUILDS',
-        ]
-    }
+        intents
+    },
+    fetchAllMembers: true
 });
 
 const managers = bot.managers = new ManagerHandler()
