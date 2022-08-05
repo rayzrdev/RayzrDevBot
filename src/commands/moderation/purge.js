@@ -19,7 +19,7 @@ const deleteLotsOfMessages = async (channel, amount) => {
     return amountDeleted;
 };
 
-exports.run = async (bot, msg, args) => {
+export const run = async (bot, msg, args) => {
     await msg.delete();
     if (isNaN(args[0])) {
         throw 'Please provide a number of messages to delete!';
@@ -34,7 +34,7 @@ exports.run = async (bot, msg, args) => {
     msg.channel.send(`Deleted ${amountDeleted} messages. :flame:`).then(m => m.delete({timeout: 3000}));
 };
 
-exports.info = {
+export const info = {
     name: 'purge',
     usage: 'purge <amount>',
     description: 'Purges a certain number of messages',

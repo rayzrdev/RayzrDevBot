@@ -1,9 +1,7 @@
-const Manager = require('../manager');
+import Manager from '../manager';
 
 class Counting extends Manager {
-    getName() {
-        return 'counting';
-    }
+    getName();
 
     preInit(bot) {
         bot.on('messageUpdate', (oldMsg, newMsg) => {
@@ -27,4 +25,4 @@ class Counting extends Manager {
     }
 }
 
-module.exports = Counting;
+export default Counting;

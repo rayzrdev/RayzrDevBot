@@ -1,13 +1,10 @@
-const path = require('path');
-const readdir = require('fs-readdir-recursive');
-const chalk = require('chalk');
-
-const Manager = require('./manager');
+import path from 'path';
+import readdir from 'fs-readdir-recursive';
+import chalk from 'chalk';
+import Manager from './manager';
 
 class CommandManager extends Manager {
-    getName() {
-        return 'commands';
-    }
+    getName();
 
     preInit() {
         this._commands = [];
@@ -72,14 +69,9 @@ class CommandManager extends Manager {
         });
     }
 
-    canUse(member, command) {
-        return !this._checkPermissions(member, command);
-    }
+    canUse();
 
-    get commands() {
-        // Essentially return a clone
-        return this._commands.slice(0);
-    }
+    get commands();
 
     getContent(message) {
         const { content } = message;
@@ -156,4 +148,4 @@ class CommandManager extends Manager {
     }
 }
 
-module.exports = CommandManager;
+export default CommandManager;

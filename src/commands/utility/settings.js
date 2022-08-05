@@ -1,4 +1,4 @@
-const { stripIndents } = require('common-tags');
+import { stripIndents } from 'common-tags';
 
 const generators = {
     channel: options => Object.assign({
@@ -26,7 +26,7 @@ const settings = {
     })
 };
 
-exports.run = async (bot, message, args) => {
+export const run = async (bot, message, args) => {
     if (args.length < 1) {
         return message.channel.send(stripIndents`
             :information_source: **Available options:** ${Object.keys(settings).map(setting => `\`${setting}\``).join(', ')}
@@ -134,7 +134,7 @@ exports.run = async (bot, message, args) => {
     }
 };
 
-exports.info = {
+export const info = {
     name: 'settings',
     usage: 'settings [name] [value]',
     description: 'Displays or modifies a setting for the bot',

@@ -1,7 +1,7 @@
-const Manager = require('../manager');
+import Manager from '../manager';
 
 class AutoRole extends Manager {
-    getName() { return 'autorole'; }
+    getName();
 
     preInit(bot) {
         this.settings = this.handler.get('settings');
@@ -20,9 +20,7 @@ class AutoRole extends Manager {
         bot.on('guildMemberAdd', member => this.applyRoles(member));
     }
 
-    async getRoles(id) {
-        return await this.settings.get(`autoroles.${id}`, { default: {} });
-    }
+    getRoles();
 
     async setRoles(id, roles) {
         if (typeof roles !== 'object') throw 'Invalid roles object!';
@@ -77,4 +75,4 @@ class AutoRole extends Manager {
     }
 }
 
-module.exports = AutoRole;
+export default AutoRole;

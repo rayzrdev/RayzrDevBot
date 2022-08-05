@@ -11,9 +11,7 @@ class Manager {
      * 
      * @memberof Manager
      */
-    getName() {
-        return '[Manager]';
-    }
+    getName();
 
     /**
      * Called when the bot loads, before it logs into Discord. Used for one-time setup methods.
@@ -52,9 +50,7 @@ class Manager {
      * 
      * @memberof Manager
      */
-    get handler() {
-        return this._handler;
-    }
+    get handler();
 
     /**
      * A reference to the bot object
@@ -65,9 +61,7 @@ class Manager {
      * 
      * @memberof Manager
      */
-    get bot() {
-        return this._bot;
-    }
+    get bot();
 }
 
-module.exports = Manager;
+export default Manager;

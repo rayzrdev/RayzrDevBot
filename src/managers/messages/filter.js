@@ -1,4 +1,4 @@
-const Manager = require('../manager');
+import Manager from '../manager';
 const emojis = [
     ':angry:',
     ':face_palm:',
@@ -56,7 +56,7 @@ const filters = [
 const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
 
 class FilterManager extends Manager {
-    getName() { return 'filter'; }
+    getName();
 
     preInit(bot) {
         bot.on('messageUpdate', (oldMessage, newMessage) => {
@@ -110,4 +110,4 @@ class FilterManager extends Manager {
     }
 }
 
-module.exports = FilterManager;
+export default FilterManager;

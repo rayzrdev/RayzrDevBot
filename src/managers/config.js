@@ -1,11 +1,9 @@
-const path = require('path');
-const fse = require('fs-extra');
-const Manager = require('./manager');
+import path from 'path';
+import fse from 'fs-extra';
+import Manager from './manager';
 
 class ConfigManager extends Manager {
-    getName() {
-        return 'config';
-    }
+    getName();
 
     preInit() {
         this._configPath = path.resolve(global.settings.baseDir, 'config.json');
@@ -29,13 +27,11 @@ class ConfigManager extends Manager {
         this._config = global.config = config;
     }
 
-    get config() {
-        return Object.assign(this._config, { save: () => this.save() });
-    }
+    get config();
 
     save() {
         fse.writeFileSync(this._configPath, JSON.stringify(this._config, null, 4));
     }
 }
 
-module.exports = ConfigManager;
+export default ConfigManager;

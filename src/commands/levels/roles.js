@@ -1,8 +1,8 @@
-exports.init = bot => {
+export const init = bot => {
     this.autorole = bot.managers.get('autorole');
 };
 
-exports.run = async (bot, msg) => {
+export const run = async (bot, msg) => {
     const member = msg.mentions.members.first();
     if (member) {
         await this.autorole.applyRoles(member);
@@ -20,7 +20,7 @@ exports.run = async (bot, msg) => {
     let message = '__**ROLES**__\n\n';
 
     await Promise.all(Object.keys(roles).map(async level => {
-        const role = await msg.guild.roles.fetch(roles[level]) || { name: '~~INVALID-ROLE~~' };
+        const role = (await msg.guild.roles.fetch(roles[level])) || { name: '~~INVALID-ROLE~~' };
         message += `:arrow_right: ***${role.name}***\n:white_small_square: Given at level ${level}\n\n`;
     }));
 
@@ -28,7 +28,7 @@ exports.run = async (bot, msg) => {
     msg.channel.send(message);
 };
 
-exports.info = {
+export const info = {
     name: 'roles',
     usage: 'roles',
     description: 'Shows all rank-based roles'

@@ -1,10 +1,10 @@
-const { MessageEmbed } = require('discord.js');
+import { MessageEmbed } from 'discord.js';
 
-exports.embed = options => new MessageEmbed(options)
+export const embed = options => new MessageEmbed(options)
     // ----- Apply defaults -----
     .setColor(global.config.color);
 
-exports.usageBuilder = command => {
+export const usageBuilder = command => {
     const embed = this.embed()
         .setTitle(`Usage for \`${global.config.prefix}${command}\`:`)
         .setDescription('\u200b');
@@ -14,8 +14,6 @@ exports.usageBuilder = command => {
             embed.addField(`\`${global.config.prefix}${command} ${usage}\``, `*${description}*`);
             return this;
         },
-        build() {
-            return embed;
-        }
+        build();
     };
 };

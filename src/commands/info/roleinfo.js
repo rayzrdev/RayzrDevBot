@@ -1,4 +1,4 @@
-exports.run = (_bot, message, args) => {
+export const run = (_bot, message, args) => {
     if (args.length < 1) {
         throw 'Please enter the name or ID of the role youw ant to get the info for.';
     }
@@ -22,7 +22,7 @@ exports.run = (_bot, message, args) => {
     );
 };
 
-exports.info = {
+export const info = {
     name: 'roleinfo',
     usage: 'roleinfo <role>',
     description: 'Gives you information about the given role.'

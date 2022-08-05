@@ -1,4 +1,4 @@
-exports.run = async (bot, message, args) => {
+export const run = async (bot, message, args) => {
     const target = message.mentions.users.first() || bot.users.cache.get(args[0]) || message.author;
 
     const data = await bot.managers.get('levels').getUserData(target.id);
@@ -15,7 +15,7 @@ exports.run = async (bot, message, args) => {
     });
 };
 
-exports.info = {
+export const info = {
     name: 'rank',
     usage: 'rank [user]',
     description: 'Shows you your rank'

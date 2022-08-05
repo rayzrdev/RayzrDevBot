@@ -1,10 +1,10 @@
-const {clamp} = require('../../utils/math');
+import { clamp } from '../../utils/math';
 
-exports.init = bot => {
+export const init = bot => {
     this.levels = bot.managers.get('levels');
 };
 
-exports.run = async (bot, msg, args) => {
+export const run = async (bot, msg, args) => {
     const amount = clamp(
         parseInt(args[0], 10) || 10,
         1,
@@ -41,7 +41,7 @@ exports.run = async (bot, msg, args) => {
     });
 };
 
-exports.info = {
+export const info = {
     name: 'top',
     usage: 'top',
     description: 'Shows the top-ranked users on the server'

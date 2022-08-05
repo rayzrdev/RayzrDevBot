@@ -1,9 +1,7 @@
-const ChannelFilter = require('./channelFilter');
+import ChannelFilter from './channelFilter';
 
 class Capitalism extends ChannelFilter {
-    getName() {
-        return 'capitalism';
-    }
+    getName();
 }
 
-module.exports = Capitalism;
+export default Capitalism;

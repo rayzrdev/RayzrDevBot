@@ -1,10 +1,10 @@
-const Manager = require('../manager');
+import Manager from '../manager';
 
 // Milliseconds - How long to wait in between AYYYs
 const COOLDOWN_TIME = 5000;
 
 class AyyManager extends Manager {
-    getName() { return 'filter'; }
+    getName();
 
     init() {
         this.clearCooldowns();
@@ -44,4 +44,4 @@ class AyyManager extends Manager {
     }
 }
 
-module.exports = AyyManager;
+export default AyyManager;

@@ -16,7 +16,7 @@ const responses = [
 
 const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
 
-exports.run = (bot, msg, args) => {
+export const run = (bot, msg, args) => {
     if (args.length < 1) {
         throw 'Please specify something to ask of the magic 8-ball!';
     }
@@ -30,7 +30,7 @@ exports.run = (bot, msg, args) => {
     msg.channel.send(`:8ball: | **${response}**`);
 };
 
-exports.info = {
+export const info = {
     name: '8ball',
     usage: '8ball <question>',
     description: 'Asks the magic 8-ball a question'

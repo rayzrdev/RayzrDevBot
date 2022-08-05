@@ -1,4 +1,4 @@
-exports.run = async (bot, msg, args) => {
+export const run = async (bot, msg, args) => {
     if (args.length < 2) {
         throw 'You must provide both a user and a reason!';
     }
@@ -16,7 +16,7 @@ exports.run = async (bot, msg, args) => {
     msg.channel.send(`Banned **${member.user.tag}**. :boom: :hammer:`);
 };
 
-exports.info = {
+export const info = {
     name: 'ban',
     usage: 'ban <user> <reason>',
     description: 'Bans a user',

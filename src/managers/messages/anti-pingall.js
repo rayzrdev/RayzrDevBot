@@ -1,4 +1,4 @@
-const Manager = require('../manager');
+import Manager from '../manager';
 
 const identical = array => array.length > 0 && array.findIndex(item => item !== array[0]) === -1;
 
@@ -8,9 +8,7 @@ const lolm8noyadont = content => {
 };
 
 class AntiPingall extends Manager {
-    getName() {
-        return 'anti-pingall';
-    }
+    getName();
 
     onMessage(message) {
         if (!message.guild || !message.guild.id) {
@@ -25,4 +23,4 @@ class AntiPingall extends Manager {
     }
 }
 
-module.exports = AntiPingall;
+export default AntiPingall;

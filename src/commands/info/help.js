@@ -1,4 +1,4 @@
-exports.run = (bot, msg, args) => {
+export const run = (bot, msg, args) => {
     const manager = bot.managers.get('commands');
 
     let commands = {};
@@ -42,7 +42,7 @@ const getField = command => {
     };
 };
 
-exports.info = {
+export const info = {
     name: 'help',
     usage: 'help [command]',
     description: 'Shows help for all commands or an individual command'

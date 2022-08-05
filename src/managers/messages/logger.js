@@ -1,9 +1,7 @@
-const Manager = require('../manager');
+import Manager from '../manager';
 
 class Logger extends Manager {
-    getName() {
-        return 'logger';
-    }
+    getName();
 
     preInit(bot) {
         bot.on('messageDelete', msg => {
@@ -64,4 +62,4 @@ class Logger extends Manager {
     }
 }
 
-module.exports = Logger;
+export default Logger;

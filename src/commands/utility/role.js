@@ -1,4 +1,4 @@
-exports.run = async (bot, message, args) => {
+export const run = async (bot, message, args) => {
     const userRoles = (global.config.userRoles || [])
         .map(item => message.guild.roles.cache.get(item))
         .filter(item => !!item);
@@ -33,7 +33,7 @@ exports.run = async (bot, message, args) => {
     }
 };
 
-exports.info = {
+export const info = {
     name: 'role',
     usage: 'role [name]',
     description: 'Lets you assign or unassign yourself roles.'

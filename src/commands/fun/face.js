@@ -1,11 +1,11 @@
-const cool = require('cool-ascii-faces');
+import cool from 'cool-ascii-faces';
 
-exports.run = (_bot, msg) => {
+export const run = (_bot, msg) => {
     msg.delete();
     msg.channel.send(cool());
 };
 
-exports.info = {
+export const info = {
     name: 'face',
     usage: 'face',
     description: 'Shows a random ASCII face'

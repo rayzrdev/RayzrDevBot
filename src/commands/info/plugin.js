@@ -1,5 +1,5 @@
-const got = require('got');
-const leven = require('leven');
+import got from 'got';
+import leven from 'leven';
 
 const apiToken = global.config.curseforgeAPIToken;
 
@@ -9,7 +9,7 @@ const opts = {
     }
 };
 
-exports.run = async (bot, msg, args) => {
+export const run = async (bot, msg, args) => {
     if (!apiToken) {
         throw 'Please get a CurseForge API token at https://www.curseforge.com/account/api-tokens, put it in your config file, and restart the bot.';
     }
@@ -138,7 +138,7 @@ const usage = msg => {
     });
 };
 
-exports.info = {
+export const info = {
     name: 'plugin',
     usage: 'plugin <info|search|download> <plugin>',
     description: 'Various plugin-related commands'

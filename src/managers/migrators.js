@@ -1,7 +1,7 @@
-const path = require('path');
-const fse = require('fs-extra');
-const XPDB = require('xpdb');
-const Manager = require('./manager');
+import path from 'path';
+import fse from 'fs-extra';
+import XPDB from 'xpdb';
+import Manager from './manager';
 
 class Migrators extends Manager {
     async preInit() {
@@ -26,4 +26,4 @@ class Migrators extends Manager {
     }
 }
 
-module.exports = Migrators;
+export default Migrators;

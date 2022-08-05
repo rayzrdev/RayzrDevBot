@@ -1,4 +1,4 @@
-const Manager = require('../manager');
+import Manager from '../manager';
 
 class ChannelFilter extends Manager {
     preInit(bot) {
@@ -22,13 +22,9 @@ class ChannelFilter extends Manager {
         }
     }
 
-    getChannelID() {
-        return global.config[this.getName()].channel;
-    }
+    getChannelID();
 
-    getEmojis() {
-        return global.config[this.getName()].emojis;
-    }
+    getEmojis();
 }
 
-module.exports = ChannelFilter;
+export default ChannelFilter;

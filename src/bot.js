@@ -1,7 +1,7 @@
-const path = require('path');
-const chalk = require('chalk');
-const Discord = require('discord.js');
-const ManagerHandler = require('./managers');
+import path from 'path';
+import chalk from 'chalk';
+import Discord from 'discord.js';
+import ManagerHandler from './managers';
 
 global.settings = {
     baseDir: path.resolve(__dirname, '..'),
@@ -103,4 +103,4 @@ bot.on('error', console.error);
 
 bot.login(config.token);
 
-module.exports = bot;
+export default bot;

@@ -1,9 +1,9 @@
-exports.init = bot => {
+export const init = bot => {
     this.levels = bot.managers.get('levels');
     this.autorole = bot.managers.get('autorole');
 };
 
-exports.run = async (bot, msg, args) => {
+export const run = async (bot, msg, args) => {
     if (args.length < 2) {
         throw 'Please provide a user and a level';
     }
@@ -29,7 +29,7 @@ exports.run = async (bot, msg, args) => {
 
 };
 
-exports.info = {
+export const info = {
     name: 'level',
     usage: 'level <user> <amount>',
     description: 'Sets the rank of a user to a certain level',

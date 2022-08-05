@@ -1,6 +1,6 @@
-const got = require('got');
+import got from 'got';
 
-exports.run = async (bot, msg) => {
+export const run = async (bot, msg) => {
     msg.delete();
 
     const m = await msg.channel.send(':arrows_counterclockwise:');
@@ -14,7 +14,7 @@ exports.run = async (bot, msg) => {
     m.delete();
 };
 
-exports.info = {
+export const info = {
     name: 'cat',
     usage: 'cat',
     description: 'Shows a random cat picture'

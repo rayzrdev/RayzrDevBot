@@ -75,7 +75,7 @@ const generateMessage = () => Object.keys(attacks).map(name => {
     return `**${name}**\nDamage: \`${attack.damage.min}-${attack.damage.max}\`\nAccuracy: \`${Math.floor(attack.attackChance * 100)}%\``;
 }).join('\n\n');
 
-exports.run = (bot, message, args) => {
+export const run = (bot, message, args) => {
     if (args[0] === 'info') {
         message.author.send(generateMessage());
         message.channel.send(':crossed_swords: Sent attack information in DMs!');
@@ -183,7 +183,7 @@ const fight = (message, player1, player2, turn) => {
     });
 };
 
-exports.info = {
+export const info = {
     name: 'fight',
     usage: 'fight info|<@user>',
     description: 'Start a fight with another user and see who will win.'

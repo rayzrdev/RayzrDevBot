@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const { spawn } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { spawn } from 'child_process';
 
 const runCommandAsync = (command, args) => new Promise((resolve, reject) => {
     spawn(command, args, { stdio: 'inherit' }).on('exit', code => (code === 0 ? resolve : reject)(code));
@@ -9,7 +9,7 @@ const runCommandAsync = (command, args) => new Promise((resolve, reject) => {
 const asyncGitPull = () => runCommandAsync('git', ['pull']);
 const asyncNpmCi = () => runCommandAsync('npm', ['ci']);
 
-exports.run = async (bot, msg) => {
+export const run = async (bot, msg) => {
     const status = await msg.channel.send(':arrows_counterclockwise: | Updating...');
 
     if (!fs.existsSync(path.resolve('.', '.git'))) {
@@ -35,7 +35,7 @@ exports.run = async (bot, msg) => {
     process.exit(1);
 };
 
-exports.info = {
+export const info = {
     name: 'update',
     description: 'Updates the bot',
     ownerOnly: true

@@ -1,7 +1,7 @@
-const Manager = require('./manager');
+import Manager from './manager';
 
 class SettingsManager extends Manager {
-    getName() { return 'settings'; }
+    getName();
 
     preInit() {
         this.cache = {};
@@ -34,4 +34,4 @@ class SettingsManager extends Manager {
     }
 }
 
-module.exports = SettingsManager;
+export default SettingsManager;

@@ -1,9 +1,9 @@
-exports.init = bot => {
+export const init = bot => {
     this.autorole = bot.managers.get('autorole');
     this.levels = bot.managers.get('levels');
 };
 
-exports.run = async (bot, msg, args) => {
+export const run = async (bot, msg, args) => {
     msg.delete();
 
     if (/add/i.test(args[0])) {
@@ -68,7 +68,7 @@ exports.run = async (bot, msg, args) => {
     }
 };
 
-exports.info = {
+export const info = {
     name: 'autoroles',
     usage: 'autoroles add <level> <role>|remove <level>|retro',
     aliases: ['autorole'],

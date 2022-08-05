@@ -1,11 +1,11 @@
-const inspect = require('util').inspect;
+import { inspect } from 'util';
 
 const clean = input => {
     const output = typeof input === 'string' ? input : inspect(input);
     return output.replace(/(@|`)/g, '$1\u200b');
 };
 
-exports.run = async (bot, msg, args) => {
+export const run = async (bot, msg, args) => {
     const input = args.join(' ');
     if (!input) {
         throw 'You must provide some code to evaluate!';
@@ -26,7 +26,7 @@ exports.run = async (bot, msg, args) => {
     }
 };
 
-exports.info = {
+export const info = {
     name: 'eval',
     usage: 'eval <js code>',
     description: 'Evaluates some JavaScript code',

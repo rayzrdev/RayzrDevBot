@@ -1,6 +1,6 @@
-const chalk = require('chalk');
-const Manager = require('./manager');
-const EventEmitter = require('events');
+import chalk from 'chalk';
+import Manager from './manager';
+import EventEmitter from 'events';
 
 /**
  * Handles all managers
@@ -27,9 +27,7 @@ class ManagerHandler {
      * 
      * @memberof ManagerHandler
      */
-    get events() {
-        return this._events;
-    }
+    get events();
 
     /**
      * The array of managers
@@ -40,9 +38,7 @@ class ManagerHandler {
      * 
      * @memberof ManagerHandler
      */
-    get managers() {
-        return this._managers;
-    }
+    get managers();
 
     add(name) {
         try {
@@ -63,9 +59,7 @@ class ManagerHandler {
         return this;
     }
 
-    get(name) {
-        return this.managers.find(manager => manager.getName() === name);
-    }
+    get();
 
     _runAll(methodName, params) {
         if (!(params instanceof Array)) {
@@ -138,4 +132,4 @@ class ManagerHandler {
     }
 }
 
-module.exports = ManagerHandler;
+export default ManagerHandler;

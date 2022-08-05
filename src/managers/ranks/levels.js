@@ -1,9 +1,9 @@
-const Manager = require('../manager');
+import Manager from '../manager';
 
 const keyPrefix = 'level.';
 
 class Levels extends Manager {
-    getName() { return 'levels'; }
+    getName();
 
     preInit() {
         this._speakTimes = {};
@@ -15,9 +15,7 @@ class Levels extends Manager {
         return 5 * (n ** 2) + 50 * n + 100;
     }
 
-    async remainingXP(id) {
-        return this.remainingXPFromTotal(await this.getXP(id));
-    }
+    remainingXP();
 
     remainingXPFromTotal(xp) {
         const level = this.levelFromXP(xp);
@@ -66,13 +64,9 @@ class Levels extends Manager {
         };
     }
 
-    _now() {
-        return process.hrtime()[0];
-    }
+    _now();
 
-    _lastSpoke(id) {
-        return this._speakTimes[id] || (this._speakTimes[id] = this._now());
-    }
+    _lastSpoke();
 
     async onMessage(message) {
         if (message.author.bot) return;
@@ -96,9 +90,7 @@ class Levels extends Manager {
         }
     }
 
-    async getLevel(id) {
-        return this.levelFromXP(await this.getXP(id));
-    }
+    getLevel();
 
     levelFromXP(xp) {
         let level = 0;
@@ -109,9 +101,7 @@ class Levels extends Manager {
         return level;
     }
 
-    async getXP(id) {
-        return await this.db.get(`${keyPrefix}${id}`) || 0;
-    }
+    getXP();
 
     async setXP(id, value) {
         await this.db.put(`${keyPrefix}${id}`, value);
@@ -122,19 +112,9 @@ class Levels extends Manager {
         await this.setXP(id, current + value);
     }
 
-    async getTop(num) {
-        return (await this.getUsers()).splice(0, num);
-    }
+    getTop();
 
-    async getUsers() {
-        return (await this.db.entries())
-            .filter(entry => entry.key.startsWith(keyPrefix))
-            .map(entry => ({
-                id: entry.key.slice(keyPrefix.length),
-                xp: entry.value
-            }))
-            .sort((a, b) => b.xp - a.xp);
-    }
+    getUsers();
 }
 
-module.exports = Levels;
+export default Levels;

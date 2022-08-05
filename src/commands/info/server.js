@@ -1,6 +1,5 @@
-const stripIndents = require('common-tags').stripIndents;
-
-const pinger = require('@rayzr/minecraft-pinger');
+import { stripIndents } from 'common-tags';
+import pinger from '@rayzr/minecraft-pinger';
 
 const ping = async (host, port) => {
     return new Promise((resolve, reject) => {
@@ -15,7 +14,7 @@ const ping = async (host, port) => {
     });
 };
 
-exports.run = async (bot, msg, args) => {
+export const run = async (bot, msg, args) => {
     if (args.length < 1) {
         throw 'You must enter a server IP!';
     }
@@ -41,7 +40,7 @@ exports.run = async (bot, msg, args) => {
     });
 };
 
-exports.info = {
+export const info = {
     name: 'server',
     usage: 'server <ip[:port]>',
     description: 'Pings a Minecraft server'

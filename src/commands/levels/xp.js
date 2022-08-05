@@ -1,8 +1,8 @@
-exports.init = bot => {
+export const init = bot => {
     this.levels = bot.managers.get('levels');
 };
 
-exports.run = (bot, msg, args) => {
+export const run = (bot, msg, args) => {
     if (args.length < 2) {
         throw 'Please provide a user and an XP amount';
     }
@@ -24,7 +24,7 @@ exports.run = (bot, msg, args) => {
     });
 };
 
-exports.info = {
+export const info = {
     name: 'xp',
     usage: 'xp <user> <amount>',
     description: 'Sets the rank of a user to a certain XP amount',
