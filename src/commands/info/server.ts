@@ -1,10 +1,12 @@
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'comm... Remove this comment to see the full error message
 import { stripIndents } from 'common-tags';
+// @ts-expect-error TS(7016): Could not find a declaration file for module '@ray... Remove this comment to see the full error message
 import pinger from '@rayzr/minecraft-pinger';
 
-const ping = async (host, port) => {
+const ping = async (host: any, port: any) => {
     return new Promise((resolve, reject) => {
         try {
-            pinger.ping(host, port, (err, result) => {
+            pinger.ping(host, port, (err: any, result: any) => {
                 if (err) return reject(err);
                 else resolve(result);
             });
@@ -14,7 +16,7 @@ const ping = async (host, port) => {
     });
 };
 
-export const run = async (bot, msg, args) => {
+export const run = async (bot: any, msg: any, args: any) => {
     if (args.length < 1) {
         throw 'You must enter a server IP!';
     }
@@ -28,16 +30,16 @@ export const run = async (bot, msg, args) => {
     const result = await ping(host, port);
 
     m.edit({
-        content: '',
-        embed: global.factory.embed()
-            .setTitle(`:white_check_mark: **${args[0]}**`)
-            .setDescription(stripIndents`
-                **Ping:** \`${result.ping}ms\`
-                **Players:** \`${result.players.online}/${result.players.max}\`
-                **Version:** \`${result.version.name}\`
-                **Motd:**\`\`\`\n${(result.description.text || result.description).replace(/\u00a7[0-9a-fklmnor]/g, '')}\n\`\`\``)
-            .setFooter(`Requested by ${msg.author.tag}`)
-    });
+    content: '',
+    embed: (global as any).factory.embed()
+        .setTitle(`:white_check_mark: **${args[0]}**`)
+        .setDescription(stripIndents `
+                **Ping:** \`${(result as any).ping}ms\`
+                **Players:** \`${(result as any).players.online}/${(result as any).players.max}\`
+                **Version:** \`${(result as any).version.name}\`
+                **Motd:**\`\`\`\n${((result as any).description.text || (result as any).description).replace(/\u00a7[0-9a-fklmnor]/g, '')}\n\`\`\``)
+        .setFooter(`Requested by ${msg.author.tag}`)
+});
 };
 
 export const info = {

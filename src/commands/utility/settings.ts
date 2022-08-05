@@ -1,11 +1,12 @@
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'comm... Remove this comment to see the full error message
 import { stripIndents } from 'common-tags';
 
 const generators = {
-    channel: options => Object.assign({
-        validator: input => /^<?#?\d{18}>?$/.test(input),
-        mapper: input => input.replace(/[^0-9]/g, '')
+    channel: (options: any) => Object.assign({
+        validator: (input: any) => /^<?#?\d{18}>?$/.test(input),
+        mapper: (input: any) => input.replace(/[^0-9]/g, '')
     }, options),
-    array: options => Object.assign({
+    array: (options: any) => Object.assign({
         isArray: true
     }, options)
 };
@@ -13,20 +14,22 @@ const generators = {
 const settings = {
     prefix: {},
     color: {
-        validator: input => /^#?[a-fA-F0-9]{6}$/.test(input),
-        mapper: input => (input.startsWith('#') ? '' : '#') + input
+        validator: (input: any) => /^#?[a-fA-F0-9]{6}$/.test(input),
+        mapper: (input: any) => (input.startsWith('#') ? '' : '#') + input
     },
     joinMessage: {},
+    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
     mainChannel: generators.channel(),
+    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
     countingChannel: generators.channel(),
     statusFormat: {},
     userRoles: generators.array({
-        validator: input => /^(<@&)?\d{18}>?$/.test(input),
-        mapper: input => input.replace(/[<>@&]/g, '')
+        validator: (input: any) => /^(<@&)?\d{18}>?$/.test(input),
+        mapper: (input: any) => input.replace(/[<>@&]/g, '')
     })
 };
 
-export const run = async (bot, message, args) => {
+export const run = async (bot: any, message: any, args: any) => {
     if (args.length < 1) {
         return message.channel.send(stripIndents`
             :information_source: **Available options:** ${Object.keys(settings).map(setting => `\`${setting}\``).join(', ')}
@@ -34,21 +37,23 @@ export const run = async (bot, message, args) => {
     }
 
     const settingName = args[0];
+    // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     if (!settings[settingName]) {
         throw 'That is not a valid setting.';
     }
 
+    // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     const setting = settings[settingName];
 
     if (args.length < 2) {
-        const value = setting.getter ? setting.getter(global.config) : global.config[settingName];
+        const value = setting.getter ? setting.getter((global as any).config) : (global as any).config[settingName];
 
         return message.channel.send(`:information_source: \`${settingName}\` = \`${setting.isArray ? 'Array' : value}\``);
     }
 
     if (setting.isArray) {
         const operation = args[1];
-        const current = (setting.getter ? setting.getter(global.config) : global.config[settingName]) || [];
+        const current = (setting.getter ? setting.getter((global as any).config) : (global as any).config[settingName]) || [];
 
         if (/^a(dd)?$/i.test(operation)) {
             if (args.length < 3) {
@@ -89,7 +94,7 @@ export const run = async (bot, message, args) => {
 
             message.channel.send(`Removed the value at index \`${index}\` from the setting \`${settingName}\`.`);
         } else if (/^l(ist)?$/i.test(operation)) {
-            const output = current.map(item => typeof setting.displayValue === 'function' ? setting.displayValue(item) : item)
+            const output = current.map((item: any) => typeof setting.displayValue === 'function' ? setting.displayValue(item) : item)
                 .join('\n');
 
             return message.channel.send(`Values for \`${settingName}\`:\n\`\`\`\n${output}\n\`\`\``);
@@ -98,12 +103,12 @@ export const run = async (bot, message, args) => {
         }
 
         if (setting.setter) {
-            setting.setter(global.config, current);
+            setting.setter((global as any).config, current);
         } else {
-            global.config[settingName] = current;
+            (global as any).config[settingName] = current;
         }
 
-        global.config.save();
+        (global as any).config.save();
     } else {
         const input = args.slice(1).join(' ');
 
@@ -124,12 +129,12 @@ export const run = async (bot, message, args) => {
         }
 
         if (setting.setter) {
-            setting.setter(global.config, value);
+            setting.setter((global as any).config, value);
         } else {
-            global.config[settingName] = value;
+            (global as any).config[settingName] = value;
         }
 
-        global.config.save();
+        (global as any).config.save();
         message.channel.send(`:white_check_mark: Updated value of \`${settingName}\` to be \`${value}\``);
     }
 };

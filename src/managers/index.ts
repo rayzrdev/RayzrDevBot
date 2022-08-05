@@ -8,12 +8,16 @@ import EventEmitter from 'events';
  * @class ManagerHandler
  */
 class ManagerHandler {
+    _events: any;
+    _managers: any;
+    bot: any;
     /**
      * Creates an instance of ManagerHandler.
      * 
      * @memberof ManagerHandler
      */
     constructor() {
+        // @ts-expect-error TS(2351): This expression is not constructable.
         this._events = new EventEmitter();
         this._managers = [];
     }
@@ -27,6 +31,7 @@ class ManagerHandler {
      * 
      * @memberof ManagerHandler
      */
+    // @ts-expect-error TS(7033): Property 'events' implicitly has type 'any', becau... Remove this comment to see the full error message
     get events();
 
     /**
@@ -38,9 +43,10 @@ class ManagerHandler {
      * 
      * @memberof ManagerHandler
      */
+    // @ts-expect-error TS(7033): Property 'managers' implicitly has type 'any', bec... Remove this comment to see the full error message
     get managers();
 
-    add(name) {
+    add(name: any) {
         try {
             const manager = require('./' + name);
             if (!manager.prototype) {
@@ -59,14 +65,16 @@ class ManagerHandler {
         return this;
     }
 
+    // @ts-expect-error TS(7010): 'get', which lacks return-type annotation, implici... Remove this comment to see the full error message
     get();
 
-    _runAll(methodName, params) {
+    // @ts-expect-error TS(2389): Function implementation name must be 'get'.
+    _runAll(methodName: any, params: any) {
         if (!(params instanceof Array)) {
             params = [params];
         }
 
-        this.managers.forEach(manager => {
+        this.managers.forEach((manager: any) => {
             if (manager[methodName]) {
                 try {
                     manager[methodName].apply(manager, params);
@@ -78,8 +86,8 @@ class ManagerHandler {
         });
     }
 
-    _setAll(property, value) {
-        this.managers.forEach(manager => manager[property] = value);
+    _setAll(property: any, value: any) {
+        this.managers.forEach((manager: any) => manager[property] = value);
     }
 
     /**
@@ -87,13 +95,13 @@ class ManagerHandler {
      * 
      * @memberof ManagerHandler
      */
-    preInit(bot) {
+    preInit(bot: any) {
         this.bot = bot;
         this._setAll('_handler', this);
         this._setAll('_bot', bot);
         this._runAll('preInit', bot);
 
-        bot.on('message', message => {
+        bot.on('message', (message: any) => {
             if (!message.guild || !message.member || message.author.id === bot.user.id || message.author.bot) {
                 return;
             }
@@ -119,6 +127,7 @@ class ManagerHandler {
      */
     disconnect() {
         this._setAll('bot', undefined);
+        // @ts-expect-error TS(2554): Expected 2 arguments, but got 1.
         this._runAll('disconnect');
     }
 
@@ -127,7 +136,7 @@ class ManagerHandler {
      * 
      * @memberof ManagerHandler
      */
-    onMessage(message) {
+    onMessage(message: any) {
         this._runAll('onMessage', message);
     }
 }

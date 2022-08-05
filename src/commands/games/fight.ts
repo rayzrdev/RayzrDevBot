@@ -1,4 +1,4 @@
-const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
+const randomItem = (arr: any) => arr[Math.floor(Math.random() * arr.length)];
 
 const attacks = {
     punch: {
@@ -45,11 +45,21 @@ const validActionRegex = new RegExp(validActions.join('|'), 'i');
 const validActionString = validActions.map(action => `**${action}**`).join(' || ');
 
 class Player {
-    constructor(user) {
+    static cache = {};
+
+    hp: any;
+    isFighting: any;
+    miss: any;
+    user: any;
+
+    constructor(user: any) {
+        // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         if (Player.cache[user.id]) {
+            // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             return Player.cache[user.id];
         }
 
+        // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         Player.cache[user.id] = this;
 
         this.user = user;
@@ -68,14 +78,13 @@ class Player {
     }
 }
 
-Player.cache = {};
-
 const generateMessage = () => Object.keys(attacks).map(name => {
+    // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     const attack = attacks[name];
     return `**${name}**\nDamage: \`${attack.damage.min}-${attack.damage.max}\`\nAccuracy: \`${Math.floor(attack.attackChance * 100)}%\``;
 }).join('\n\n');
 
-export const run = (bot, message, args) => {
+export const run = (bot: any, message: any, args: any) => {
     if (args[0] === 'info') {
         message.author.send(generateMessage());
         message.channel.send(':crossed_swords: Sent attack information in DMs!');
@@ -112,7 +121,7 @@ export const run = (bot, message, args) => {
     fight(message, you, opponent, true);
 };
 
-const fight = (message, player1, player2, turn) => {
+const fight = (message: any, player1: any, player2: any, turn: any) => {
     if (!player1.isFighting || !player2.isFighting) {
         // If either one of them isn't supposed to be fighting, reset and exit.
         player1.reset();
@@ -125,11 +134,11 @@ const fight = (message, player1, player2, turn) => {
     const targetPlayer = turn ? player2 : player1;
 
     message.channel.send(`**${currentPlayer.user.username}**, it's your turn. Type ${validActionString} to hit the enemy.`);
-    message.channel.awaitMessages(response => response.author.id === currentPlayer.user.id && validActionRegex.test(response.content), {
+    message.channel.awaitMessages((response: any) => response.author.id === currentPlayer.user.id && validActionRegex.test(response.content), {
         max: 1,
         time: 30000,
         errors: ['time'],
-    }).then(collected => {
+    }).then((collected: any) => {
         const msg = collected.first();
         const input = msg.content.toLowerCase();
 
@@ -144,6 +153,7 @@ const fight = (message, player1, player2, turn) => {
 
         currentPlayer.miss = 0;
 
+        // @ts-expect-error TS(7053): Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         const attack = attacks[input];
 
         if (Math.random() > attack.attackChance) {

@@ -1,6 +1,7 @@
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'cool... Remove this comment to see the full error message
 import cool from 'cool-ascii-faces';
 
-export const run = (_bot, msg) => {
+export const run = (_bot: any, msg: any) => {
     msg.delete();
     msg.channel.send(cool());
 };

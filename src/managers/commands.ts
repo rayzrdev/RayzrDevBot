@@ -1,11 +1,15 @@
 import path from 'path';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'fs-r... Remove this comment to see the full error message
 import readdir from 'fs-readdir-recursive';
 import chalk from 'chalk';
 import Manager from './manager';
 
 class CommandManager extends Manager {
+    _commands: any;
+    // @ts-expect-error TS(7010): 'getName', which lacks return-type annotation, imp... Remove this comment to see the full error message
     getName();
 
+    // @ts-expect-error TS(2389): Function implementation name must be 'getName'.
     preInit() {
         this._commands = [];
         this.loadCommands();
@@ -14,16 +18,16 @@ class CommandManager extends Manager {
     init() {
         const bot = this.bot;
 
-        this._commands.filter(command => command && command.init)
-            .forEach(command => command.init(bot));
+        this._commands.filter((command: any) => command && command.init)
+            .forEach((command: any) => command.init(bot));
     }
 
     loadCommands() {
         const commandsFolder = path.resolve(__dirname, '..', 'commands');
 
         readdir(commandsFolder)
-            .filter(file => !path.basename(file).startsWith('_') && file.endsWith('.js'))
-            .forEach(file => {
+            .filter((file: any) => !path.basename(file).startsWith('_') && file.endsWith('.js'))
+            .forEach((file: any) => {
                 let command;
 
                 try {
@@ -37,7 +41,7 @@ class CommandManager extends Manager {
             });
     }
 
-    validateCommand(command) {
+    validateCommand(command: any) {
         if (typeof command !== 'object') return 'Exports are empty';
         if (typeof command.run !== 'function') return 'Missing run function';
         if (typeof command.info !== 'object') return 'Missing info object';
@@ -46,7 +50,7 @@ class CommandManager extends Manager {
         return '';
     }
 
-    _loadSingle(command, file) {
+    _loadSingle(command: any, file: any) {
         const check = this.validateCommand(command);
 
         if (check) {
@@ -60,22 +64,24 @@ class CommandManager extends Manager {
         this._commands.push(command);
     }
 
-    findCommand(input) {
+    findCommand(input: any) {
         const lower = input.toLowerCase();
 
-        return this._commands.find(command => {
+        return this._commands.find((command: any) => {
             return command.info.name.toLowerCase() === input.toLowerCase() ||
-                (command.info.aliases && command.info.aliases.find(alias => alias === lower));
+                (command.info.aliases && command.info.aliases.find((alias: any) => alias === lower));
         });
     }
 
+    // @ts-expect-error TS(2391): Function implementation is missing or not immediat... Remove this comment to see the full error message
     canUse();
 
+    // @ts-expect-error TS(7033): Property 'commands' implicitly has type 'any', bec... Remove this comment to see the full error message
     get commands();
 
-    getContent(message) {
+    getContent(message: any) {
         const { content } = message;
-        const { prefix } = global.config;
+        const { prefix } = (global as any).config;
         let out = '';
 
         if (content.startsWith(prefix)) {
@@ -87,7 +93,7 @@ class CommandManager extends Manager {
         return out.trim();
     }
 
-    async onMessage(message) {
+    async onMessage(message: any) {
         const content = this.getContent(message);
         if (!content) {
             return;
@@ -104,28 +110,28 @@ class CommandManager extends Manager {
         this.executeCommand(command, message, args);
     }
 
-    async executeCommand(command, message, args) {
+    async executeCommand(command: any, message: any, args: any) {
         const permMessage = this._checkPermissions(message.member, command);
         if (permMessage) {
             return message.channel.send(`:no_entry_sign: ${permMessage}`)
-                .then(m => m.delete({timeout: 5000}));
+                .then((m: any) => m.delete({timeout: 5000}));
         }
 
         try {
             await command.run(this.bot, message, args);
         } catch (err) {
-            const displayMessage = `${err && err.message || err || 'An unknown error has occurred!'}`;
+            const displayMessage = `${err && (err as any).message || err || 'An unknown error has occurred!'}`;
 
             if (displayMessage == 'help') {
                 return this.showHelp(command.info.name, message);
             }
 
             message.channel.send(`:x: ${displayMessage}`)
-                .then(m => m.delete({timeout: 5000}));
+                .then((m: any) => m.delete({timeout: 5000}));
         }
     }
 
-    _checkPermissions(member, command) {
+    _checkPermissions(member: any, command: any) {
         if (command.info.perms) {
             const perms = [].concat(command.info.perms);
 
@@ -136,14 +142,14 @@ class CommandManager extends Manager {
             }
         }
 
-        if (command.info.ownerOnly && member.id !== (global.config.ownerID || '138048234819026944')) {
+        if (command.info.ownerOnly && member.id !== ((global as any).config.ownerID || '138048234819026944')) {
             return 'Only the owner of the bot can use this command.';
         }
 
         return '';
     }
 
-    showHelp(command, message) {
+    showHelp(command: any, message: any) {
         this.executeCommand(this.findCommand('help'), message, [command]);
     }
 }

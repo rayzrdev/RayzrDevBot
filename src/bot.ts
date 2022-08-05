@@ -3,12 +3,12 @@ import chalk from 'chalk';
 import Discord from 'discord.js';
 import ManagerHandler from './managers';
 
-global.settings = {
+(global as any).settings = {
     baseDir: path.resolve(__dirname, '..'),
     dataFolder: path.resolve(__dirname, '..', 'data')
 };
 
-global.factory = require('./factory');
+(global as any).factory = require('./factory');
 
 const bot = new Discord.Client({
     ws: {
@@ -21,7 +21,7 @@ const bot = new Discord.Client({
     }
 });
 
-const managers = bot.managers = new ManagerHandler()
+const managers = (bot as any).managers = new ManagerHandler()
     .add('data')
     .add('config')
     .add('migrators')
@@ -42,7 +42,8 @@ const managers = bot.managers = new ManagerHandler()
 
 managers.preInit(bot);
 
-const config = global.config = managers.get('config').config;
+// @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
+const config = (global as any).config = managers.get('config').config;
 
 bot.on('ready', () => {
     console.log('Running init...');
@@ -71,13 +72,14 @@ const updateDisplay = async () => {
         const channel = await bot.channels.fetch(config.mainChannel);
 
         // Check first to not spam the crap out of audit-log
-        if (channel.topic !== topic) {
-            channel.setTopic(topic);
+        if ((channel as any).topic !== topic) {
+            (channel as any).setTopic(topic);
         }
     } catch (e) {
         console.warn(`Main channel could not be found! ID: ${config.mainChannel}`);
     }
 
+    // @ts-expect-error TS(2531): Object is possibly 'null'.
     bot.user.setPresence({
         activity: {
             name: `${config.prefix}help | ${totalUsers} users`,
@@ -87,10 +89,9 @@ const updateDisplay = async () => {
 };
 
 bot.on('guildMemberAdd', member => {
-    bot.channels.fetch(config.mainChannel).then(channel =>
-        channel.send(config.joinMessage.replace('{user}', `${member}`))
-    );
+    bot.channels.fetch(config.mainChannel).then(channel => (channel as any).send(config.joinMessage.replace('{user}', `${member}`)));
 
+    // @ts-expect-error TS(2531): Object is possibly 'null'.
     member.guild.owner.send(`> \`${member.guild}\` | **New member:** ${member} - \`${member.user.tag}\``);
 });
 

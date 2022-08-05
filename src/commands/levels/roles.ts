@@ -1,14 +1,17 @@
-export const init = bot => {
+export const init = (bot: any) => {
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     this.autorole = bot.managers.get('autorole');
 };
 
-export const run = async (bot, msg) => {
+export const run = async (bot: any, msg: any) => {
     const member = msg.mentions.members.first();
     if (member) {
+        // @ts-expect-error TS(2532): Object is possibly 'undefined'.
         await this.autorole.applyRoles(member);
         return msg.channel.send(`:white_check_mark: Applied all autoroles to \`${member.user.tag}\``);
     }
 
+    // @ts-expect-error TS(2532): Object is possibly 'undefined'.
     const roles = await this.autorole.getRoles(msg.guild.id);
 
     const keys = Object.keys(roles);

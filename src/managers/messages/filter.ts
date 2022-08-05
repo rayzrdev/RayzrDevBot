@@ -40,7 +40,7 @@ const filters = [
     },
     {
         name: 'invite link',
-        filter: (input, context) => {
+        filter: (input: any, context: any) => {
             return context.channel.name !== 'advertisements'
                 && !context.member.hasPermission('MANAGE_MESSAGES')
                 && /(https?)?(:\/\/)?discord\.(io|gg|me)\/?[^/]+/i.test(input);
@@ -53,13 +53,15 @@ const filters = [
     }
 ];
 
-const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
+const randomItem = (arr: any) => arr[Math.floor(Math.random() * arr.length)];
 
 class FilterManager extends Manager {
+    // @ts-expect-error TS(7010): 'getName', which lacks return-type annotation, imp... Remove this comment to see the full error message
     getName();
 
-    preInit(bot) {
-        bot.on('messageUpdate', (oldMessage, newMessage) => {
+    // @ts-expect-error TS(2389): Function implementation name must be 'getName'.
+    preInit(bot: any) {
+        bot.on('messageUpdate', (oldMessage: any, newMessage: any) => {
             if (!newMessage.guild || !newMessage.member || newMessage.author.id === bot.user.id || newMessage.author.bot) {
                 return;
             }
@@ -70,12 +72,12 @@ class FilterManager extends Manager {
         });
     }
 
-    onMessage(message) {
+    onMessage(message: any) {
         let warning = this.getFilterMessage(message, message.content);
 
         if (warning) {
             message.delete();
-            message.channel.send(warning).then(m => m.delete({timeout: 2000}));
+            message.channel.send(warning).then((m: any) => m.delete({timeout: 2000}));
 
             message.author.send('**The following message was deleted:**').then(() => {
                 message.author.send(message.content);
@@ -84,7 +86,7 @@ class FilterManager extends Manager {
         }
 
         if (message.channel.name === 'advertisements') {
-            this.handler.get('levels').getLevel(message.author.id).then(level => {
+            this.handler.get('levels').getLevel(message.author.id).then((level: any) => {
                 if (level < 5) {
                     message.delete();
                     message.author.send(':x: You must be at least level **5** to post in #advertisements');
@@ -93,7 +95,7 @@ class FilterManager extends Manager {
         }
     }
 
-    getFilterMessage(context, content) {
+    getFilterMessage(context: any, content: any) {
         if (!content) return;
 
         const violatedFilter = filters.find(item => {

@@ -14,9 +14,9 @@ const responses = [
     'Haha, funny joke'
 ];
 
-const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
+const randomItem = (arr: any) => arr[Math.floor(Math.random() * arr.length)];
 
-export const run = (bot, msg, args) => {
+export const run = (bot: any, msg: any, args: any) => {
     if (args.length < 1) {
         throw 'Please specify something to ask of the magic 8-ball!';
     }

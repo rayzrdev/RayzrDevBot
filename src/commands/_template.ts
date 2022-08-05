@@ -1,4 +1,4 @@
-export const run = (bot, msg, args) => {
+export const run = (bot: any, msg: any, args: any) => {
 
 };
 

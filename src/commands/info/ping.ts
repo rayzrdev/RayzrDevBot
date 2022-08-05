@@ -1,4 +1,4 @@
-export const run = async (bot, msg) => {
+export const run = async (bot: any, msg: any) => {
     const m = await msg.channel.send('Pong!');
     m.edit(`Pong! \`${m.createdTimestamp - msg.createdTimestamp}ms\` :watch:`);
 };

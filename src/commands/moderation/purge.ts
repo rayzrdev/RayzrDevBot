@@ -1,4 +1,4 @@
-const deleteLotsOfMessages = async (channel, amount) => {
+const deleteLotsOfMessages = async (channel: any, amount: any) => {
     let amountDeleted = 0;
 
     while (amountDeleted < amount) {
@@ -19,7 +19,7 @@ const deleteLotsOfMessages = async (channel, amount) => {
     return amountDeleted;
 };
 
-export const run = async (bot, msg, args) => {
+export const run = async (bot: any, msg: any, args: any) => {
     await msg.delete();
     if (isNaN(args[0])) {
         throw 'Please provide a number of messages to delete!';
@@ -31,7 +31,7 @@ export const run = async (bot, msg, args) => {
     }
 
     const amountDeleted = await deleteLotsOfMessages(msg.channel, amount);
-    msg.channel.send(`Deleted ${amountDeleted} messages. :flame:`).then(m => m.delete({timeout: 3000}));
+    msg.channel.send(`Deleted ${amountDeleted} messages. :flame:`).then((m: any) => m.delete({timeout: 3000}));
 };
 
 export const info = {

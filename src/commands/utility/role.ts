@@ -1,14 +1,14 @@
-export const run = async (bot, message, args) => {
-    const userRoles = (global.config.userRoles || [])
-        .map(item => message.guild.roles.cache.get(item))
-        .filter(item => !!item);
+export const run = async (bot: any, message: any, args: any) => {
+    const userRoles = ((global as any).config.userRoles || [])
+    .map((item: any) => message.guild.roles.cache.get(item))
+    .filter((item: any) => !!item);
 
     let roleName = args.join(' ');
     if (!roleName) {
-        return message.channel.send(`:information_source: Available roles:\n\n${userRoles.map(role => `- **${role.name}**`).join('\n')}`);
+        return message.channel.send(`:information_source: Available roles:\n\n${userRoles.map((role: any) => `- **${role.name}**`).join('\n')}`);
     }
 
-    const selectedRole = userRoles.find(role => role.name.toLowerCase() === roleName.toLowerCase());
+    const selectedRole = userRoles.find((role: any) => role.name.toLowerCase() === roleName.toLowerCase());
 
     if (!selectedRole) {
         throw 'That is not an available self-assignable role.';

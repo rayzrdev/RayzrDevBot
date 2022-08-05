@@ -1,7 +1,7 @@
 import got from 'got';
 import leven from 'leven';
 
-const apiToken = global.config.curseforgeAPIToken;
+const apiToken = (global as any).config.curseforgeAPIToken;
 
 const opts = {
     headers: {
@@ -9,7 +9,7 @@ const opts = {
     }
 };
 
-export const run = async (bot, msg, args) => {
+export const run = async (bot: any, msg: any, args: any) => {
     if (!apiToken) {
         throw 'Please get a CurseForge API token at https://www.curseforge.com/account/api-tokens, put it in your config file, and restart the bot.';
     }
@@ -29,9 +29,9 @@ export const run = async (bot, msg, args) => {
         const query = args.join('-').toLowerCase();
         const data = await search(query);
         msg.channel.send({
-            embed: global.factory.embed({ fields: getResults(data) })
-                .setTitle(`Search results for __\`${query}\`__`)
-        });
+    embed: (global as any).factory.embed({ fields: getResults(data) })
+        .setTitle(`Search results for __\`${query}\`__`)
+});
 
     } else if (sub === 'info') {
         if (args.length < 1) {
@@ -39,7 +39,7 @@ export const run = async (bot, msg, args) => {
         }
 
         const versions = await getVersions(args);
-        const fields = versions.map(v => {
+        const fields = versions.map((v: any) => {
             return {
                 name: v.name,
                 value: `
@@ -51,9 +51,9 @@ export const run = async (bot, msg, args) => {
         });
 
         msg.channel.send({
-            embed: global.factory.embed({ fields })
-                .setDescription(`Click [here](https://dev.bukkit.org/projects/${args.join('-')}/) to see the project page.`)
-        });
+    embed: (global as any).factory.embed({ fields })
+        .setDescription(`Click [here](https://dev.bukkit.org/projects/${args.join('-')}/) to see the project page.`)
+});
 
     } else if (sub === 'download') {
         if (args.length < 1) {
@@ -70,9 +70,9 @@ export const run = async (bot, msg, args) => {
     }
 };
 
-const getResults = data => {
+const getResults = (data: any) => {
     return data
-        .map(p => {
+        .map((p: any) => {
             return {
                 name: p.name,
                 value: `
@@ -84,7 +84,7 @@ const getResults = data => {
         .slice(0, 5);
 };
 
-const search = async query => {
+const search = async (query: any) => {
     const res = await got(`https://api.curseforge.com/servermods/projects?search=${query}`, opts);
     const data = JSON.parse(res.body);
 
@@ -92,10 +92,10 @@ const search = async query => {
         throw 'No plugins found with that ID!';
     }
 
-    return data.sort((a, b) => leven(query, a.slug) - leven(query, b.slug));
+    return data.sort((a: any, b: any) => leven(query, a.slug) - leven(query, b.slug));
 };
 
-const getVersions = async args => {
+const getVersions = async (args: any) => {
     let id = args[0];
     if (isNaN(id)) {
         const query = args.join('-').toLowerCase();
@@ -113,7 +113,8 @@ const getVersions = async args => {
     return data.splice(data.length - 5).reverse();
 };
 
-const download = async (url, name, user) => {
+const download = async (url: any, name: any, user: any) => {
+    // @ts-expect-error TS(2769): No overload matches this call.
     const result = await got(url, Object.assign(opts, { encoding: null }));
 
     if (result.body.length > 8 * 1024 * 1024) {
@@ -128,14 +129,14 @@ const download = async (url, name, user) => {
     }
 };
 
-const usage = msg => {
+const usage = (msg: any) => {
     msg.channel.send({
-        embed: global.factory.usageBuilder('plugin')
-            .addCommand('search <name>', 'Searches for a plugin by name')
-            .addCommand('info <slug|id>', 'Gets info about a plugin by its slug or ID')
-            .addCommand('download <slug|id>', 'Downloads the plugin with the given project ID')
-            .build()
-    });
+    embed: (global as any).factory.usageBuilder('plugin')
+        .addCommand('search <name>', 'Searches for a plugin by name')
+        .addCommand('info <slug|id>', 'Gets info about a plugin by its slug or ID')
+        .addCommand('download <slug|id>', 'Downloads the plugin with the given project ID')
+        .build()
+});
 };
 
 export const info = {

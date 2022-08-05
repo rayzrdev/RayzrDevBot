@@ -4,8 +4,11 @@ import Manager from '../manager';
 const COOLDOWN_TIME = 5000;
 
 class AyyManager extends Manager {
+    cooldowns: any;
+    // @ts-expect-error TS(7010): 'getName', which lacks return-type annotation, imp... Remove this comment to see the full error message
     getName();
 
+    // @ts-expect-error TS(2389): Function implementation name must be 'getName'.
     init() {
         this.clearCooldowns();
 
@@ -16,7 +19,7 @@ class AyyManager extends Manager {
         this.cooldowns = {};
     }
 
-    onMessage(message) {
+    onMessage(message: any) {
         if (!/^ay+$/i.test(message.cleanContent)) {
             return;
         }
@@ -24,14 +27,14 @@ class AyyManager extends Manager {
         const now = Date.now();
         if (this.cooldowns[message.author.id] && now - this.cooldowns[message.author.id] < COOLDOWN_TIME) {
             message.delete();
-            message.channel.send('plzno ._.').then(m => m.delete({timeout: 5000}));
+            message.channel.send('plzno ._.').then((m: any) => m.delete({timeout: 5000}));
             return;
         }
 
         this.cooldowns[message.author.id] = now;
 
         const content = message.cleanContent;
-        const percentUpper = content.substr(1).split('').filter(c => c === 'Y').reduce(mem => mem + 1, 0) / (content.length - 1);
+        const percentUpper = content.substr(1).split('').filter((c: any) => c === 'Y').reduce((mem: any) => mem + 1, 0) / (content.length - 1);
         const length = Math.min(content.length + 5, 2000);
 
         let output = content[0];

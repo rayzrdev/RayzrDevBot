@@ -11,6 +11,7 @@ class Manager {
      * 
      * @memberof Manager
      */
+    // @ts-expect-error TS(7010): 'getName', which lacks return-type annotation, imp... Remove this comment to see the full error message
     getName();
 
     /**
@@ -18,6 +19,7 @@ class Manager {
      * 
      * @memberof Manager
      */
+    // @ts-expect-error TS(2389): Function implementation name must be 'getName'.
     preInit() { }
 
     /**
@@ -39,7 +41,7 @@ class Manager {
      * 
      * @param {Message} message The message that was sent
      */
-    onMessage(message) { }
+    onMessage(message: any) { }
 
     /**
      * The ManagerHandler that owns this manager
@@ -50,6 +52,7 @@ class Manager {
      * 
      * @memberof Manager
      */
+    // @ts-expect-error TS(7033): Property 'handler' implicitly has type 'any', beca... Remove this comment to see the full error message
     get handler();
 
     /**
@@ -61,6 +64,7 @@ class Manager {
      * 
      * @memberof Manager
      */
+    // @ts-expect-error TS(7033): Property 'bot' implicitly has type 'any', because ... Remove this comment to see the full error message
     get bot();
 }
 

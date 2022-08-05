@@ -1,4 +1,4 @@
-export const run = async (bot, msg, args) => {
+export const run = async (bot: any, msg: any, args: any) => {
     if (args.length < 2) {
         throw 'You must provide both a user and a reason!';
     }
